@@ -60,9 +60,9 @@
     "webpack-theme-color-replacer": "^1.2.15"
   },
   "eslintConfig": {
-    "root": true,
+    "root": false,
     "env": {
-      "node": true
+      "node": false
     },
     "extends": [
       "plugin:vue/strongly-recommended",
