@@ -12,12 +12,43 @@
         :tabBarStyle="{ textAlign: 'center', borderBottom: 'unset' }"
         @change="handleTabClick"
       >
-        <a-tab-pane key="tab1" tab="账号密码登录">
+        <a-tab-pane key="tab1" tab="学生登录">
           <a-form-item>
             <a-input
               size="large"
               type="text"
-              placeholder="账户: admin"
+              placeholder="请输入学号"
+              v-decorator="[
+                'username',
+                {rules: [{ required: true, message: '请输入帐户名或邮箱地址' }, { validator: handleUsernameOrEmail }], validateTrigger: 'change'}
+              ]"
+            >
+              <a-icon slot="prefix" type="user" :style="{ color: 'rgba(0,0,0,.25)' }"/>
+            </a-input>
+          </a-form-item>
+          <a-form-item>
+            <a-input
+              size="large"
+              type="password"
+              autocomplete="false"
+              placeholder="密码: admin or ant.design"
+              v-decorator="[
+                'password',
+                {rules: [{ required: true, message: '请输入密码' }], validateTrigger: 'blur'}
+              ]"
+            >
+              <a-icon slot="prefix" type="lock" :style="{ color: 'rgba(0,0,0,.25)' }"/>
+            </a-input>
+          </a-form-item>
+        </a-tab-pane>
+
+
+        <a-tab-pane key="tab2" tab="管理员登录">
+          <a-form-item>
+            <a-input
+              size="large"
+              type="text"
+              placeholder="请输入学号"
               v-decorator="[
                 'username',
                 {rules: [{ required: true, message: '请输入帐户名或邮箱地址' }, { validator: handleUsernameOrEmail }], validateTrigger: 'change'}
@@ -42,7 +73,8 @@
             </a-input>
           </a-form-item>
         </a-tab-pane>
-        <a-tab-pane key="tab2" tab="手机号登录">
+
+        <a-tab-pane key="tab3" tab="公司登录">
           <a-form-item>
             <a-input size="large" type="text" placeholder="手机号" v-decorator="['mobile', {rules: [{ required: true, pattern: /^1[34578]\d{9}$/, message: '请输入正确的手机号' }], validateTrigger: 'change'}]">
               <a-icon slot="prefix" type="mobile" :style="{ color: 'rgba(0,0,0,.25)' }"/>
@@ -68,6 +100,7 @@
             </a-col>
           </a-row>
         </a-tab-pane>
+        
       </a-tabs>
 
       <a-form-item>
@@ -90,19 +123,7 @@
         >确定</a-button>
       </a-form-item>
 
-      <div class="user-login-other">
-        <span>其他登录方式</span>
-        <a>
-          <a-icon class="item-icon" type="alipay-circle"></a-icon>
-        </a>
-        <a>
-          <a-icon class="item-icon" type="taobao-circle"></a-icon>
-        </a>
-        <a>
-          <a-icon class="item-icon" type="weibo-circle"></a-icon>
-        </a>
-        <router-link class="register" :to="{ name: 'register' }">注册账户</router-link>
-      </div>
+      
     </a-form>
 
     <two-step-captcha

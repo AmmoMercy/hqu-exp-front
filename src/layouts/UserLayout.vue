@@ -4,25 +4,22 @@
       <div class="top">
         <div class="header">
           <a href="/">
-            <img src="~@/assets/logo.svg" class="logo" alt="logo">
-            <span class="title">Ant Design</span>
+            <img src="~@/assets/logo.png" class="logo" alt="logo">
+            <span class="title">HQU Internship</span>
           </a>
         </div>
         <div class="desc">
-          Ant Design 是西湖区最具影响力的 Web 设计规范
+          华侨大学计算机学院实训管理系统
         </div>
       </div>
 
       <route-view></route-view>
 
       <div class="footer">
-        <div class="links">
-          <a href="_self">帮助</a>
-          <a href="_self">隐私</a>
-          <a href="_self">条款</a>
-        </div>
         <div class="copyright">
-          Copyright &copy; 2018 白鹭学园技术组出品
+          Copyright &copy; <a href="http://cst.hqu.edu.cn/">HQU CST</a>  & 
+          <a href="http://www.kooboo.org/">亚尔迪</a>
+          联合出品
         </div>
       </div>
     </div>
