@@ -12,7 +12,7 @@
         :tabBarStyle="{ textAlign: 'center', borderBottom: 'unset' }"
         @change="handleTabClick"
       >
-        <a-tab-pane key="tab1" tab="学生登录">
+        <a-tab-pane key="student" tab="学生登录">
           <a-form-item>
             <a-input
               size="large"
@@ -20,7 +20,7 @@
               placeholder="请输入学号"
               v-decorator="[
                 'username',
-                {rules: [{ required: true, message: '请输入帐户名或邮箱地址' }, { validator: handleUsernameOrEmail }], validateTrigger: 'change'}
+                {rules: [{ required: true, message: '请输入帐户名或邮箱地址' }, { validator: validateEmail }], validateTrigger: 'change'}
               ]"
             >
               <a-icon slot="prefix" type="user" :style="{ color: 'rgba(0,0,0,.25)' }"/>
@@ -43,7 +43,7 @@
         </a-tab-pane>
 
 
-        <a-tab-pane key="tab2" tab="管理员登录">
+        <a-tab-pane key="admin" tab="管理员登录">
           <a-form-item>
             <a-input
               size="large"
@@ -51,7 +51,7 @@
               placeholder="请输入学号"
               v-decorator="[
                 'username',
-                {rules: [{ required: true, message: '请输入帐户名或邮箱地址' }, { validator: handleUsernameOrEmail }], validateTrigger: 'change'}
+                {rules: [{ required: true, message: '请输入帐户名或邮箱地址' }, { validator: validateEmail }], validateTrigger: 'change'}
               ]"
             >
               <a-icon slot="prefix" type="user" :style="{ color: 'rgba(0,0,0,.25)' }"/>
@@ -74,34 +74,37 @@
           </a-form-item>
         </a-tab-pane>
 
-        <a-tab-pane key="tab3" tab="公司登录">
-          <a-form-item>
-            <a-input size="large" type="text" placeholder="手机号" v-decorator="['mobile', {rules: [{ required: true, pattern: /^1[34578]\d{9}$/, message: '请输入正确的手机号' }], validateTrigger: 'change'}]">
-              <a-icon slot="prefix" type="mobile" :style="{ color: 'rgba(0,0,0,.25)' }"/>
+        <a-tab-pane key="enterprise" tab="公司登录">
+            <a-form-item>
+            <a-input
+              size="large"
+              type="text"
+              placeholder="请输入学号"
+              v-decorator="[
+                'username',
+                {rules: [{ required: true, message: '请输入帐户名或邮箱地址' }, { validator: validateEmail ,message:'请输入正确的邮箱'}], validateTrigger: 'change'}
+              ]"
+            >
+              <a-icon slot="prefix" type="user" :style="{ color: 'rgba(0,0,0,.25)' }"/>
             </a-input>
           </a-form-item>
 
-          <a-row :gutter="16">
-            <a-col class="gutter-row" :span="16">
-              <a-form-item>
-                <a-input size="large" type="text" placeholder="验证码" v-decorator="['captcha', {rules: [{ required: true, message: '请输入验证码' }], validateTrigger: 'blur'}]">
-                  <a-icon slot="prefix" type="mail" :style="{ color: 'rgba(0,0,0,.25)' }"/>
-                </a-input>
-              </a-form-item>
-            </a-col>
-            <a-col class="gutter-row" :span="8">
-              <a-button
-                class="getCaptcha"
-                tabindex="-1"
-                :disabled="state.smsSendBtn"
-                @click.stop.prevent="getCaptcha"
-                v-text="!state.smsSendBtn && '获取验证码' || (state.time+' s')"
-              ></a-button>
-            </a-col>
-          </a-row>
+          <a-form-item>
+            <a-input
+              size="large"
+              type="password"
+              autocomplete="false"
+              placeholder="密码: admin or ant.design"
+              v-decorator="[
+                'password',
+                {rules: [{ required: true, message: '请输入密码' }], validateTrigger: 'blur'}
+              ]"
+            >
+              <a-icon slot="prefix" type="lock" :style="{ color: 'rgba(0,0,0,.25)' }"/>
+            </a-input>
+          </a-form-item>
         </a-tab-pane>
-        
-      </a-tabs>
+       </a-tabs>
 
       <a-form-item>
         <a-checkbox v-decorator="['rememberMe']">自动登录</a-checkbox>
@@ -122,8 +125,6 @@
           :disabled="state.loginBtn"
         >确定</a-button>
       </a-form-item>
-
-      
     </a-form>
 
     <two-step-captcha
@@ -148,18 +149,18 @@ export default {
   },
   data () {
     return {
-      customActiveKey: 'tab1',
+      customActiveKey: 'student',
       loginBtn: false,
-      // login type: 0 email, 1 username, 2 telephone
-      loginType: 0,
+        // login type: student, admin,  enterprise
+      loginType: 'student',
       requiredTwoStepCaptcha: false,
       stepCaptchaVisible: false,
       form: this.$form.createForm(this),
       state: {
         time: 60,
         loginBtn: false,
-        // login type: 0 email, 1 username, 2 telephone
-        loginType: 0,
+        // login type: 1 student, 2 admin, 3 enterprise
+        loginType: 'student',
         smsSendBtn: false
       }
     }
@@ -177,18 +178,20 @@ export default {
   methods: {
     ...mapActions(['Login', 'Logout']),
     // handler
-    handleUsernameOrEmail (rule, value, callback) {
+    validateEmail (rule, value, callback) {
+      //if you want to return true just callback with no param, else with a string
       const { state } = this
       const regex = /^([a-zA-Z0-9_-])+@([a-zA-Z0-9_-])+((\.[a-zA-Z0-9_-]{2,3}){1,2})$/
       if (regex.test(value)) {
-        state.loginType = 0
-      } else {
-        state.loginType = 1
-      }
+        console.log(value)
       callback()
+      }else{
+        callback('请输入正确的邮箱')
+      }
     },
     handleTabClick (key) {
       this.customActiveKey = key
+      this.state.loginType=key
       // this.form.resetFields()
     },
     handleSubmit (e) {
@@ -202,15 +205,14 @@ export default {
 
       state.loginBtn = true
 
-      const validateFieldsKey = customActiveKey === 'tab1' ? ['username', 'password'] : ['mobile', 'captcha']
-
+      const validateFieldsKey=['username', 'password']
+      
       validateFields(validateFieldsKey, { force: true }, (err, values) => {
         if (!err) {
-          console.log('login form', values)
           const loginParams = { ...values }
-          delete loginParams.username
-          loginParams[!state.loginType ? 'email' : 'username'] = values.username
           loginParams.password = md5(values.password)
+          loginParams.loginType=state.loginType
+          console.log(loginParams)
           Login(loginParams)
             .then((res) => this.loginSuccess(res))
             .catch(err => this.requestFailed(err))

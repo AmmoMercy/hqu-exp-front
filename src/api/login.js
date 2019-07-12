@@ -12,9 +12,9 @@ import { axios } from '@/utils/request'
  * @param parameter
  * @returns {*}
  */
-export function login (parameter) {
+export function login (parameter, loginType) {
   return axios({
-    url: '/auth/login',
+    url: loginType + '/login',
     method: 'post',
     data: parameter
   })
