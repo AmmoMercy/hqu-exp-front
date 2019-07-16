@@ -42,7 +42,6 @@
           </a-form-item>
         </a-tab-pane>
 
-
         <a-tab-pane key="admin" tab="管理员登录">
           <a-form-item>
             <a-input
@@ -75,7 +74,7 @@
         </a-tab-pane>
 
         <a-tab-pane key="enterprise" tab="公司登录">
-            <a-form-item>
+          <a-form-item>
             <a-input
               size="large"
               type="text"
@@ -104,7 +103,7 @@
             </a-input>
           </a-form-item>
         </a-tab-pane>
-       </a-tabs>
+      </a-tabs>
 
       <a-form-item>
         <a-checkbox v-decorator="['rememberMe']">自动登录</a-checkbox>
@@ -151,7 +150,7 @@ export default {
     return {
       customActiveKey: 'student',
       loginBtn: false,
-        // login type: student, admin,  enterprise
+      // login type: student, admin,  enterprise
       loginType: 'student',
       requiredTwoStepCaptcha: false,
       stepCaptchaVisible: false,
@@ -179,19 +178,19 @@ export default {
     ...mapActions(['Login', 'Logout']),
     // handler
     validateEmail (rule, value, callback) {
-      //if you want to return true just callback with no param, else with a string
+      // if you want to return true just callback with no param, else with a string
       const { state } = this
       const regex = /^([a-zA-Z0-9_-])+@([a-zA-Z0-9_-])+((\.[a-zA-Z0-9_-]{2,3}){1,2})$/
       if (regex.test(value)) {
         console.log(value)
-      callback()
-      }else{
+        callback()
+      } else {
         callback('请输入正确的邮箱')
       }
     },
     handleTabClick (key) {
       this.customActiveKey = key
-      this.state.loginType=key
+      this.state.loginType = key
       // this.form.resetFields()
     },
     handleSubmit (e) {
@@ -205,13 +204,13 @@ export default {
 
       state.loginBtn = true
 
-      const validateFieldsKey=['username', 'password']
-      
+      const validateFieldsKey = ['username', 'password']
+
       validateFields(validateFieldsKey, { force: true }, (err, values) => {
         if (!err) {
           const loginParams = { ...values }
           loginParams.password = md5(values.password)
-          loginParams.loginType=state.loginType
+          loginParams.loginType = state.loginType
           console.log(loginParams)
           Login(loginParams)
             .then((res) => this.loginSuccess(res))
