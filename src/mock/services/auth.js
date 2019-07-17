@@ -16,6 +16,8 @@ const login = options => {
 
   return builder(
     {
+      code: 200,
+      msg: '登录成功',
       id: Mock.mock('@guid'),
       name: Mock.mock('@name'),
       username: 'admin',
@@ -52,6 +54,8 @@ const twofactor = () => {
 }
 
 Mock.mock(/\/student\/login/, 'post', login)
+Mock.mock(/\/admin\/login/, 'post', login)
+Mock.mock(/\/enterprise\/login/, 'post', login)
 Mock.mock(/\/auth\/logout/, 'post', logout)
 Mock.mock(/\/account\/sms/, 'post', smsCaptcha)
 Mock.mock(/\/auth\/2step-code/, 'post', twofactor)

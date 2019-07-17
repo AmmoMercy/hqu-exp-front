@@ -99,6 +99,7 @@ export default {
       return null
     },
     renderMenuItem (menu) {
+      console.log('rendermenu', menu)
       const target = menu.meta.target || null
       const tag = target && 'a' || 'router-link'
       const props = { to: { name: menu.name } }

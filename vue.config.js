@@ -97,7 +97,7 @@ module.exports = {
     // proxy: {
     //   '/api': {
     //     // target: 'https://mock.ihx.me/mock/5baf3052f7da7e07e04a5116/antd-pro',
-    //     target: 'https://mock.ihx.me/mock/5baf3052f7da7e07e04a5116/antd-pro',
+    //     target: 'http://fuck.chuanjianli.kooboo.site',
     //     ws: false,
     //     changeOrigin: true
     //   }

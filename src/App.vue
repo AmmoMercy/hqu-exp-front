@@ -9,6 +9,7 @@
 <script>
 import zhCN from 'ant-design-vue/lib/locale-provider/zh_CN'
 import { AppDeviceEnquire } from '@/utils/mixin'
+import { logEgg } from '@/utils/egg'
 
 export default {
   mixins: [AppDeviceEnquire],
@@ -18,7 +19,7 @@ export default {
     }
   },
   mounted () {
-
+    logEgg()
   }
 }
 

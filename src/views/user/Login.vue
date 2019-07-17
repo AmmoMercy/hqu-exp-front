@@ -141,7 +141,6 @@ import TwoStepCaptcha from '@/components/tools/TwoStepCaptcha'
 import { mapActions } from 'vuex'
 import { timeFix } from '@/utils/util'
 import { getSmsCaptcha, get2step } from '@/api/login'
-
 export default {
   components: {
     TwoStepCaptcha
@@ -179,7 +178,6 @@ export default {
     // handler
     validateEmail (rule, value, callback) {
       // if you want to return true just callback with no param, else with a string
-      const { state } = this
       const regex = /^([a-zA-Z0-9_-])+@([a-zA-Z0-9_-])+((\.[a-zA-Z0-9_-]{2,3}){1,2})$/
       if (regex.test(value)) {
         console.log(value)
@@ -190,7 +188,7 @@ export default {
     },
     handleTabClick (key) {
       this.customActiveKey = key
-      this.state.loginType = key
+      this.state.loginType = this.customActiveKey
       // this.form.resetFields()
     },
     handleSubmit (e) {
@@ -198,7 +196,6 @@ export default {
       const {
         form: { validateFields },
         state,
-        customActiveKey,
         Login
       } = this
 
@@ -270,7 +267,7 @@ export default {
     },
     loginSuccess (res) {
       console.log(res)
-      this.$router.push({ name: 'dashboard' })
+      this.$router.push({ name: 'internship' })
       // 延迟 1 秒显示欢迎信息
       setTimeout(() => {
         this.$notification.success({
