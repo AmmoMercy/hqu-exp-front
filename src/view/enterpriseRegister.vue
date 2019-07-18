@@ -4,30 +4,30 @@
       <a-form-item v-bind="formItemLayout" label="E-mail">
         <a-input
           v-decorator="[
-          'email',
-          {
-            rules: [{
-              type: 'email', message: 'The input is not valid E-mail!',
-            }, {
-              required: true, message: 'Please input your E-mail!',
-            }]
-          }
-        ]"
+            'email',
+            {
+              rules: [{
+                type: 'email', message: 'The input is not valid E-mail!',
+              }, {
+                required: true, message: 'Please input your E-mail!',
+              }]
+            }
+          ]"
           placeholder="请输入邮箱，邮箱即为登录账号"
         />
       </a-form-item>
       <a-form-item v-bind="formItemLayout" label="Password">
         <a-input
           v-decorator="[
-          'password',
-          {
-            rules: [{
-              required: true, message: 'Please input your password!',
-            }, {
-              validator: validateToNextPassword,
-            }],
-          }
-        ]"
+            'password',
+            {
+              rules: [{
+                required: true, message: 'Please input your password!',
+              }, {
+                validator: validateToNextPassword,
+              }],
+            }
+          ]"
           type="password"
           placeholder="请输入密码"
         />
@@ -35,15 +35,15 @@
       <a-form-item v-bind="formItemLayout" label="Confirm Password">
         <a-input
           v-decorator="[
-          'confirm',
-          {
-            rules: [{
-              required: true, message: 'Please confirm your password!',
-            }, {
-              validator: compareToFirstPassword,
-            }],
-          }
-        ]"
+            'confirm',
+            {
+              rules: [{
+                required: true, message: 'Please confirm your password!',
+              }, {
+                validator: compareToFirstPassword,
+              }],
+            }
+          ]"
           placeholder="请输入和上次相同的密码"
           type="password"
           @blur="handleConfirmBlur"
@@ -52,9 +52,9 @@
       <a-form-item v-bind="formItemLayout" label="type">
         <a-select
           v-decorator="[
-          'type',
-          {rules: [{ required: true, message: 'Please select your type!' }]}
-        ]"
+            'type',
+            {rules: [{ required: true, message: 'Please select your type!' }]}
+          ]"
           placeholder="请选择导师制还是公司制"
         >
           <a-select-option value="enterprise">公司</a-select-option>
@@ -70,53 +70,53 @@
         </span>
         <a-input
           v-decorator="[
-          'nickname',
-          {
-            rules: [{ required: true, message: 'Please input your nickname!', whitespace: true }]
-          }
-        ]"
+            'nickname',
+            {
+              rules: [{ required: true, message: 'Please input your nickname!', whitespace: true }]
+            }
+          ]"
           placeholder="nickname"
         />
       </a-form-item>
       <a-form-item v-bind="formItemLayout" label="Address">
         <a-input
           v-decorator="[
-          'address',
-          {
-            rules: [{  required: true, message: 'Please input your address !' }],
-          }
-        ]"
+            'address',
+            {
+              rules: [{ required: true, message: 'Please input your address !' }],
+            }
+          ]"
           placeholder="Address"
         />
       </a-form-item>
       <a-form-item v-bind="formItemLayout" label="Contact Name">
         <a-input
           v-decorator="[
-          'contact-name',
-          {
-            rules: [{  required: true, message: 'Please input your name !' }],
-          }
-        ]"
+            'contact-name',
+            {
+              rules: [{ required: true, message: 'Please input your name !' }],
+            }
+          ]"
           placeholder="Contact Name"
         />
       </a-form-item>
       <a-form-item v-bind="formItemLayout" label="Phone Number">
         <a-input
           v-decorator="[
-          'contact-tel',
-          {
-            rules: [{ required: true, message: 'Please input your phone number!' },{validator:validatePhone}],
-          }
-        ]"
+            'contact-tel',
+            {
+              rules: [{ required: true, message: 'Please input your phone number!' },{validator:validatePhone}],
+            }
+          ]"
           placeholder="Phone Number"
           style="width: 100%"
         >
           <a-select
             slot="addonBefore"
             v-decorator="[
-            'prefix',
-            { initialValue: '86' }
-          ]"
+              'prefix',
+              { initialValue: '86' }
+            ]"
             style="width: 70px"
           >
             <a-select-option value="86">+86</a-select-option>
@@ -158,10 +158,10 @@
         <div class="dropbox">
           <a-upload-dragger
             v-decorator="['dragger', {
-            rules: [{ required: true}],
-            valuePropName: 'fileList',
-            getValueFromEvent: normFile,
-          }]"
+              rules: [{ required: true}],
+              valuePropName: 'fileList',
+              getValueFromEvent: normFile,
+            }]"
             name="files"
             action="/upload.do"
           >
@@ -210,19 +210,19 @@
 <script>
 // import SIdentify from "@/views/enterprise/identify";
 export default {
-  data() {
+  data () {
     return {
-      flag: true, //该值变化，就会触发刷新
-      code: "",
+      flag: true, // 该值变化，就会触发刷新
+      code: '',
       previewVisible: false,
-      previewImage: "",
+      previewImage: '',
       fileList: [
         {
-          uid: "-1",
-          name: "xxx.png",
-          status: "done",
+          uid: '-1',
+          name: 'xxx.png',
+          status: 'done',
           url:
-            "https://zos.alipayobjects.com/rmsportal/jkjgkEfvpUPVyRjUImniVslZfWPnJuuZ.png"
+            'https://zos.alipayobjects.com/rmsportal/jkjgkEfvpUPVyRjUImniVslZfWPnJuuZ.png'
         }
       ],
       confirmDirty: false,
@@ -249,74 +249,74 @@ export default {
           }
         }
       }
-    };
+    }
   },
-//   components: {
-//     SIdentify
-//   },
-  beforeCreate() {
-    this.form = this.$form.createForm(this);
+  //   components: {
+  //     SIdentify
+  //   },
+  beforeCreate () {
+    this.form = this.$form.createForm(this)
   },
-  mounted() {
-    this.flag = !this.flag;
+  mounted () {
+    this.flag = !this.flag
   },
   methods: {
-    handleSubmit(event2) {
-      event2.preventDefault();
+    handleSubmit (event2) {
+      event2.preventDefault()
       this.form.validateFieldsAndScroll((err, values) => {
         if (!err) {
-          console.log("Received values of form: ", values);
+          console.log('Received values of form: ', values)
         }
-      });
+      })
     },
-    compareToFirstPassword(rule, value, callback) {
-      const form = this.form;
-      if (value && value !== form.getFieldValue("password")) {
-        callback("Two passwords that you enter is inconsistent!");
+    compareToFirstPassword (rule, value, callback) {
+      const form = this.form
+      if (value && value !== form.getFieldValue('password')) {
+        callback('Two passwords that you enter is inconsistent!')
       } else {
-        callback();
+        callback()
       }
     },
-    validateToNextPassword(rule, value, callback) {
-      const form = this.form;
+    validateToNextPassword (rule, value, callback) {
+      const form = this.form
       if (value && this.confirmDirty) {
-        form.validateFields(["confirm"], { force: true });
+        form.validateFields(['confirm'], { force: true })
       }
-      callback();
+      callback()
     },
-    validatePhone(rule, value, callback) {
-      const reg = /^[1][3,4,5,7,8][0-9]{9}$/;
-      if (value == "" || value == undefined || value == null) {
-        callback();
+    validatePhone (rule, value, callback) {
+      const reg = /^[1][3,4,5,7,8][0-9]{9}$/
+      if (value == '' || value == undefined || value == null) {
+        callback()
       } else {
-        if (!reg.test(value) && value != "") {
-          callback(new Error("请输入正确的电话号码"));
+        if (!reg.test(value) && value != '') {
+          callback(new Error('请输入正确的电话号码'))
         } else {
-          callback();
+          callback()
         }
       }
     },
-    handleConfirmBlur(event3) {
-      const value = event3.target.value;
-      this.confirmDirty = this.confirmDirty || !!value;
+    handleConfirmBlur (event3) {
+      const value = event3.target.value
+      this.confirmDirty = this.confirmDirty || !!value
     },
-    handlePreview(file) {
-      this.previewImage = file.url || file.thumbUrl;
-      this.previewVisible = true;
+    handlePreview (file) {
+      this.previewImage = file.url || file.thumbUrl
+      this.previewVisible = true
     },
-    handleChange({ fileList }) {
-      this.fileList = fileList;
+    handleChange ({ fileList }) {
+      this.fileList = fileList
     },
-    handleCancel() {
-      this.previewVisible = false;
+    handleCancel () {
+      this.previewVisible = false
     },
-    normFile(event1) {
-      console.log("Upload event:", event1);
+    normFile (event1) {
+      console.log('Upload event:', event1)
       if (Array.isArray(event1)) {
-        return event1;
+        return event1
       }
-      return event1 && event1.fileList;
-    },
+      return event1 && event1.fileList
+    }
     // refreshCode() {
     //   this.flag = !this.flag;
     // },
@@ -325,7 +325,7 @@ export default {
     //   console.log("getMakedCode:", this.code);
     // }
   }
-};
+}
 </script>
 <style>
 #components-form-demo-validate-other .dropbox {

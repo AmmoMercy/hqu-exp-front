@@ -1,7 +1,7 @@
 <template>
   <a-card :body-style="{padding: '24px 32px'}" :bordered="false">
     <a-form :form="form" @submit="handleSubmit">
-      <a-form-item v-bind="formItemLayout" label="Topic">
+      <a-form-item v-bind="formItemLayout" label="实训题目">
         <a-input
           v-decorator="[
             'topic',
@@ -12,17 +12,17 @@
           placeholder="Topic"
         />
       </a-form-item>
-      <a-form-item v-bind="formItemLayout" label="BeginTime">
+      <a-form-item v-bind="formItemLayout" label="开始时间">
         <a-date-picker
           v-decorator="['date-time-picker', config]"
           show-time
           format="YYYY-MM-DD HH:mm:ss"
         />
       </a-form-item>
-      <a-form-item v-bind="formItemLayout" label="EndTime">
+      <a-form-item v-bind="formItemLayout" label="结束时间">
         <a-date-picker v-decorator="['EndTime', config]" show-time format="YYYY-MM-DD HH:mm:ss" />
       </a-form-item>
-      <a-form-item v-bind="formItemLayout" label="description">
+      <a-form-item v-bind="formItemLayout" label="项目简介">
         <a-textarea
           rows="20"
           v-decorator="[
@@ -31,14 +31,14 @@
           ]"
         />
       </a-form-item>
-      <a-form-item v-bind="formItemLayout" label="NeedNum">
+      <a-form-item v-bind="formItemLayout" label="需求人数">
         <a-input-number
           v-decorator="['need-num', { initialValue: 20,rules:[{required:true}] }]"
           :min="1"
           :max="100"
         />
       </a-form-item>
-      <a-form-item v-bind="formItemLayout" label="RequestEndTime">
+      <a-form-item v-bind="formItemLayout" label="申请截至时间">
         <a-date-picker
           v-decorator="['RequestEndTime',config]"
           show-time
