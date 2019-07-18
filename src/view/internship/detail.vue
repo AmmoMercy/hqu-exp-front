@@ -114,9 +114,9 @@
 </template>
 
 <script>
-import { mixinDevice } from '@/utils/mixin';
-import { PageView } from '@/layouts';
-import DetailList from '@/components/tools/DetailList';
+import { mixinDevice } from '@/utils/mixin'
+import { PageView } from '@/layouts'
+import DetailList from '@/components/tools/DetailList'
 
 const DetailListItem = DetailList.Item
 
