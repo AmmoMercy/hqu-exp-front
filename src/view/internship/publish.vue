@@ -65,11 +65,11 @@ export default {
       formItemLayout: {
         labelCol: {
           xs: { span: 24 },
-          sm: { span: 8 }
+          sm: { span: 6 }
         },
         wrapperCol: {
           xs: { span: 24 },
-          sm: { span: 8 }
+          sm: { span: 15 }
         }
       },
       tailFormItemLayout: {
@@ -80,7 +80,7 @@ export default {
           },
           sm: {
             span: 16,
-            offset: 8
+            offset: 0
           }
         }
       }
