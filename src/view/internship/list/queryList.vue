@@ -155,14 +155,14 @@ export default {
       return statusMap[type].status
     }
   },
-  /* methods: {
+  methods: {
     Searchlist() {
       this.loading = true
       setTimeout(() => {
-        this.data = queryData
+        this.data = data
         this.loading = false
-      }, 5000)
+      }, 300)
     }
-  } */
+  }
 }
 </script>
