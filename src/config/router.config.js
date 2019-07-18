@@ -102,7 +102,7 @@ export const enterpriseRouterMap = [
         path: '/studentmanage',
         name: 'studentmanage',
         component: () => import('@/view/student/list/list'),
-        meta: { title: '申请列表', keepAlive: true }
+        meta: { title: '学生管理', keepAlive: true }
       }
     ]
   },
