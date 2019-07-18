@@ -41,6 +41,12 @@ export const studentRouterMap = [
             component: () => import('@/view/internship/detail'),
             hidden: true,
             meta: { title: '实训项目', keepAlive: true }
+          },
+          {
+            path: '/internship/completion',
+            name: 'internshipCompletion',
+            component: () => import('@/view/internship/completion'),
+            meta: { title: '结业上传', keepAlive: true }
           }
         ]
       },
@@ -87,8 +93,15 @@ export const enterpriseRouterMap = [
           },
           {
             path: '/internship/publish',
+            name: 'publish',
             component: () => import('@/view/internship/publish'),
             meta: { title: '发布实训', keepAlive: true }
+          },
+          {
+            path: '/internship/submitprove',
+            name: 'submitprove',
+            component: () => import('@/view/internship/submitprove'),
+            meta: { title: '提交结业证明', keepAlive: true }
           }
         ]
       },
