@@ -46,7 +46,7 @@
         />
       </a-form-item>
       <a-form-item :wrapperCol="{ span: 24 }" style="text-align: center">
-        <a-button type="primary" html-type="submit">Register</a-button>
+        <a-button type="primary" html-type="submit" @click="countDown">Publish</a-button>
       </a-form-item>
     </a-form>
   </a-card>
@@ -104,6 +104,23 @@ export default {
         }
         console.log('Received values of form: ', values)
       })
+    },
+    countDown() {
+      let secondsToGo = 5;
+      const modal = this.$success({
+        title: '发布成功',
+        content: `这个窗口将于 ${secondsToGo} s后关闭。`,
+      });
+      const interval = setInterval(() => {
+        secondsToGo -= 1;
+        modal.update({
+          content: `这个窗口将于 ${secondsToGo} s后关闭。`,
+        });
+      }, 1000);
+      setTimeout(() => {
+        clearInterval(interval)
+        modal.destroy()
+      }, secondsToGo * 1000);
     }
   }
 }
