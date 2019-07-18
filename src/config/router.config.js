@@ -76,7 +76,7 @@ export const enterpriseRouterMap = [
       {
         path: '/internship',
         name: 'internship',
-        component: RouteView,
+        component: PageView,
         meta: { title: '实训项目', keepAlive: true },
         children: [
           {

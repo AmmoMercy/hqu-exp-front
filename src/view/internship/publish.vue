@@ -4,11 +4,11 @@
       <a-form-item v-bind="formItemLayout" label="Topic">
         <a-input
           v-decorator="[
-          'topic',
-          {
-            rules: [{  required: true, message: 'Please input your topic!' }],
-          }
-        ]"
+            'topic',
+            {
+              rules: [{ required: true, message: 'Please input your topic!' }],
+            }
+          ]"
           placeholder="Topic"
         />
       </a-form-item>
@@ -53,11 +53,11 @@
 </template>
 <script>
 export default {
-  data() {
+  data () {
     return {
       config: {
         rules: [
-          { type: "object", required: true, message: "Please select time!" }
+          { type: 'object', required: true, message: 'Please select time!' }
         ]
       },
       confirmDirty: false,
@@ -84,28 +84,27 @@ export default {
           }
         }
       }
-    };
+    }
   },
-  beforeCreate() {
-    this.form = this.$form.createForm(this);
+  beforeCreate () {
+    this.form = this.$form.createForm(this)
   },
   methods: {
-    handleSubmit(e) {
-      e.preventDefault();
-      const values = {
-        ...fieldsValue,
-        "date-time-picker": fieldsValue["date-time-picker"].format(
-          "YYYY-MM-DD HH:mm:ss"
-        )
-      };
+    handleSubmit (e) {
+      e.preventDefault()
+      // const values = {
+      //   ...fieldsValue,
+      //   'date-time-picker': fieldsValue['date-time-picker'].format(
+      //     'YYYY-MM-DD HH:mm:ss'
+      //   )
+      // }
       this.form.validateFieldsAndScroll((err, values) => {
         if (!err) {
-          return;
+          return
         }
-        console.log("Received values of form: ", values);
-      });
+        console.log('Received values of form: ', values)
+      })
     }
   }
-};
+}
 </script>
-
