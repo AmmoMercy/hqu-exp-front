@@ -5,8 +5,8 @@ import {
   RouteView,
   BlankLayout,
   PageView
-} from '@/layouts';
-import router from '@/router/index';
+} from '@/layouts'
+import router from '@/router/index'
 
 export const studentRouterMap = [
   {
@@ -116,6 +116,18 @@ export const enterpriseRouterMap = [
         name: 'studentmanage',
         component: () => import('@/view/student/list/list'),
         meta: { title: '学生管理', keepAlive: true }
+      },
+      { path: '/enterprise',
+        name: 'enterprise',
+        component: () => import('@/view/enterprise/detail'),
+        meta: { title: '企业信息' }
+
+      },
+      { path: '/internshipdetail',
+        name: 'internshipdetail',
+        component: () => import('@/view/internship/detail'),
+        meta: { title: '实训信息' }
+
       }
     ]
   },
@@ -171,6 +183,7 @@ export const adminRouterMap = [
       }
     ]
   },
+
   {
     path: '*', // 此处需特别注意置于最底部
     redirect: '/404'

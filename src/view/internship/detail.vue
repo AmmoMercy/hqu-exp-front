@@ -66,9 +66,9 @@
         <a-form-item label="实训地址">
           <a-input
             v-decorator="[
-            'name',
-            {rules: [{ required: true, message: '必须填写详细地址' }]}
-          ]"
+              'name',
+              {rules: [{ required: true, message: '必须填写详细地址' }]}
+            ]"
             name="name"
             placeholder="详细地址"
           />
@@ -78,9 +78,9 @@
             name="buildTime"
             style="width: 100%"
             v-decorator="[
-            'buildTime',
-            {rules: [{ required: true, message: '请选择起止日期' }]}
-          ]"
+              'buildTime',
+              {rules: [{ required: true, message: '请选择起止日期' }]}
+            ]"
           />
         </a-form-item>
         <a-form-item label="报名截止日期">
@@ -88,9 +88,9 @@
             name="stopTime"
             style="width: 100%"
             v-decorator="[
-            'stopTime',
-            {rules: [{ required: true, message: '必须填写报名截止日期' }]}
-          ]"
+              'stopTime',
+              {rules: [{ required: true, message: '必须填写报名截止日期' }]}
+            ]"
           />
         </a-form-item>
         <a-form-item label="意向人数">
@@ -99,9 +99,9 @@
             :max="100"
             name="peopleNum"
             v-decorator="[
-            'peopleNum',
-            {rules: [{ required: true, message: '必须填写意向人数' }]}
-          ]"
+              'peopleNum',
+              {rules: [{ required: true, message: '必须填写意向人数' }]}
+            ]"
           />
           <span>人</span>
         </a-form-item>
@@ -114,45 +114,45 @@
 </template>
 
 <script>
-import { mixinDevice } from "@/utils/mixin";
-import { PageView } from "@/layouts";
-import DetailList from "@/components/tools/DetailList";
+import { mixinDevice } from '@/utils/mixin';
+import { PageView } from '@/layouts';
+import DetailList from '@/components/tools/DetailList';
 
-const DetailListItem = DetailList.Item;
+const DetailListItem = DetailList.Item
 
 export default {
-  name: "Advanced",
+  name: 'Advanced',
   components: {
     PageView,
     DetailList,
     DetailListItem
   },
   mixins: [mixinDevice],
-  data() {
+  data () {
     return {
       visible: false,
       mdl: {},
       previewVisible: false,
-      previewImage: "",
+      previewImage: '',
       fileList: [
         {
-          uid: "-1",
-          name: "xxx.png",
-          status: "done",
+          uid: '-1',
+          name: 'xxx.png',
+          status: 'done',
           url:
-            "https://zos.alipayobjects.com/rmsportal/jkjgkEfvpUPVyRjUImniVslZfWPnJuuZ.png"
+            'https://zos.alipayobjects.com/rmsportal/jkjgkEfvpUPVyRjUImniVslZfWPnJuuZ.png'
         }
       ]
-    };
+    }
   },
   methods: {
-    handleEdit(record) {
-      this.mdl = Object.assign({}, record);
-      this.visible = true;
+    handleEdit (record) {
+      this.mdl = Object.assign({}, record)
+      this.visible = true
     },
-    handleOk() {}
+    handleOk () {}
   }
-};
+}
 </script>
 
 <style lang="less" scoped>
