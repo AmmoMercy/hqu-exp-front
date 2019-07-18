@@ -5,8 +5,8 @@ import {
   RouteView,
   BlankLayout,
   PageView
-} from '@/layouts'
-import router from '@/router/index'
+} from '@/layouts';
+import router from '@/router/index';
 
 export const studentRouterMap = [
   {
