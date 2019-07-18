@@ -147,7 +147,7 @@ export const adminRouterMap = [
     children: [
       {
         path: '/internshiplist',
-        neme: 'internshiplist',
+        name: 'internshiplist',
         component: () => import('@/view/internship/list/queryList'),
         meta: { title: '项目列表' }
       },
@@ -159,14 +159,14 @@ export const adminRouterMap = [
       },
       {
         path: '/grade',
-        component: () => import('@/view/enterprise/list/queryList'),
-
+        component: () => import('@/view/admin/grade'),
+        name: 'grade',
         meta: { title: '成绩管理' }
       },
       {
         path: '/admin',
-        component: () => import('@/view/enterprise/list/queryList'),
-
+        component: () => import('@/view/admin/setting'),
+        name: 'setting',
         meta: { title: '个人设置' }
       }
     ]

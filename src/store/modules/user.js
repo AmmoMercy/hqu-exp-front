@@ -48,7 +48,7 @@ const user = {
             const result = response.result
             if (result.code === 200) {
               window.document.cookie =
-                '假的cookie=这是一个用来模拟的cookie 正式上线时请删除'
+                'cookie=这是一个用来模拟的cookie 正式上线时请删除'
               // const accessedRouters = routerMapSelector(loginType)
               // commit('SET_ROUTERS', accessedRouters)
               // router.addRoutes(accessedRouters)
@@ -110,7 +110,7 @@ const user = {
       return new Promise(resolve => {
         commit('SET_ROLE', '')
         window.document.cookie =
-          '假的cookie=; expires=Thu, 01 Jan 1970 00:00:01 GMT;'
+          'cookie=000000; expires=Thu, 01 Jan 1999 00:00:01 GMT;'
         Vue.ls.remove(USER_ROLE)
 
         logout(state.token)
