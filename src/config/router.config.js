@@ -122,6 +122,18 @@ export const enterpriseRouterMap = [
   {
     path: '*', // 此处需特别注意置于最底部
     redirect: '/404'
+  },
+  {
+    path: '/enterpriseRegister',
+    name: 'enterpriseRegister',
+    component: () => import('@/view/enterpriseRegister'),
+    meta: { title: '企业注册', keepAlive: true }
+  },
+  {
+    path: '/studentRegister',
+    name: 'studentRegister',
+    component: () => import('@/view/studentRegister'),
+    meta: { title: '学生注册', keepAlive: true }
   }
 ]
 

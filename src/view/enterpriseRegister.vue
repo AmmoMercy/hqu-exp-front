@@ -173,7 +173,7 @@
           </a-upload-dragger>
         </div>
       </a-form-item>
-      <a-form-item
+      <!-- <a-form-item
         v-bind="formItemLayout"
         label="Captcha"
         extra="We must make sure that your are a human."
@@ -193,7 +193,7 @@
             </div>
           </a-col>
         </a-row>
-      </a-form-item>
+      </a-form-item> -->
       <a-form-item v-bind="tailFormItemLayout">
         <a-checkbox v-decorator="['agreement', {valuePropName: 'checked'}]">
           I have read the
@@ -208,7 +208,7 @@
 </template>
 
 <script>
-import SIdentify from "@/views/enterprise/identify";
+// import SIdentify from "@/views/enterprise/identify";
 export default {
   data() {
     return {
@@ -251,9 +251,9 @@ export default {
       }
     };
   },
-  components: {
-    SIdentify
-  },
+//   components: {
+//     SIdentify
+//   },
   beforeCreate() {
     this.form = this.$form.createForm(this);
   },
@@ -317,13 +317,13 @@ export default {
       }
       return event1 && event1.fileList;
     },
-    refreshCode() {
-      this.flag = !this.flag;
-    },
-    getMakedCode(code) {
-      this.code = code;
-      console.log("getMakedCode:", this.code);
-    }
+    // refreshCode() {
+    //   this.flag = !this.flag;
+    // },
+    // getMakedCode(code) {
+    //   this.code = code;
+    //   console.log("getMakedCode:", this.code);
+    // }
   }
 };
 </script>
