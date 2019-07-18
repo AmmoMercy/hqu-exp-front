@@ -15,7 +15,7 @@ router.beforeEach((to, from, next) => {
   if (window.document.cookie) {
     /* has token */
     if (to.path === '/user/login') {
-      next({ path: '/dashboard/workplace' })
+      next({ name: 'index' })
       NProgress.done()
     } else {
       next()

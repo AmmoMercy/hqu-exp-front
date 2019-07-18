@@ -58,6 +58,10 @@ export const studentRouterMap = [
         ]
       }
     ]
+  },
+  {
+    path: '*', // 此处需特别注意置于最底部
+    redirect: '/404'
   }
 ]
 
@@ -66,13 +70,13 @@ export const enterpriseRouterMap = [
     path: '/',
     name: 'index',
     component: BasicLayout,
-    redirect: '/internship',
+    redirect: '/internship/list',
     mata: { title: '首页' },
     children: [
       {
         path: '/internship',
         name: 'internship',
-        component: () => import('@/view/internship/list/queryList'),
+        component: RouteView,
         meta: { title: '实训项目', keepAlive: true },
         children: [
           {
@@ -101,6 +105,10 @@ export const enterpriseRouterMap = [
         meta: { title: '申请列表', keepAlive: true }
       }
     ]
+  },
+  {
+    path: '*', // 此处需特别注意置于最底部
+    redirect: '/404'
   }
 ]
 
@@ -113,7 +121,6 @@ export const adminRouterMap = [
     redirect: '/internshiplist',
     children: [
       {
-
         path: '/internshiplist',
         neme: 'internshiplist',
         component: () => import('@/view/internship/list/queryList'),
@@ -138,6 +145,10 @@ export const adminRouterMap = [
         meta: { title: '个人设置' }
       }
     ]
+  },
+  {
+    path: '*', // 此处需特别注意置于最底部
+    redirect: '/404'
   }
 ]
 

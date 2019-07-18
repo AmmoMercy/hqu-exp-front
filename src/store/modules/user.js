@@ -109,7 +109,8 @@ const user = {
     Logout ({ commit, state }) {
       return new Promise(resolve => {
         commit('SET_ROLE', '')
-        window.document.cookie = '假的cookie=; expires=Thu, 01 Jan 1970 00:00:01 GMT;'
+        window.document.cookie =
+          '假的cookie=; expires=Thu, 01 Jan 1970 00:00:01 GMT;'
         Vue.ls.remove(USER_ROLE)
 
         logout(state.token)
