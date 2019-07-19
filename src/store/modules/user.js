@@ -1,7 +1,9 @@
 import Vue from 'vue'
-import { login, getInfo, logout } from '@/api/login'
+import { login, logout } from '@/api/login'
+import { getEntInfo } from '@/api/enterprise'
 import { welcome } from '@/utils/util'
 import { USER_ROLE } from '@/store/mutation-types'
+import { getStuInfo } from '@/api/student'
 
 const user = {
   state: {
@@ -70,6 +72,15 @@ const user = {
           commit('SET_ROLE', userRole)
           commit('SET_NAME', { name: 'You know who', welcome: welcome() })
           resolve()
+          if (userRole === 'enterprise') {
+            getEntInfo().then(response => {
+              commit('SET_INFO', response.data)
+            })
+          } else if (userRole === 'student') {
+            getStuInfo().then(response => {
+              commit('SET_INFO', response.data)
+            })
+          }
         } else {
           reject()
         }

@@ -58,3 +58,12 @@ export function removeLoadingAnimate (id = '', timeout = 1500) {
     document.body.removeChild(document.getElementById(id))
   }, timeout)
 }
+
+export function genderChanger (gnerderNum) {
+  if (gnerderNum === 0) {
+    return '女'
+  } else if (gnerderNum === 1) {
+    return '男'
+  }
+  return '未知'
+}
