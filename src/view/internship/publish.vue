@@ -46,7 +46,7 @@
         />
       </a-form-item>
       <a-form-item :wrapperCol="{ span: 24 }" style="text-align: center">
-        <a-button type="primary" html-type="submit" @click="countDown">Publish</a-button>
+        <a-button type="primary" html-type="submit">Publish</a-button>
       </a-form-item>
     </a-form>
   </a-card>
@@ -100,6 +100,7 @@ export default {
       // }
       this.form.validateFieldsAndScroll((err, values) => {
         if (!err) {
+          this.countDown();
           return
         }
         console.log('Received values of form: ', values)
