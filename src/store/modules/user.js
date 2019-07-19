@@ -78,7 +78,7 @@ const user = {
         //     const result = response.result
 
         //     if (result.role && result.role.permissions.length > 0) {
-        //       const role = result.role
+        //       const role = result.rol
         //       role.permissions = result.role.permissions
         //       role.permissions.map(per => {
         //         if (
@@ -114,7 +114,6 @@ const user = {
     Logout ({ commit, state }) {
       return new Promise(resolve => {
         commit('SET_ROLE', '')
-        debugger
         window.document.cookie =
           'cookie=; expires=Thu, 01 Jan 1999 00:00:01 GMT;'
         Vue.ls.remove(USER_ROLE)
