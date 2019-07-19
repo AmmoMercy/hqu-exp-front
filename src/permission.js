@@ -12,6 +12,7 @@ const whiteList = ['login', 'register', 'registerResult'] // no redirect whiteli
 router.beforeEach((to, from, next) => {
   NProgress.start() // start progress bar
   to.meta && (typeof to.meta.title !== 'undefined' && setDocumentTitle(`${to.meta.title} - ${domTitle}`))
+  debugger
   if (window.document.cookie) {
     /* has token */
     if (to.path === '/user/login') {
@@ -29,12 +30,7 @@ router.beforeEach((to, from, next) => {
               // 动态添加可访问路由表
               router.addRoutes(store.getters.addRouters)
 
-              const redirect = decodeURIComponent(from.query.redirect || to.path)
-              if (to.path === redirect) {
-                next({ ...to, replace: true })
-              } else {
-                next({ path: redirect })
-              }
+              next({ name: 'index' })
             })
           })
           .catch(() => {
@@ -43,7 +39,7 @@ router.beforeEach((to, from, next) => {
               description: '请求用户信息失败，请重试'
             })
             store.dispatch('Logout').then(() => {
-              next({ path: '/user/login', query: { redirect: to.fullPath } })
+              next({ path: '/user/login' })
             })
           })
       } else {

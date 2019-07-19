@@ -9,9 +9,9 @@
                 <a-input placeholder="请输入学号" />
               </a-form-item>
             </a-col>
-              <span>
-                <a-button type="primary" @click="Searchlist">查询</a-button>
-              </span>
+            <span>
+              <a-button type="primary" @click="Searchlist">查询</a-button>
+            </span>
           </a-row>
         </a-form>
       </div>
@@ -42,7 +42,7 @@ const genderMap = {
   2: {
     status: 'error',
     text: '女'
-  },
+  }
 }
 
 const columns = [
@@ -74,7 +74,7 @@ const columns = [
   },
   {
     title: '联系方式',
-    dataIndex: 'tel',
+    dataIndex: 'tel'
   },
   {
     title: '简介',
@@ -85,7 +85,7 @@ const columns = [
     title: '邮箱',
     dataIndex: 'email'
   },
-   {
+  {
     title: '实训经历',
     dataIndex: 'exps'
   },
@@ -105,18 +105,18 @@ const data = [
     key: '1',
     stu_id: '21313131',
     name: 'KooBoo',
-    status:2,
+    status: 2,
     enterence_year: '2019',
     major: 'IT',
-    tel:'123456',
+    tel: '123456',
     introduction: 'this is intro',
-    email:'Kooboo@qq.com',
-    exps: 'this is exps',
+    email: 'Kooboo@qq.com',
+    exps: 'this is exps'
   }
 ]
 export default {
   name: 'StudentList',
-  data() {
+  data () {
     return {
       data,
       columns,
@@ -126,15 +126,15 @@ export default {
     }
   },
   filters: {
-    statusFilter(type) {
+    statusFilter (type) {
       return genderMap[type].text
     },
-    statusTypeFilter(type) {
+    statusTypeFilter (type) {
       return genderMap[type].status
     }
   },
   methods: {
-    Searchlist() {
+    Searchlist () {
       this.loading = true
       setTimeout(() => {
         this.data = data

@@ -65,9 +65,14 @@ const user = {
     },
     GetInfo ({ commit }) {
       return new Promise((resolve, reject) => {
-        commit('SET_ROLE', Vue.ls.get(USER_ROLE))
-        commit('SET_NAME', { name: 'nigga', welcome: welcome() })
-        resolve()
+        const userRole = Vue.ls.get(USER_ROLE)
+        if (userRole) {
+          commit('SET_ROLE', userRole)
+          commit('SET_NAME', { name: 'You know who', welcome: welcome() })
+          resolve()
+        } else {
+          reject()
+        }
         // getInfo()
         //   .then(response => {
         //     const result = response.result
@@ -109,8 +114,9 @@ const user = {
     Logout ({ commit, state }) {
       return new Promise(resolve => {
         commit('SET_ROLE', '')
+        debugger
         window.document.cookie =
-          'cookie=000000; expires=Thu, 01 Jan 1999 00:00:01 GMT;'
+          'cookie=; expires=Thu, 01 Jan 1999 00:00:01 GMT;'
         Vue.ls.remove(USER_ROLE)
 
         logout(state.token)
