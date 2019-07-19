@@ -45,7 +45,7 @@
         <detail-list-item term="报名截止日期">时间</detail-list-item>
         <detail-list-item term="意向人数">xxxxx人</detail-list-item>
         <detail-list-item term="已报名人数">xxxxx/xxxxxx人</detail-list-item>
-        <detail-list-item term="备注">编辑按钮企业可见，报名按钮学生可见，其余所有人可见</detail-list-item>
+        <detail-list-item term="备注">编辑按钮企业可见，报名按钮学生可见，其余所有人可见，编辑后需要重新审核</detail-list-item>
       </detail-list>
       <a-divider style="margin-bottom: 32px" />
       <a-form-item label="实训描述">
@@ -59,16 +59,16 @@
       </a-form-item>
       <a-divider style="margin-bottom: 32px" />
       <a-form-item :wrapperCol="{ span: 24 }" style="text-align: center">
-        <a-button htmlType="submit" type="primary">我要报名</a-button>
+        <a-button htmlType="submit" type="primary" @click="handleEnter(record)">我要报名</a-button>
       </a-form-item>
 
       <a-modal title="编辑实训信息" :width="800" v-model="visible" @ok="handleOk">
         <a-form-item label="实训地址">
           <a-input
             v-decorator="[
-              'name',
-              {rules: [{ required: true, message: '必须填写详细地址' }]}
-            ]"
+            'name',
+            {rules: [{ required: true, message: '必须填写详细地址' }]}
+          ]"
             name="name"
             placeholder="详细地址"
           />
@@ -78,9 +78,9 @@
             name="buildTime"
             style="width: 100%"
             v-decorator="[
-              'buildTime',
-              {rules: [{ required: true, message: '请选择起止日期' }]}
-            ]"
+            'buildTime',
+            {rules: [{ required: true, message: '请选择起止日期' }]}
+          ]"
           />
         </a-form-item>
         <a-form-item label="报名截止日期">
@@ -88,9 +88,9 @@
             name="stopTime"
             style="width: 100%"
             v-decorator="[
-              'stopTime',
-              {rules: [{ required: true, message: '必须填写报名截止日期' }]}
-            ]"
+            'stopTime',
+            {rules: [{ required: true, message: '必须填写报名截止日期' }]}
+          ]"
           />
         </a-form-item>
         <a-form-item label="意向人数">
@@ -99,15 +99,49 @@
             :max="100"
             name="peopleNum"
             v-decorator="[
-              'peopleNum',
-              {rules: [{ required: true, message: '必须填写意向人数' }]}
-            ]"
+            'peopleNum',
+            {rules: [{ required: true, message: '必须填写意向人数' }]}
+          ]"
           />
           <span>人</span>
         </a-form-item>
         <a-form-item label="实训描述">
-          <a-textarea rows="10" placeholder="这里填写实训描述" />
+          <a-textarea
+            rows="10"
+            v-decorator="[
+            'name',
+            {rules: [{ required: true, message: '必须填写实训描述' }]}
+          ]"
+            name="name"
+            placeholder="这里填写实训描述"
+          />
         </a-form-item>
+      </a-modal>
+
+      <a-modal title="确认报名" :width="800" v-model="enterVisible" @ok="handleOk">
+        <a-row :gutter="16">
+          <a-col class="gutter-row" :span="20">
+            <a-form-item extra="我们将发送一串验证码至您的邮箱，以确认是您本人的操作">
+              <a-input
+                size="large"
+                type="text"
+                placeholder="验证码"
+                v-decorator="['captcha', {rules: [{ required: true, message: '请输入验证码' }], validateTrigger: 'blur'}]"
+              >
+                <a-icon slot="prefix" type="mail" :style="{ color: 'rgba(0,0,0,.25)' }" />
+              </a-input>
+            </a-form-item>
+          </a-col>
+          <a-col class="gutter-row" :span="4">
+            <a-button
+              class="getCaptcha"
+              size="large"
+              :disabled="state.smsSendBtn"
+              @click.stop.prevent="getCaptcha"
+              v-text="!state.smsSendBtn && '获取验证码'||(state.time+' s')"
+            ></a-button>
+          </a-col>
+        </a-row>
       </a-modal>
     </a-card>
   </page-view>
@@ -128,29 +162,29 @@ export default {
     DetailListItem
   },
   mixins: [mixinDevice],
-  data () {
+  data() {
     return {
+      state: {
+        time: 60,
+        smsSendBtn: false,
+        percent: 10,
+        progressColor: '#FF0000'
+      },
       visible: false,
+      enterVisible: false,
       mdl: {},
-      previewVisible: false,
-      previewImage: '',
-      fileList: [
-        {
-          uid: '-1',
-          name: 'xxx.png',
-          status: 'done',
-          url:
-            'https://zos.alipayobjects.com/rmsportal/jkjgkEfvpUPVyRjUImniVslZfWPnJuuZ.png'
-        }
-      ]
     }
   },
   methods: {
-    handleEdit (record) {
+    handleEdit(record) {
       this.mdl = Object.assign({}, record)
       this.visible = true
     },
-    handleOk () {}
+    handleEnter(record) {
+      this.mdl = Object.assign({}, record)
+      this.enterVisible = true
+    },
+    handleOk() {}
   }
 }
 </script>
@@ -192,4 +226,5 @@ export default {
     text-align: left;
   }
 }
+
 </style>

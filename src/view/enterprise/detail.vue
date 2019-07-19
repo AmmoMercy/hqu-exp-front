@@ -50,26 +50,23 @@
       <a-form-item label="简介">
         <a-textarea contenteditable="false" rows="10" readonly value="我是简介" style="border:none" />
       </a-form-item>
-      <a-divider style="margin-bottom: 32px" />
-      <div class="clearfix">
-        <a-upload
-          action="https://www.mocky.io/v2/5cc8019d300000980a055e76"
-          listType="picture-card"
-          :fileList="fileList"
-          @preview="handlePreview"
-        ></a-upload>
-        <a-modal :visible="previewVisible" :footer="null" @cancel="handleCancel">
-          <img alt="example" style="width: 100%" :src="previewImage" />
-        </a-modal>
-      </div>
-      <a-divider style="margin-bottom: 32px" orientation="right">❤照片墙❤</a-divider>
+      <a-divider>❤照片墙❤</a-divider>
+
+      <a-carousel arrows dotsClass="slick-dots slick-thumb" style="margin-bottom: 75px">
+        <a slot="customPaging" slot-scope="props">
+          <img :src="getImgUrl(props.i)" />
+        </a>
+        <div v-for="item in 4">
+          <img :src="baseUrl+'abstract0'+item+'.jpg'" />
+        </div>
+      </a-carousel>
       <a-modal title="编辑信息" :width="800" v-model="visible" @ok="handleOk">
         <a-form-item label="详细地址">
           <a-input
             v-decorator="[
-              'name',
-              {rules: [{ required: true, message: '必须填写详细地址' }]}
-            ]"
+            'name',
+            {rules: [{ required: true, message: '必须填写详细地址' }]}
+          ]"
             name="name"
             placeholder="详细地址"
           />
@@ -77,9 +74,9 @@
         <a-form-item label="企业/导师email">
           <a-input
             v-decorator="[
-              'name',
-              {rules: [{ required: true, message: '必须填写企业/导师email' }]}
-            ]"
+            'name',
+            {rules: [{ required: true, message: '必须填写企业/导师email' }]}
+          ]"
             name="name"
             placeholder="email"
           />
@@ -87,9 +84,9 @@
         <a-form-item label="企业/导师联系人">
           <a-input
             v-decorator="[
-              'name',
-              {rules: [{ required: true, message: '必须填写企业/导师联系人' }]}
-            ]"
+            'name',
+            {rules: [{ required: true, message: '必须填写企业/导师联系人' }]}
+          ]"
             name="name"
             placeholder="联系人本名"
           />
@@ -97,15 +94,23 @@
         <a-form-item label="企业/导师联系方式">
           <a-input
             v-decorator="[
-              'name',
-              {rules: [{ required: true, message: '必须填写联系方式' }]}
-            ]"
+            'name',
+            {rules: [{ required: true, message: '必须填写联系方式' }]}
+          ]"
             name="name"
             placeholder="手机号码"
           />
         </a-form-item>
         <a-form-item label="简介">
-          <a-textarea rows="10" placeholder="这里填写简介" />
+          <a-textarea
+            rows="10"
+            v-decorator="[
+            'name',
+            {rules: [{ required: true, message: '必须填写简介' }]}
+          ]"
+            name="name"
+            placeholder="这里填写简介"
+          />
         </a-form-item>
         <a-divider style="margin-bottom: 32px" orientation="left">上传照片</a-divider>
         <div class="clearfix">
@@ -136,6 +141,8 @@ import { PageView } from '@/layouts'
 import DetailList from '@/components/tools/DetailList'
 
 const DetailListItem = DetailList.Item
+const baseUrl =
+  'https://raw.githubusercontent.com/vueComponent/ant-design-vue/master/components/vc-slick/assets/img/react-slick/'
 
 export default {
   name: 'Advanced',
@@ -145,45 +152,47 @@ export default {
     DetailListItem
   },
   mixins: [mixinDevice],
-  data () {
+  data() {
     return {
       visible: false,
+      baseUrl,
       mdl: {},
       previewVisible: false,
       previewImage: '',
-      role: 'enterprise',
       fileList: [
         {
           uid: '-1',
           name: 'xxx.png',
           status: 'done',
-          url:
-            'https://zos.alipayobjects.com/rmsportal/jkjgkEfvpUPVyRjUImniVslZfWPnJuuZ.png'
+          url: 'https://zos.alipayobjects.com/rmsportal/jkjgkEfvpUPVyRjUImniVslZfWPnJuuZ.png'
         }
       ]
     }
   },
   methods: {
-    handleCancel () {
+    handleCancel() {
       this.previewVisible = false
     },
-    handlePreview (file) {
+    handlePreview(file) {
       this.previewImage = file.url || file.thumbUrl
       this.previewVisible = true
     },
-    handleChange ({ fileList }) {
+    handleChange({ fileList }) {
       this.fileList = fileList
     },
-    handleEdit (record) {
+    handleEdit(record) {
       this.mdl = Object.assign({}, record)
       this.visible = true
     },
-    handleOk () {}
+    handleOk() {},
+    getImgUrl(i) {
+      return `${baseUrl}abstract0${i + 1}.jpg`
+    }
   }
 }
 </script>
 
-<style lang="less" scoped>
+<style scoped>
 .detail-layout {
   margin-left: 44px;
 }
@@ -220,14 +229,29 @@ export default {
     text-align: left;
   }
 }
-
-.ant-upload-select-picture-card i {
-  font-size: 32px;
-  color: #999;
+.ant-carousel >>> .slick-dots {
+  height: auto;
 }
-
-.ant-upload-select-picture-card .ant-upload-text {
-  margin-top: 8px;
-  color: #666;
+.ant-carousel >>> .slick-slide img {
+  border: 5px solid #fff;
+  display: block;
+  margin: auto;
+  width: 800px;
+  max-width: 100%;
+}
+.ant-carousel >>> .slick-thumb {
+  bottom: -75px;
+}
+.ant-carousel >>> .slick-thumb li {
+  width: 100px;
+  height: 75px;
+}
+.ant-carousel >>> .slick-thumb li img {
+  width: 100%;
+  height: 100%;
+  filter: grayscale(100%);
+}
+.ant-carousel >>> .slick-thumb li.slick-active img {
+  filter: grayscale(0%);
 }
 </style>
