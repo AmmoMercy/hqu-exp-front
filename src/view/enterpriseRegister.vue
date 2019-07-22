@@ -210,19 +210,19 @@
 <script>
 // import SIdentify from "@/views/enterprise/identify";
 export default {
-  data() {
+  data () {
     return {
       flag: true, // 该值变化，就会触发刷新
-      code: "",
+      code: '',
       previewVisible: false,
-      previewImage: "",
+      previewImage: '',
       fileList: [
         {
-          uid: "-1",
-          name: "xxx.png",
-          status: "done",
+          uid: '-1',
+          name: 'xxx.png',
+          status: 'done',
           url:
-            "https://zos.alipayobjects.com/rmsportal/jkjgkEfvpUPVyRjUImniVslZfWPnJuuZ.png"
+            'https://zos.alipayobjects.com/rmsportal/jkjgkEfvpUPVyRjUImniVslZfWPnJuuZ.png'
         }
       ],
       confirmDirty: false,
@@ -249,74 +249,74 @@ export default {
           }
         }
       }
-    };
+    }
   },
   //   components: {
   //     SIdentify
   //   },
-  beforeCreate() {
-    this.form = this.$form.createForm(this);
+  beforeCreate () {
+    this.form = this.$form.createForm(this)
   },
-  mounted() {
-    this.flag = !this.flag;
+  mounted () {
+    this.flag = !this.flag
   },
   methods: {
-    compareToFirstPassword(rule, value, callback) {
-      const form = this.form;
-      if (value && value !== form.getFieldValue("password")) {
-        callback("Two passwords that you enter is inconsistent!");
+    compareToFirstPassword (rule, value, callback) {
+      const form = this.form
+      if (value && value !== form.getFieldValue('password')) {
+        callback('Two passwords that you enter is inconsistent!')
       } else {
-        callback();
+        callback()
       }
     },
-    validateToNextPassword(rule, value, callback) {
-      const form = this.form;
+    validateToNextPassword (rule, value, callback) {
+      const form = this.form
       if (value && this.confirmDirty) {
-        form.validateFields(["confirm"], { force: true });
+        form.validateFields(['confirm'], { force: true })
       }
-      callback();
+      callback()
     },
-    validatePhone(rule, value, callback) {
-      const reg = /^[1][3,4,5,7,8][0-9]{9}$/;
-      if (value == "" || value == undefined || value == null) {
-        callback();
+    validatePhone (rule, value, callback) {
+      const reg = /^[1][3,4,5,7,8][0-9]{9}$/
+      if (value === '' || value === undefined || value == null) {
+        callback()
       } else {
-        if (!reg.test(value) && value != "") {
-          callback(new Error("请输入正确的电话号码"));
+        if (!reg.test(value) && value != '') {
+          callback(new Error('请输入正确的电话号码'))
         } else {
-          callback();
+          callback()
         }
       }
     },
-    handleConfirmBlur(event3) {
-      const value = event3.target.value;
-      this.confirmDirty = this.confirmDirty || !!value;
+    handleConfirmBlur (event3) {
+      const value = event3.target.value
+      this.confirmDirty = this.confirmDirty || !!value
     },
-    handlePreview(file) {
-      this.previewImage = file.url || file.thumbUrl;
-      this.previewVisible = true;
+    handlePreview (file) {
+      this.previewImage = file.url || file.thumbUrl
+      this.previewVisible = true
     },
-    handleChange({ fileList }) {
-      this.fileList = fileList;
+    handleChange ({ fileList }) {
+      this.fileList = fileList
     },
-    handleCancel() {
-      this.previewVisible = false;
+    handleCancel () {
+      this.previewVisible = false
     },
-    normFile(event1) {
-      console.log("Upload event:", event1);
+    normFile (event1) {
+      console.log('Upload event:', event1)
       if (Array.isArray(event1)) {
-        return event1;
+        return event1
       }
-      return event1 && event1.fileList;
+      return event1 && event1.fileList
     },
-    handleSubmit(event2) {
-      event2.preventDefault();
+    handleSubmit (event2) {
+      event2.preventDefault()
       this.form.validateFieldsAndScroll((err, values) => {
         if (!err) {
-          this.countDown();
-          console.log("Received values of form: ", values);
+          this.countDown()
+          console.log('Received values of form: ', values)
         }
-      });
+      })
     },
     // refreshCode() {
     //   this.flag = !this.flag;
@@ -325,25 +325,25 @@ export default {
     //   this.code = code;
     //   console.log("getMakedCode:", this.code);
     // }
-    countDown() {
-      let secondsToGo = 5;
+    countDown () {
+      let secondsToGo = 5
       const modal = this.$success({
-        title: "注册成功",
+        title: '注册成功',
         content: `这个窗口将于 ${secondsToGo} s后关闭。`
-      });
+      })
       const interval = setInterval(() => {
-        secondsToGo -= 1;
+        secondsToGo -= 1
         modal.update({
           content: `这个窗口将于 ${secondsToGo} s后关闭。`
-        });
-      }, 1000);
+        })
+      }, 1000)
       setTimeout(() => {
-        clearInterval(interval);
-        modal.destroy();
-      }, secondsToGo * 1000);
+        clearInterval(interval)
+        modal.destroy()
+      }, secondsToGo * 1000)
     }
   }
-};
+}
 </script>
 <style>
 #components-form-demo-validate-other .dropbox {
