@@ -1,28 +1,28 @@
 <template>
   <a-card :body-style="{padding: '24px 32px'}" :bordered="false">
     <a-form :form="form" @submit="handleSubmit">
-      <a-form-item v-bind="formItemLayout" label="E-mail">
+      <a-form-item v-bind="formItemLayout" label="邮箱">
         <a-input
           v-decorator="[
             'email',
             {
               rules: [{
-                type: 'email', message: 'The input is not valid E-mail!',
+                type: 'email', message: '请输入正确的邮箱',
               }, {
-                required: true, message: 'Please input your E-mail!',
+                required: true, message: '请输入邮箱',
               }]
             }
           ]"
-          placeholder="请输入邮箱，邮箱即为登录账号"
+          placeholder="请输入邮箱 该邮箱将作为登录账号"
         />
       </a-form-item>
-      <a-form-item v-bind="formItemLayout" label="Password">
+      <a-form-item v-bind="formItemLayout" label="密码">
         <a-input
           v-decorator="[
             'password',
             {
               rules: [{
-                required: true, message: 'Please input your password!',
+                required: true, message: '请输入密码',
               }, {
                 validator: validateToNextPassword,
               }],
@@ -32,30 +32,30 @@
           placeholder="请输入密码"
         />
       </a-form-item>
-      <a-form-item v-bind="formItemLayout" label="Confirm Password">
+      <a-form-item v-bind="formItemLayout" label="再次输入密码">
         <a-input
           v-decorator="[
             'confirm',
             {
               rules: [{
-                required: true, message: 'Please confirm your password!',
+                required: true, message: '请再次输入密码',
               }, {
                 validator: compareToFirstPassword,
               }],
             }
           ]"
-          placeholder="请输入和上次相同的密码"
+          placeholder="请再次输入密码"
           type="password"
           @blur="handleConfirmBlur"
         />
       </a-form-item>
-      <a-form-item v-bind="formItemLayout" label="type">
+      <a-form-item v-bind="formItemLayout" label="注册类型">
         <a-select
           v-decorator="[
             'type',
             {rules: [{ required: true, message: 'Please select your type!' }]}
           ]"
-          placeholder="请选择导师制还是公司制"
+          placeholder="请选择您的身份"
         >
           <a-select-option value="enterprise">公司</a-select-option>
           <a-select-option value="tutor">导师</a-select-option>
@@ -63,8 +63,8 @@
       </a-form-item>
       <a-form-item v-bind="formItemLayout">
         <span slot="label">
-          Nickname&nbsp;
-          <a-tooltip title="What do you want others to call you?">
+          公司名称&nbsp;
+          <a-tooltip title="导师请输入导师姓名">
             <a-icon type="question-circle-o" />
           </a-tooltip>
         </span>
@@ -204,7 +204,13 @@
         <a-button type="primary" html-type="submit">Register</a-button>
       </a-form-item>
     </a-form>
+    <button
+      id="TencentCaptcha"
+      data-appid="2085027395"
+      data-cbfn="callback2"
+    >验证</button>
   </a-card>
+
 </template>
 
 <script>
@@ -281,7 +287,7 @@ export default {
       if (value === '' || value === undefined || value == null) {
         callback()
       } else {
-        if (!reg.test(value) && value != '') {
+        if (!reg.test(value) && value !== '') {
           callback(new Error('请输入正确的电话号码'))
         } else {
           callback()

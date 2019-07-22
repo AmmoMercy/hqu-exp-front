@@ -108,10 +108,10 @@
       <a-form-item>
         <a-checkbox v-decorator="['rememberMe']">自动登录</a-checkbox>
         <router-link
-          :to="{ name: 'recover', params: { user: 'aaa'} }"
+          :to="{ name: 'register' }"
           class="forge-password"
           style="float: right;"
-        >忘记密码</router-link>
+        >企业注册</router-link>
       </a-form-item>
 
       <a-form-item style="margin-top:24px">
@@ -122,17 +122,12 @@
           class="login-button"
           :loading="state.loginBtn"
           :disabled="state.loginBtn"
+
         >确定</a-button>
       </a-form-item>
     </a-form>
 
-    <two-step-captcha
-      v-if="requiredTwoStepCaptcha"
-      :visible="stepCaptchaVisible"
-      @success="stepCaptchaSuccess"
-      @cancel="stepCaptchaCancel"
-    ></two-step-captcha>
-  </div>
+    <button @click="toCaptcha">验证    </button></div>
 </template>
 
 <script>
@@ -221,6 +216,21 @@ export default {
           }, 600)
         }
       })
+    },
+    toCaptcha () {
+      var captcha = new TencentCaptcha('2085027395', function (res) {
+        console.log(res)
+        // res（未通过验证）= {ret: 1, ticket: null}
+        // res（验证成功） = {ret: 0, ticket: "String", randstr: "String"}
+        if (res.ret === 0) {
+          // 票据
+          // alert(res.ticket)
+          // 随机串
+          // alert(res.randstr)
+        }
+      })
+      // 显示验证码
+      captcha.show()
     },
     getCaptcha (e) {
       e.preventDefault()
