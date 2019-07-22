@@ -14,13 +14,13 @@
       </a-form-item>
       <a-form-item v-bind="formItemLayout" label="开始时间">
         <a-date-picker
-          v-decorator="['date-time-picker', config]"
+          v-decorator="['beginTime', config]"
           show-time
           format="YYYY-MM-DD HH:mm:ss"
         />
       </a-form-item>
       <a-form-item v-bind="formItemLayout" label="结束时间">
-        <a-date-picker v-decorator="['EndTime', config]" show-time format="YYYY-MM-DD HH:mm:ss" />
+        <a-date-picker v-decorator="['endTime', config]" show-time format="YYYY-MM-DD HH:mm:ss" />
       </a-form-item>
       <a-form-item v-bind="formItemLayout" label="项目简介">
         <a-textarea
@@ -40,24 +40,36 @@
       </a-form-item>
       <a-form-item v-bind="formItemLayout" label="申请截至时间">
         <a-date-picker
-          v-decorator="['RequestEndTime',config]"
+          v-decorator="['requestEndTime',config]"
           show-time
           format="YYYY-MM-DD HH:mm:ss"
         />
       </a-form-item>
       <a-form-item :wrapperCol="{ span: 24 }" style="text-align: center">
-        <a-button type="primary" html-type="submit">Publish</a-button>
+        <a-button
+          type="primary"
+          html-type="submit"
+          class="publish-button"
+          :loading="state.publishBtn"
+          :disabled="state.publishBtn"
+        >Publish</a-button>
       </a-form-item>
     </a-form>
   </a-card>
 </template>
 <script>
+import { publish } from '@/api'
 export default {
-  data () {
+  data() {
     return {
+      form: this.$form.createForm(this),
+      publishBtn: false,
+       state: {
+        publishBtn: false
+      },
       config: {
         rules: [
-          { type: 'object', required: true, message: 'Please select time!' }
+          { type: "object", required: true, message: "Please select time!" }
         ]
       },
       confirmDirty: false,
@@ -84,45 +96,60 @@ export default {
           }
         }
       }
-    }
+     
+    };
   },
-  beforeCreate () {
-    this.form = this.$form.createForm(this)
-  },
+
   methods: {
-    handleSubmit (e) {
-      e.preventDefault()
+    handleSubmit(e) {
+      e.preventDefault();
+      const {
+        form: { validateFields },
+        state
+      } = this
+      state.publishBtn = true
+      const validateFieldsKey=['topic','beginTime','endTime','description','need-num','requestEndTime']
       // const values = {
       //   ...fieldsValue,
       //   'date-time-picker': fieldsValue['date-time-picker'].format(
       //     'YYYY-MM-DD HH:mm:ss'
       //   )
       // }
-      this.form.validateFieldsAndScroll((err, values) => {
+       validateFields(validateFieldsKey, { force: true }, (err, values) => {
         if (!err) {
-          this.countDown();
-          return
+          const publishParams = { ...values }
+          console.log(publishParams)
+          Publish(publishParams)
+          .then((res) =>{if(res.code===200)this.countDown()} )
+          .catch((err) => this.requestFailed(err))
         }
-        console.log('Received values of form: ', values)
-      })
+        console.log("Received values of form: ", values);
+      });
     },
     countDown() {
       let secondsToGo = 5;
       const modal = this.$success({
-        title: '发布成功',
-        content: `这个窗口将于 ${secondsToGo} s后关闭。`,
+        title: "发布成功",
+        content: `这个窗口将于 ${secondsToGo} s后关闭。`
       });
       const interval = setInterval(() => {
         secondsToGo -= 1;
         modal.update({
-          content: `这个窗口将于 ${secondsToGo} s后关闭。`,
+          content: `这个窗口将于 ${secondsToGo} s后关闭。`
         });
       }, 1000);
       setTimeout(() => {
-        clearInterval(interval)
-        modal.destroy()
+        clearInterval(interval);
+        modal.destroy();
       }, secondsToGo * 1000);
+    },
+    requestFailed (err) {
+      this.$notification['error']({
+        message: '错误',
+        description: ((err.response || {}).data || {}).message || '请求出现错误，请稍后再试',
+        duration: 4
+      })
     }
   }
-}
+};
 </script>

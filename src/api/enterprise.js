@@ -5,3 +5,10 @@ export function getEntInfo (parameter) {
     method: 'get'
   })
 }
+export function publish (parameter) {
+  return axios({
+    url: '/api/enterprise/internship',
+    method: 'post',
+    data: parameter
+  })
+}
