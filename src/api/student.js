@@ -5,7 +5,7 @@ export function getStu (parameter) {
     method: 'get'
   })
 }
-export function getStuInfo (parameter) {
+export function getStuInfo () {
   return axios({
     url: '/api/student/myinfo',
     method: 'get'

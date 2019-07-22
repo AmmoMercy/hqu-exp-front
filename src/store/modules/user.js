@@ -70,15 +70,17 @@ const user = {
         const userRole = Vue.ls.get(USER_ROLE)
         if (userRole) {
           commit('SET_ROLE', userRole)
-          commit('SET_NAME', { name: 'You know who', welcome: welcome() })
+
           resolve()
           if (userRole === 'enterprise') {
             getEntInfo().then(response => {
               commit('SET_INFO', response.data)
+              commit('SET_NAME', { name: response.data.name, welcome: welcome() })
             })
           } else if (userRole === 'student') {
             getStuInfo().then(response => {
               commit('SET_INFO', response.data)
+              commit('SET_NAME', { name: response.data.name, welcome: welcome() })
             })
           }
         } else {

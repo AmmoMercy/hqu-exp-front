@@ -116,6 +116,7 @@ import { PageView } from '@/layouts'
 import DetailList from '@/components/tools/DetailList'
 import store from '@/store'
 import { genderChanger } from '@/utils/util'
+import { getStu } from '@/api'
 const DetailListItem = DetailList.Item
 
 export default {
@@ -158,7 +159,14 @@ export default {
     }
   },
   mounted () {
-    this.student = store.getters.userInfo
+    if (store.getters.role === 'student') { this.student = store.getters.userInfo } else {
+      const stuid = store.getters.stuid
+      getStu(stuid).then(
+        (response) => {
+          if (response.code === 200) { this.student = response.data }
+        }
+      )
+    }
     this.student.gender = genderChanger(this.student.gender)
   },
   methods: {
@@ -199,22 +207,21 @@ export default {
   line-height: 64px;
   font-size: 16px;
 
-  i {
+}
+.no-data  i {
     font-size: 24px;
     margin-right: 16px;
     position: relative;
     top: 3px;
   }
-}
 
-.mobile {
-  .detail-layout {
+ .mobile .detail-layout {
     margin-left: unset;
   }
-  .text {
+ .mobile .text {
   }
-  .status-list {
+ .mobile .status-list {
     text-align: left;
   }
-}
+
 </style>
