@@ -18,3 +18,10 @@ export function publish (parameter) {
     data: parameter
   })
 }
+export function register (parameter) {
+  return axios({
+    url: '/api/enterprise/register',
+    method: 'post',
+    data: parameter
+  })
+}

@@ -138,13 +138,14 @@
           v-decorator="['images', {
             rules: [{ required: true}],
           }]"
-          action="https://www.mocky.io/v2/5cc8019d300000980a055e76"
+          accept=".png,.jpg,.jpeg"
+          :beforeUpload="imageBeforeUpload"
           listType="picture-card"
-          :fileList="fileList"
+          :fileList="imageList"
           @preview="handlePreview"
           @change="handleChange"
         >
-          <div v-if="fileList.length < 3">
+          <div v-if="imageList.length < 3">
             <a-icon type="plus" />
             <div class="ant-upload-text">Upload</div>
           </div>
@@ -162,7 +163,9 @@
               valuePropName: 'fileList',
               getValueFromEvent: normFile,
             }]"
+            :beforeUpload="fileBeforeUpload"
             name="files"
+            before
             action="/upload.do"
           >
             <p class="ant-upload-drag-icon">
@@ -215,6 +218,7 @@
 
 <script>
 // import SIdentify from "@/views/enterprise/identify";
+import { register } from '@/api/enterprise'
 export default {
   data () {
     return {
@@ -222,15 +226,9 @@ export default {
       code: '',
       previewVisible: false,
       previewImage: '',
-      fileList: [
-        {
-          uid: '-1',
-          name: 'xxx.png',
-          status: 'done',
-          url:
-            'https://zos.alipayobjects.com/rmsportal/jkjgkEfvpUPVyRjUImniVslZfWPnJuuZ.png'
-        }
+      imageList: [
       ],
+      file: {},
       confirmDirty: false,
       autoCompleteResult: [],
       formItemLayout: {
@@ -267,6 +265,14 @@ export default {
     this.flag = !this.flag
   },
   methods: {
+    imageBeforeUpload (file, fileList) {
+      this.imageList.push(file)
+      return false
+    },
+    fileBeforeUpload (file, fileList) {
+      this.file = file
+      return false
+    },
     compareToFirstPassword (rule, value, callback) {
       const form = this.form
       if (value && value !== form.getFieldValue('password')) {
@@ -303,7 +309,7 @@ export default {
       this.previewVisible = true
     },
     handleChange ({ fileList }) {
-      this.fileList = fileList
+      this.imageList = fileList
     },
     handleCancel () {
       this.previewVisible = false
@@ -315,12 +321,23 @@ export default {
       }
       return event1 && event1.fileList
     },
-    handleSubmit (event2) {
-      event2.preventDefault()
+    handleSubmit (e) {
+      e.preventDefault()
       this.form.validateFieldsAndScroll((err, values) => {
         if (!err) {
           this.countDown()
-          console.log('Received values of form: ', values)
+          const formData = new FormData()
+          delete values.prefix
+          delete values.images
+          delete values.dragger
+          for (var key in values) {
+            formData.append(key, values[key])
+          }
+          this.imageList.forEach((file) => {
+            formData.append('images[]', file)
+          })
+          formData.append('qualificate_file', this.file)
+          register(formData)
         }
       })
     },
