@@ -53,7 +53,7 @@
         <a-select
           v-decorator="[
             'type',
-            {rules: [{ required: true, message: 'Please select your type!' }]}
+            {rules: [{ required: true, message: '请选择您的类型' }]}
           ]"
           placeholder="请选择您的身份"
         >
@@ -72,43 +72,43 @@
           v-decorator="[
             'nickname',
             {
-              rules: [{ required: true, message: 'Please input your nickname!', whitespace: true }]
+              rules: [{ required: true, message: '请输入公司名称', whitespace: true }]
             }
           ]"
-          placeholder="nickname"
+          placeholder="公司名称"
         />
       </a-form-item>
-      <a-form-item v-bind="formItemLayout" label="Address">
+      <a-form-item v-bind="formItemLayout" label="公司地址">
         <a-input
           v-decorator="[
             'address',
             {
-              rules: [{ required: true, message: 'Please input your address !' }],
+              rules: [{ required: true, message: '请输入公司地址' }],
             }
           ]"
-          placeholder="Address"
+          placeholder="公司地址"
         />
       </a-form-item>
-      <a-form-item v-bind="formItemLayout" label="Contact Name">
+      <a-form-item v-bind="formItemLayout" label="联系人姓名">
         <a-input
           v-decorator="[
             'contact-name',
             {
-              rules: [{ required: true, message: 'Please input your name !' }],
+              rules: [{ required: true, message: '请输入联系人姓名' }],
             }
           ]"
-          placeholder="Contact Name"
+          placeholder="联系人姓名"
         />
       </a-form-item>
-      <a-form-item v-bind="formItemLayout" label="Phone Number">
+      <a-form-item v-bind="formItemLayout" label="联系人电话">
         <a-input
           v-decorator="[
             'contact-tel',
             {
-              rules: [{ required: true, message: 'Please input your phone number!' },{validator:validatePhone}],
+              rules: [{ required: true, message: '请输入联系人电话' },{validator:validatePhone}],
             }
           ]"
-          placeholder="Phone Number"
+          placeholder="联系人电话"
           style="width: 100%"
         >
           <a-select
@@ -120,20 +120,20 @@
             style="width: 70px"
           >
             <a-select-option value="86">+86</a-select-option>
-            <a-select-option value="87">+87</a-select-option>
           </a-select>
         </a-input>
       </a-form-item>
-      <a-form-item v-bind="formItemLayout" label="introduce">
+      <a-form-item v-bind="formItemLayout" label="公司概述">
         <a-textarea
           rows="20"
           v-decorator="[
             'description',
-            {rules: [{ required: true, message: '请输入目标描述' }]}
+            {rules: [{ required: true, message: '请输入公司概述' }]}
           ]"
+          placeholder="公司概述"
         />
       </a-form-item>
-      <a-form-item v-bind="formItemLayout" label="images">
+      <a-form-item v-bind="formItemLayout" label="公司照片">
         <a-upload
           v-decorator="['images', {
             rules: [{ required: true}],
@@ -147,7 +147,7 @@
         >
           <div v-if="imageList.length < 3">
             <a-icon type="plus" />
-            <div class="ant-upload-text">Upload</div>
+            <div class="ant-upload-text">仅限png或jpg</div>
           </div>
         </a-upload>
         <a-modal :visible="previewVisible" :footer="null" @cancel="handleCancel">
@@ -163,16 +163,15 @@
               valuePropName: 'fileList',
               getValueFromEvent: normFile,
             }]"
-            :beforeUpload="fileBeforeUpload"
             name="files"
-            before
-            action="/upload.do"
+            :beforeUpload="fileBeforeUpload"
+            accept=".zip"
           >
             <p class="ant-upload-drag-icon">
               <a-icon type="inbox" />
             </p>
-            <p class="ant-upload-text">Click or drag file to this area to upload</p>
-            <p class="ant-upload-hint">Support for a single or bulk upload.</p>
+            <p class="ant-upload-text">点击选取或拖动文件到此处</p>
+            <p class="ant-upload-hint">请将营业执照等照片打包成zip</p>
           </a-upload-dragger>
         </div>
       </a-form-item>
@@ -186,7 +185,7 @@
             <a-input
               v-decorator="[
               'captcha',
-              {rules: [{ required: true, message: 'Please input the captcha you got!' }]}
+              {rules: [{ required: true, message: '请输入 the captcha you got!' }]}
             ]"
             />
           </a-col>
@@ -198,16 +197,16 @@
         </a-row>
       </a-form-item>-->
       <a-form-item v-bind="tailFormItemLayout">
-        <a-checkbox v-decorator="['agreement', {valuePropName: 'checked'}]">
-          I have read the
-          <a href>agreement</a>
+        <a-checkbox @change="handleCheckBox()" v-decorator="['agreement', {valuePropName: 'checked'}]">
+          本人保证所提交信息均为真实有效信息 并承担因提供不实信息所产生的全部责任
         </a-checkbox>
       </a-form-item>
       <a-form-item :wrapperCol="{ span: 24 }" style="text-align: center">
-        <a-button type="primary" html-type="submit">Register</a-button>
+        <a-button type="primary" html-type="submit" :disabled="isChecked">注册</a-button>
       </a-form-item>
     </a-form>
     <button
+
       id="TencentCaptcha"
       data-appid="2085027395"
       data-cbfn="callback2"
@@ -229,6 +228,7 @@ export default {
       imageList: [
       ],
       file: {},
+      isChecked: true,
       confirmDirty: false,
       autoCompleteResult: [],
       formItemLayout: {
@@ -258,6 +258,7 @@ export default {
   //   components: {
   //     SIdentify
   //   },
+
   beforeCreate () {
     this.form = this.$form.createForm(this)
   },
@@ -265,6 +266,10 @@ export default {
     this.flag = !this.flag
   },
   methods: {
+    handleCheckBox () {
+      this.isChecked = this.form.getFieldValue('agreement')
+      console.log(this.isChecked)
+    },
     imageBeforeUpload (file, fileList) {
       this.imageList.push(file)
       return false
