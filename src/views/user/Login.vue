@@ -111,7 +111,7 @@
           type="default"
           v-if="!validated"
           @click="toCaptcha"
-        >验证</a-button>
+        >点击获取验证码</a-button>
         <router-link
           :to="{ name: 'register' }"
           class="forge-password"
