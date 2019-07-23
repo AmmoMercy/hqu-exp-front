@@ -1,6 +1,6 @@
 import Mock from 'mockjs2'
 const student = (options) => {
-  console.log(options.url)
+  console.log(options)
   return {
     'code': 200,
     'data': {

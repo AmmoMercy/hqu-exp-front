@@ -116,7 +116,7 @@ import { PageView } from '@/layouts'
 import DetailList from '@/components/tools/DetailList'
 import store from '@/store'
 import { genderChanger } from '@/utils/util'
-import { getStu } from '@/api'
+import { getStu } from '../../api/student';
 const DetailListItem = DetailList.Item
 
 export default {
