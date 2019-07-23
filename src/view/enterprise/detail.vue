@@ -1,15 +1,15 @@
 
 <template>
   <page-view
-    title="企业/导师名称"
+    :title="enterprise.name"
     logo="https://gw.alipayobjects.com/zos/rmsportal/nxkuOJlFJuAUhzlMTCEe.png"
   >
     <detail-list slot="headerContent" size="small" :col="2" class="detail-layout">
-      <detail-list-item term="注册时间">2018-08-07</detail-list-item>
+      <detail-list-item term="注册时间">{{enterprise.register_time}}</detail-list-item>
       <detail-list-item term="资质文件">
         <a>url</a>
       </detail-list-item>
-      <detail-list-item term="类型">企业/导师</detail-list-item>
+      <detail-list-item term="类型">{{enterprise.type}}</detail-list-item>
       <detail-list-item term="备注">这部分为管理员可见</detail-list-item>
     </detail-list>
     <!-- actions -->
@@ -39,16 +39,22 @@
         </a-button>
       </a-form-item>
       <detail-list title="一般信息">
-        <detail-list-item term="类型">导师/企业</detail-list-item>
-        <detail-list-item term="详细地址">地址</detail-list-item>
-        <detail-list-item term="企业/导师email">email</detail-list-item>
-        <detail-list-item term="企业/导师联系人">XXX</detail-list-item>
-        <detail-list-item term="企业/导师联系方式">1234567890</detail-list-item>
+        <detail-list-item term="类型">{{enterprise.type}}</detail-list-item>
+        <detail-list-item term="详细地址">{{enterprise.address}}</detail-list-item>
+        <detail-list-item term="企业/导师email">{{enterprise.email}}</detail-list-item>
+        <detail-list-item term="企业/导师联系人">{{enterprise.contact_name}}</detail-list-item>
+        <detail-list-item term="企业/导师联系方式">{{enterprise.contact_tel}}</detail-list-item>
         <detail-list-item term="备注">除了编辑按钮，其余所有人可见</detail-list-item>
       </detail-list>
       <a-divider style="margin-bottom: 32px" />
       <a-form-item label="简介">
-        <a-textarea contenteditable="false" rows="10" readonly value="我是简介" style="border:none" />
+        <a-textarea
+          contenteditable="false"
+          rows="10"
+          readonly
+          v-model="enterprise.intro"
+          style="border:none"
+        />
       </a-form-item>
       <a-divider>❤照片墙❤</a-divider>
 
@@ -68,7 +74,8 @@
             {rules: [{ required: true, message: '必须填写详细地址' }]}
           ]"
             name="name"
-            placeholder="详细地址"
+            placeholder="address"
+            v-model="enterprise.address"
           />
         </a-form-item>
         <a-form-item label="企业/导师email">
@@ -79,6 +86,7 @@
           ]"
             name="name"
             placeholder="email"
+            v-model="enterprise.email"
           />
         </a-form-item>
         <a-form-item label="企业/导师联系人">
@@ -89,6 +97,7 @@
           ]"
             name="name"
             placeholder="联系人本名"
+            v-model="enterprise.contact_name"
           />
         </a-form-item>
         <a-form-item label="企业/导师联系方式">
@@ -99,6 +108,7 @@
           ]"
             name="name"
             placeholder="手机号码"
+            v-model="enterprise.contact_tel"
           />
         </a-form-item>
         <a-form-item label="简介">
@@ -110,6 +120,7 @@
           ]"
             name="name"
             placeholder="这里填写简介"
+            v-model="enterprise.intro"
           />
         </a-form-item>
         <a-divider style="margin-bottom: 32px" orientation="left">上传照片</a-divider>
@@ -136,16 +147,18 @@
 </template>
 
 <script>
-import { mixinDevice } from '@/utils/mixin'
-import { PageView } from '@/layouts'
-import DetailList from '@/components/tools/DetailList'
+import { mixinDevice } from "@/utils/mixin";
+import { PageView } from "@/layouts";
+import DetailList from "@/components/tools/DetailList";
+import store from "@/store";
+import { getEnt } from "../../api/enterprise";
 
-const DetailListItem = DetailList.Item
+const DetailListItem = DetailList.Item;
 const baseUrl =
-  'https://raw.githubusercontent.com/vueComponent/ant-design-vue/master/components/vc-slick/assets/img/react-slick/'
+  "https://raw.githubusercontent.com/vueComponent/ant-design-vue/master/components/vc-slick/assets/img/react-slick/";
 
 export default {
-  name: 'Advanced',
+  name: "Advanced",
   components: {
     PageView,
     DetailList,
@@ -158,38 +171,52 @@ export default {
       baseUrl,
       mdl: {},
       previewVisible: false,
-      previewImage: '',
+      previewImage: "",
+      enterprise: {},
       fileList: [
         {
-          uid: '-1',
-          name: 'xxx.png',
-          status: 'done',
-          url: 'https://zos.alipayobjects.com/rmsportal/jkjgkEfvpUPVyRjUImniVslZfWPnJuuZ.png'
+          uid: "-1",
+          name: "xxx.png",
+          status: "done",
+          url:
+            "https://zos.alipayobjects.com/rmsportal/jkjgkEfvpUPVyRjUImniVslZfWPnJuuZ.png"
         }
       ]
+    };
+  },
+  mounted() {
+    if (store.getters.role === "enterprise") {
+      this.enterprise = store.getters.userInfo;
+    } else {
+      const entid = store.getters.entid;
+      getEnt(entid).then(response => {
+        if (response.code === 200) {
+          this.enterprise = response.data;
+        }
+      });
     }
   },
   methods: {
     handleCancel() {
-      this.previewVisible = false
+      this.previewVisible = false;
     },
     handlePreview(file) {
-      this.previewImage = file.url || file.thumbUrl
-      this.previewVisible = true
+      this.previewImage = file.url || file.thumbUrl;
+      this.previewVisible = true;
     },
     handleChange({ fileList }) {
-      this.fileList = fileList
+      this.fileList = fileList;
     },
     handleEdit(record) {
-      this.mdl = Object.assign({}, record)
-      this.visible = true
+      this.mdl = Object.assign({}, record);
+      this.visible = true;
     },
     handleOk() {},
     getImgUrl(i) {
-      return `${baseUrl}abstract0${i + 1}.jpg`
+      return `${baseUrl}abstract0${i + 1}.jpg`;
     }
   }
-}
+};
 </script>
 
 <style scoped>

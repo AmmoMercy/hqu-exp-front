@@ -1,12 +1,12 @@
 
 <template>
   <page-view
-    title="实训项目名称"
+    :title="internship.topic"
     logo="https://gw.alipayobjects.com/zos/rmsportal/nxkuOJlFJuAUhzlMTCEe.png"
   >
     <detail-list slot="headerContent" size="small" :col="2" class="detail-layout">
-      <detail-list-item term="提交日期">2018-08-07</detail-list-item>
-      <detail-list-item term="类型">企业/导师</detail-list-item>
+      <detail-list-item term="提交日期">{{internship.submit_time}}</detail-list-item>
+      <detail-list-item term="类型">{{internship.type}}</detail-list-item>
       <detail-list-item term="备注">这部分为管理员可见</detail-list-item>
     </detail-list>
     <!-- actions -->
@@ -36,15 +36,15 @@
         </a-button>
       </a-form-item>
       <detail-list title="一般信息">
-        <detail-list-item term="类型">导师/企业</detail-list-item>
+        <detail-list-item term="类型">{{internship.type}}</detail-list-item>
         <detail-list-item term="企业/导师名称">
-          <a>xx企业（转跳至该企业详情页）</a>
+          <a>{{internship.enterprise}}</a>
         </detail-list-item>
-        <detail-list-item term="实训地址">地址</detail-list-item>
-        <detail-list-item term="实训起止日">时间--时间</detail-list-item>
-        <detail-list-item term="报名截止日期">时间</detail-list-item>
-        <detail-list-item term="意向人数">xxxxx人</detail-list-item>
-        <detail-list-item term="已报名人数">xxxxx/xxxxxx人</detail-list-item>
+        <detail-list-item term="实训地址">{{internship.address}}</detail-list-item>
+        <detail-list-item term="实训起止日">{{internship.exp_begin_time}}-{{internship.exp_end_time}}</detail-list-item>
+        <detail-list-item term="报名截止日期">{{internship.apply_end_time}}</detail-list-item>
+        <detail-list-item term="意向人数">{{internship.need_num}}</detail-list-item>
+        <detail-list-item term="已报名人数">{{internship.submit_num}}人</detail-list-item>
         <detail-list-item term="备注">编辑按钮企业可见，报名按钮学生可见，其余所有人可见，编辑后需要重新审核</detail-list-item>
       </detail-list>
       <a-divider style="margin-bottom: 32px" />
@@ -53,7 +53,7 @@
           contenteditable="false"
           rows="10"
           readonly
-          value="我是描述、要求等"
+          :value="internship.description"
           style="border:none"
         />
       </a-form-item>
@@ -71,6 +71,7 @@
           ]"
             name="name"
             placeholder="详细地址"
+            v-model="internship.address"
           />
         </a-form-item>
         <a-form-item label="实训起止日期">
@@ -102,6 +103,7 @@
             'peopleNum',
             {rules: [{ required: true, message: '必须填写意向人数' }]}
           ]"
+            v-model="internship.need_num"
           />
           <span>人</span>
         </a-form-item>
@@ -114,6 +116,7 @@
           ]"
             name="name"
             placeholder="这里填写实训描述"
+            v-model="internship.description"
           />
         </a-form-item>
       </a-modal>
@@ -148,14 +151,16 @@
 </template>
 
 <script>
-import { mixinDevice } from '@/utils/mixin'
-import { PageView } from '@/layouts'
-import DetailList from '@/components/tools/DetailList'
+import { mixinDevice } from "@/utils/mixin";
+import { PageView } from "@/layouts";
+import DetailList from "@/components/tools/DetailList";
+import store from "@/store";
+import { publish } from "../../api/enterprise";
 
-const DetailListItem = DetailList.Item
+const DetailListItem = DetailList.Item;
 
 export default {
-  name: 'Advanced',
+  name: "Advanced",
   components: {
     PageView,
     DetailList,
@@ -168,25 +173,38 @@ export default {
         time: 60,
         smsSendBtn: false,
         percent: 10,
-        progressColor: '#FF0000'
+        progressColor: "#FF0000"
       },
       visible: false,
       enterVisible: false,
       mdl: {},
+      internship: {}
+    };
+  },
+  mounted() {
+    if (store.getters.role === "internship") {
+      this.internship = store.getters.userInfo;
+    } else {
+      const expid = store.getters.expid;
+      publish(expid).then(response => {
+        if (response.code === 200) {
+          this.internship = response.data;
+        }
+      });
     }
   },
   methods: {
     handleEdit(record) {
-      this.mdl = Object.assign({}, record)
-      this.visible = true
+      this.mdl = Object.assign({}, record);
+      this.visible = true;
     },
     handleEnter(record) {
-      this.mdl = Object.assign({}, record)
-      this.enterVisible = true
+      this.mdl = Object.assign({}, record);
+      this.enterVisible = true;
     },
     handleOk() {}
   }
-}
+};
 </script>
 
 <style lang="less" scoped>
@@ -226,5 +244,4 @@ export default {
     text-align: left;
   }
 }
-
 </style>
