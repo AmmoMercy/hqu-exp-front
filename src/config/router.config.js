@@ -211,14 +211,13 @@ export const constantRouterMap = [
         name: 'registerResult',
         component: () =>
           import(/* webpackChunkName: "user" */ '@/views/user/RegisterResult')
+      },
+      {
+        path: '/register',
+        name: 'register',
+        component: () => import('@/view/enterpriseRegister')
       }
     ]
-  },
-
-  {
-    path: '/register',
-    name: 'register',
-    component: () => import('@/view/enterpriseRegister')
   },
 
   {
