@@ -4,17 +4,21 @@
   <div>
     <a-row style="margin-top: 50px">
       <a-col :span="18" :offset="3">
-        <a-table :columns="columns" :dataSource="data" >
+        <s-table 
+        :columns="columns" 
+        :data="loadData"
+        >
           <template slot="name" slot-scope="text">
             <a href="javascript:;">{{text}}</a>
           </template>
-        </a-table>
+        </s-table>
       </a-col>
       <a-col :span="18" :offset="3">
         <a-upload-dragger
           name="file"
           :multiple="true"
-          action="https://www.mocky.io/v2/5cc8019d300000980a055e76"
+          accept="application/zip"
+          action="/api/student/completion/work"
           @change="handleChange"
         >
           <p class="ant-upload-drag-icon">
@@ -30,6 +34,7 @@
 
 
 <script>
+
 const columns = [
   {
     title: "姓名",
@@ -44,34 +49,58 @@ const columns = [
   }
 ];
 
-const data = [
-  {
-    key: "1",
-    name: '朱鹏屹',
-    exp_name: '亚尔迪百万富翁之旅'
-  }
-]
+// const data = [
+//   {
+//     key: "1",
+//     name: '',
+//     exp_name:''
+//   }
+// ]
+
+import store from '@/store'
+import {completion} from '@/api/student'
+import {STable} from '@/components'
+import { getExpList } from '@/api/student'
 
 export default {
+  components:{
+    STable
+  },
   data () {
     return {
-      data,
-      columns
+      columns,
+      student:{},
+      loadData: parameter => {
+        console.log('loadData.parameter', parameter)
+        return getExpList(Object.assign(parameter, this.queryParam))
+          .then(res => {
+            return res.result
+            }
+      )}
     }
   },
+
+
+
+  
   methods: {
     handleChange (info) {
       const status = info.file.status
-      if (status !== "uploading") {
-        console.log(info.file, info.fileList);
-      }
-      if (status === "done") {
+      if (status !== "uploading") {   
+      const completionParams =['info.file','info.fileList']
+      console.log(completionParams)
+      .then((res) => {
+        if (res.code ===200 && status === "done") 
         this.$message.success(`${info.file.name} file uploaded successfully.`)
-      } else if (status === "error") {
+      })
+      .catch((err) => {
+        if (res.code === 100 || status === "error") 
         this.$message.error(`${info.file.name} file upload failed.`)
-      }
-    }
+      })
+      console.log("Received file")
+    }       
   }
+}
 }
 </script>
 <style>
