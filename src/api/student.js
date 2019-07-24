@@ -14,16 +14,16 @@ export function getStuInfo () {
 }
 export function completion (parameter) {
   return axios({
-    url: '/api/student/completion/work',
+    url: '/api/student/completion',
     method: 'post',
     data: parameter
   })
 }
-export function getExpList (parameter) {
-  return axios({
-    url: '/api/student/completion/table',
-    method: 'get',
-    parameter: parameter
+// export function getExpList (parameter) {
+//   return axios({
+//     url: '/api/student/completion/table',
+//     method: 'get',
+//     parameter: parameter
 
-  })
-}
+//   })
+// }

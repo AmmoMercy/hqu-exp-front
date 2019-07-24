@@ -34,6 +34,15 @@ const register = options => {
     msg: '处理成功'
   }
 }
+
+const submitprove = options => {
+  console.log(options)
+  return {
+    code: 200,
+    msg: '处理成功'
+  }
+}
+Mock.mock(/\/api\/enterprise\/result/, 'post', submitprove)
 Mock.mock(/\/api\/enterprise\/register/, 'post', register)
 Mock.mock(/\/api\/enterprise\/internship/, 'post', publish)
 Mock.mock(/\/api\/enterprise\/info/, 'get', enterpriseInfo)

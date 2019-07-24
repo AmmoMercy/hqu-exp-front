@@ -1,19 +1,19 @@
 import Mock from 'mockjs2'
-import { builder } from '../util'
+// import { builder } from '../util'
 
-const expList = (options) => {
-  const result = []
+// const expList = (options) => {
+//   const result = []
 
-  result.push({
-    key: '1',
-    name: '图灵',
-    exp_name: '亚尔迪'
-  })
+//   result.push({
+//     key: '1',
+//     name: '图灵',
+//     exp_name: '亚尔迪'
+//   })
 
-  return builder({
-    data: result
-  })
-}
+//   return builder({
+//     data: result
+//   })
+// }
 const student = (options) => {
   console.log(options)
   return {
@@ -31,12 +31,12 @@ const student = (options) => {
 }
 
 const completion = options => {
-  console.log(options.url)
+  console.log(options)
   return {
     code: 200,
     msg: '处理成功'
   }
 }
 Mock.mock(/\/api\/student\/myinfo/, 'get', student)
-Mock.mock(/\/api\/student\/completion\/work/, 'post', completion)
-Mock.mock(/\/api\/student\/completion\/table/, 'get', expList)
+Mock.mock(/\/api\/student\/completion/, 'post', completion)
+// Mock.mock(/\/api\/student\/completion\/table/, 'get', expList)

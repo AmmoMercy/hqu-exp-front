@@ -25,3 +25,10 @@ export function register (parameter) {
     data: parameter
   })
 }
+export function submitprove (parameter) {
+  return axios({
+    url: '/api/enterprise/result',
+    method: 'post',
+    data: parameter
+  })
+}
