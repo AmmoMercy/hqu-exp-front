@@ -22,7 +22,7 @@ const enterpriseInfo = (options) => {
       'contact_tel': '18866668888',
       'intro': '简介',
       'register_time': '1970-01-01T00:00:00',
-      'status': '已通过',
+      'status': 0,
       ' images': '图片'
     }
   }

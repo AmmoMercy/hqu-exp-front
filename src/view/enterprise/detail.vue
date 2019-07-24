@@ -4,37 +4,50 @@
     :title="enterprise.name"
     logo="https://gw.alipayobjects.com/zos/rmsportal/nxkuOJlFJuAUhzlMTCEe.png"
   >
-    <detail-list slot="headerContent" size="small" :col="2" class="detail-layout">
+    <detail-list
+      slot="headerContent"
+      size="small"
+      :col="2"
+      class="detail-layout"
+      v-if="role==='admin'"
+    >
       <detail-list-item term="注册时间">{{enterprise.register_time}}</detail-list-item>
       <detail-list-item term="资质文件">
         <a>url</a>
       </detail-list-item>
       <detail-list-item term="类型">{{enterprise.type}}</detail-list-item>
-      <detail-list-item term="备注">这部分为管理员可见</detail-list-item>
     </detail-list>
     <!-- actions -->
-    <template slot="action">
-      <a-button htmlType="submit" type="primary">
-        <a-icon type="check" />审核通过
+    <template slot="action" class="steps-action" v-if="role==='admin'">
+      <a-button v-if="enterprise.status===0" type="primary" @click="pass">
+        <a-icon type="check" />通过
       </a-button>
-      <a-button style="margin-left: 8px">
-        <a-icon type="close" />审核不通过
+      <a-button v-if="enterprise.status ===0" style="margin-left: 8px" @click="fail">
+        <a-icon type="close" />不通过
+      </a-button>
+      <a-button v-if="enterprise.status >= 1" style="margin-left: 8px" @click="reCheck">
+        <a-icon type="close" />撤销
       </a-button>
     </template>
 
-    <a-card :bordered="false" title="流程进度">
-      <span>这部分为企业和管理员可见</span>
-      <a-divider style="margin-bottom: 32px" />
-      <a-steps :direction="isMobile() && 'vertical' || 'horizontal'" :current="2" progressDot>
-        <a-step title="注册完成"></a-step>
-        <a-step title="审核中"></a-step>
-        <a-step style="margin-left: 8px" title="审核通过"></a-step>
+    <a-card :bordered="false" title="流程进度" v-if="role==='enterprise'||role==='admin'">
+      <a-steps :current="enterprise.status+1">
+        <a-step title="提交成功" description="请耐心等待审核。" />
+        <a-step v-if="enterprise.status===0" title="审核中" description="审核结果将会在7个工作日内进行通知。" />
+        <a-step v-if="enterprise.status===1" title="审核通过!" description="贵企业已经可以进行实训信息发布。" />
+        <a-step
+          v-else-if="enterprise.status===2"
+          title="审核未通过!"
+          status="error"
+          description="请修改企业信息，重新提交。"
+        />
+        <a-step v-else title="等待审核完毕" />
       </a-steps>
     </a-card>
 
     <a-card style="margin-top: 24px" :bordered="false" title="企业信息">
       <a-form-item :wrapperCol="{ span: 24 }" style="text-align: right">
-        <a-button htmlType="submit" @click="handleEdit(record)">
+        <a-button htmlType="submit" @click="handleEdit(record)" v-if="role==='enterprise'">
           <a-icon type="edit" />
         </a-button>
       </a-form-item>
@@ -44,7 +57,6 @@
         <detail-list-item term="企业/导师email">{{enterprise.email}}</detail-list-item>
         <detail-list-item term="企业/导师联系人">{{enterprise.contact_name}}</detail-list-item>
         <detail-list-item term="企业/导师联系方式">{{enterprise.contact_tel}}</detail-list-item>
-        <detail-list-item term="备注">除了编辑按钮，其余所有人可见</detail-list-item>
       </detail-list>
       <a-divider style="margin-bottom: 32px" />
       <a-form-item label="简介">
@@ -173,6 +185,7 @@ export default {
       previewVisible: false,
       previewImage: "",
       enterprise: {},
+      role: 0,
       fileList: [
         {
           uid: "-1",
@@ -195,6 +208,7 @@ export default {
         }
       });
     }
+    this.role = store.getters.role;
   },
   methods: {
     handleCancel() {
@@ -212,6 +226,18 @@ export default {
       this.visible = true;
     },
     handleOk() {},
+    pass() {
+      this.enterprise.status = 1;
+      //此处加上保存进数据库的方法
+    },
+    fail() {
+      this.enterprise.status = 2;
+      //此处加上保存进数据库的方法
+    },
+    reCheck() {
+      this.enterprise.status = 0;
+      //此处加上保存进数据库的方法
+    },
     getImgUrl(i) {
       return `${baseUrl}abstract0${i + 1}.jpg`;
     }
