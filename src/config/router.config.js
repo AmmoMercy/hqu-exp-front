@@ -161,25 +161,25 @@ export const adminRouterMap = [
         path: '/internshiplist',
         name: 'internshiplist',
         component: () => import('@/view/internship/list/queryList'),
-        meta: { title: '项目列表' }
+        meta: { title: '项目列表', icon: 'snippets' }
       },
       {
         path: '/enterprise',
         name: 'enterpriselist',
         component: () => import('@/view/enterprise/list/queryList'),
-        meta: { title: '企业列表' }
+        meta: { title: '企业列表', icon: 'deployment-unit' }
       },
       {
         path: '/grade',
         component: () => import('@/view/admin/grade'),
         name: 'grade',
-        meta: { title: '成绩管理' }
+        meta: { title: '成绩管理', icon: 'file-done' }
       },
       {
         path: '/admin',
         component: () => import('@/view/admin/setting'),
         name: 'setting',
-        meta: { title: '个人设置' }
+        meta: { title: '个人设置', icon: 'user' }
       }
     ]
   },
