@@ -83,7 +83,7 @@ export const enterpriseRouterMap = [
         path: '/internship',
         name: 'internship',
         component: PageView,
-        meta: { title: '实训项目', keepAlive: true },
+        meta: { title: '实训项目', keepAlive: true, icon: 'snippets' },
         children: [
           {
             path: '/internship/list',
@@ -109,18 +109,18 @@ export const enterpriseRouterMap = [
         path: '/applicationlist',
         name: 'applicatinlist',
         component: () => import('@/view/application/list/list'),
-        meta: { title: '申请列表', keepAlive: true }
+        meta: { title: '申请列表', keepAlive: true, icon: 'profile' }
       },
       {
         path: '/studentmanage',
         name: 'studentmanage',
         component: () => import('@/view/student/list/list'),
-        meta: { title: '学生管理', keepAlive: true }
+        meta: { title: '学生管理', keepAlive: true, icon: 'team' }
       },
       { path: '/enterprise',
         name: 'enterprise',
         component: () => import('@/view/enterprise/detail'),
-        meta: { title: '企业信息' }
+        meta: { title: '企业信息', icon: 'deployment-unit' }
 
       },
       { path: '/internshipdetail',
