@@ -83,7 +83,7 @@ export const enterpriseRouterMap = [
         path: '/internship',
         name: 'internship',
         component: PageView,
-        meta: { title: '实训项目', keepAlive: true },
+        meta: { title: '实训项目', keepAlive: true, icon: 'snippets' },
         children: [
           {
             path: '/internship/list',
@@ -109,18 +109,18 @@ export const enterpriseRouterMap = [
         path: '/applicationlist',
         name: 'applicatinlist',
         component: () => import('@/view/application/list/list'),
-        meta: { title: '申请列表', keepAlive: true }
+        meta: { title: '申请列表', keepAlive: true, icon: 'profile' }
       },
       {
         path: '/studentmanage',
         name: 'studentmanage',
         component: () => import('@/view/student/list/list'),
-        meta: { title: '学生管理', keepAlive: true }
+        meta: { title: '学生管理', keepAlive: true, icon: 'team' }
       },
       { path: '/enterprise',
         name: 'enterprise',
         component: () => import('@/view/enterprise/detail'),
-        meta: { title: '企业信息' }
+        meta: { title: '企业信息', icon: 'deployment-unit' }
 
       },
       { path: '/internshipdetail',
@@ -161,25 +161,25 @@ export const adminRouterMap = [
         path: '/internshiplist',
         name: 'internshiplist',
         component: () => import('@/view/internship/list/queryList'),
-        meta: { title: '项目列表' }
+        meta: { title: '项目列表', icon: 'snippets' }
       },
       {
         path: '/enterprise',
         name: 'enterpriselist',
         component: () => import('@/view/enterprise/list/queryList'),
-        meta: { title: '企业列表' }
+        meta: { title: '企业列表', icon: 'deployment-unit' }
       },
       {
         path: '/grade',
         component: () => import('@/view/admin/grade'),
         name: 'grade',
-        meta: { title: '成绩管理' }
+        meta: { title: '成绩管理', icon: 'file-done' }
       },
       {
         path: '/admin',
         component: () => import('@/view/admin/setting'),
         name: 'setting',
-        meta: { title: '个人设置' }
+        meta: { title: '个人设置', icon: 'user' }
       }
     ]
   },
@@ -211,14 +211,13 @@ export const constantRouterMap = [
         name: 'registerResult',
         component: () =>
           import(/* webpackChunkName: "user" */ '@/views/user/RegisterResult')
+      },
+      {
+        path: '/register',
+        name: 'register',
+        component: () => import('@/view/enterpriseRegister')
       }
     ]
-  },
-
-  {
-    path: '/register',
-    name: 'register',
-    component: () => import('@/view/enterpriseRegister')
   },
 
   {

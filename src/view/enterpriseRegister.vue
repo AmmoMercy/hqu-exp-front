@@ -1,179 +1,183 @@
 <template>
-  <a-card :body-style="{padding: '24px 32px'}" :bordered="false">
-    <a-form :form="form" @submit="handleSubmit">
-      <a-form-item v-bind="formItemLayout" label="邮箱">
-        <a-input
-          v-decorator="[
-            'email',
-            {
-              rules: [{
-                type: 'email', message: '请输入正确的邮箱',
-              }, {
-                required: true, message: '请输入邮箱',
-              }]
-            }
-          ]"
-          placeholder="请输入邮箱 该邮箱将作为登录账号"
-        />
-      </a-form-item>
-      <a-form-item v-bind="formItemLayout" label="密码">
-        <a-input
-          v-decorator="[
-            'password',
-            {
-              rules: [{
-                required: true, message: '请输入密码',
-              }, {
-                validator: validateToNextPassword,
-              }],
-            }
-          ]"
-          type="password"
-          placeholder="请输入密码"
-        />
-      </a-form-item>
-      <a-form-item v-bind="formItemLayout" label="再次输入密码">
-        <a-input
-          v-decorator="[
-            'confirm',
-            {
-              rules: [{
-                required: true, message: '请再次输入密码',
-              }, {
-                validator: compareToFirstPassword,
-              }],
-            }
-          ]"
-          placeholder="请再次输入密码"
-          type="password"
-          @blur="handleConfirmBlur"
-        />
-      </a-form-item>
-      <a-form-item v-bind="formItemLayout" label="注册类型">
-        <a-select
-          v-decorator="[
-            'type',
-            {rules: [{ required: true, message: 'Please select your type!' }]}
-          ]"
-          placeholder="请选择您的身份"
-        >
-          <a-select-option value="enterprise">公司</a-select-option>
-          <a-select-option value="tutor">导师</a-select-option>
-        </a-select>
-      </a-form-item>
-      <a-form-item v-bind="formItemLayout">
-        <span slot="label">
-          公司名称&nbsp;
-          <a-tooltip title="导师请输入导师姓名">
-            <a-icon type="question-circle-o" />
-          </a-tooltip>
-        </span>
-        <a-input
-          v-decorator="[
-            'nickname',
-            {
-              rules: [{ required: true, message: 'Please input your nickname!', whitespace: true }]
-            }
-          ]"
-          placeholder="nickname"
-        />
-      </a-form-item>
-      <a-form-item v-bind="formItemLayout" label="Address">
-        <a-input
-          v-decorator="[
-            'address',
-            {
-              rules: [{ required: true, message: 'Please input your address !' }],
-            }
-          ]"
-          placeholder="Address"
-        />
-      </a-form-item>
-      <a-form-item v-bind="formItemLayout" label="Contact Name">
-        <a-input
-          v-decorator="[
-            'contact-name',
-            {
-              rules: [{ required: true, message: 'Please input your name !' }],
-            }
-          ]"
-          placeholder="Contact Name"
-        />
-      </a-form-item>
-      <a-form-item v-bind="formItemLayout" label="Phone Number">
-        <a-input
-          v-decorator="[
-            'contact-tel',
-            {
-              rules: [{ required: true, message: 'Please input your phone number!' },{validator:validatePhone}],
-            }
-          ]"
-          placeholder="Phone Number"
-          style="width: 100%"
-        >
-          <a-select
-            slot="addonBefore"
+  <a-row>
+    <a-col :span="24">
+      <a-form :form="form" @submit="handleSubmit">
+        <a-form-item v-bind="formItemLayout" label="邮箱">
+          <a-input
+            size="large"
             v-decorator="[
-              'prefix',
-              { initialValue: '86' }
+              'email',
+              {
+                rules: [{
+                  type: 'email', message: '请输入正确的邮箱',
+                }, {
+                  required: true, message: '请输入邮箱',
+                }]
+              }
             ]"
-            style="width: 70px"
+            placeholder="请输入邮箱 该邮箱将作为登录账号"
+          />
+        </a-form-item>
+        <a-form-item v-bind="formItemLayout" label="密码">
+          <a-input
+            v-decorator="[
+              'password',
+              {
+                rules: [{
+                  required: true, message: '请输入密码',
+                }, {
+                  validator: validateToNextPassword,
+                }],
+              }
+            ]"
+            type="password"
+            placeholder="请输入密码"
+          />
+        </a-form-item>
+        <a-form-item v-bind="formItemLayout" label="再次输入密码">
+          <a-input
+            v-decorator="[
+              'confirm',
+              {
+                rules: [{
+                  required: true, message: '请再次输入密码',
+                }, {
+                  validator: compareToFirstPassword,
+                }],
+              }
+            ]"
+            placeholder="请再次输入密码"
+            type="password"
+            @blur="handleConfirmBlur"
+          />
+        </a-form-item>
+        <a-form-item v-bind="formItemLayout" label="注册类型">
+          <a-select
+            v-decorator="[
+              'type',
+              {rules: [{ required: true, message: '请选择您的类型' }]}
+            ]"
+            placeholder="请选择您的身份"
           >
-            <a-select-option value="86">+86</a-select-option>
-            <a-select-option value="87">+87</a-select-option>
+            <a-select-option value="enterprise">公司</a-select-option>
+            <a-select-option value="tutor">导师</a-select-option>
           </a-select>
-        </a-input>
-      </a-form-item>
-      <a-form-item v-bind="formItemLayout" label="introduce">
-        <a-textarea
-          rows="20"
-          v-decorator="[
-            'description',
-            {rules: [{ required: true, message: '请输入目标描述' }]}
-          ]"
-        />
-      </a-form-item>
-      <a-form-item v-bind="formItemLayout" label="images">
-        <a-upload
-          v-decorator="['images', {
-            rules: [{ required: true}],
-          }]"
-          action="https://www.mocky.io/v2/5cc8019d300000980a055e76"
-          listType="picture-card"
-          :fileList="fileList"
-          @preview="handlePreview"
-          @change="handleChange"
-        >
-          <div v-if="fileList.length < 3">
-            <a-icon type="plus" />
-            <div class="ant-upload-text">Upload</div>
-          </div>
-        </a-upload>
-        <a-modal :visible="previewVisible" :footer="null" @cancel="handleCancel">
-          <img alt="example" style="width: 100%" :src="previewImage" />
-        </a-modal>
-      </a-form-item>
-
-      <a-form-item v-bind="formItemLayout" label="资质文件">
-        <div class="dropbox">
-          <a-upload-dragger
-            v-decorator="['dragger', {
-              rules: [{ required: true}],
-              valuePropName: 'fileList',
-              getValueFromEvent: normFile,
-            }]"
-            name="files"
-            action="/upload.do"
+        </a-form-item>
+        <a-form-item v-bind="formItemLayout">
+          <span slot="label">
+            公司名称&nbsp;
+            <a-tooltip title="导师请输入导师姓名">
+              <a-icon type="question-circle-o" />
+            </a-tooltip>
+          </span>
+          <a-input
+            v-decorator="[
+              'nickname',
+              {
+                rules: [{ required: true, message: '请输入公司名称', whitespace: true }]
+              }
+            ]"
+            placeholder="公司名称"
+          />
+        </a-form-item>
+        <a-form-item v-bind="formItemLayout" label="公司地址">
+          <a-input
+            v-decorator="[
+              'address',
+              {
+                rules: [{ required: true, message: '请输入公司地址' }],
+              }
+            ]"
+            placeholder="公司地址"
+          />
+        </a-form-item>
+        <a-form-item v-bind="formItemLayout" label="联系人姓名">
+          <a-input
+            v-decorator="[
+              'contact-name',
+              {
+                rules: [{ required: true, message: '请输入联系人姓名' }],
+              }
+            ]"
+            placeholder="联系人姓名"
+          />
+        </a-form-item>
+        <a-form-item v-bind="formItemLayout" label="联系人电话">
+          <a-input
+            v-decorator="[
+              'contact-tel',
+              {
+                rules: [{ required: true, message: '请输入联系人电话' },{validator:validatePhone}],
+              }
+            ]"
+            placeholder="联系人电话"
+            style="width: 100%"
           >
-            <p class="ant-upload-drag-icon">
-              <a-icon type="inbox" />
-            </p>
-            <p class="ant-upload-text">Click or drag file to this area to upload</p>
-            <p class="ant-upload-hint">Support for a single or bulk upload.</p>
-          </a-upload-dragger>
-        </div>
-      </a-form-item>
-      <!-- <a-form-item
+            <a-select
+              slot="addonBefore"
+              v-decorator="[
+                'prefix',
+                { initialValue: '86' }
+              ]"
+              style="width: 70px"
+            >
+              <a-select-option value="86">+86</a-select-option>
+            </a-select>
+          </a-input>
+        </a-form-item>
+        <a-form-item v-bind="formItemLayout" label="公司概述">
+          <a-textarea
+            rows="20"
+            v-decorator="[
+              'description',
+              {rules: [{ required: true, message: '请输入公司概述' }]}
+            ]"
+            placeholder="公司概述"
+          />
+        </a-form-item>
+        <a-form-item v-bind="formItemLayout" label="公司照片">
+          <a-upload
+            v-decorator="['images', {
+              rules: [{ required: true}],
+            }]"
+            accept=".png,.jpg,.jpeg"
+            :beforeUpload="imageBeforeUpload"
+            listType="picture-card"
+            :fileList="imageList"
+            @preview="handlePreview"
+            @change="handleChange"
+          >
+            <div v-if="imageList.length < 3">
+              <a-icon type="plus" />
+              <div class="ant-upload-text">仅限png或jpg</div>
+            </div>
+          </a-upload>
+          <a-modal :visible="previewVisible" :footer="null" @cancel="handleCancel">
+            <img alt="example" style="width: 100%" :src="previewImage" />
+          </a-modal>
+        </a-form-item>
+
+        <a-form-item v-bind="formItemLayout" label="资质文件">
+          <div class="dropbox">
+            <a-upload-dragger
+              v-decorator="['dragger', {
+                rules: [{ required: true}],
+                valuePropName: 'fileList',
+                getValueFromEvent: normFile,
+              }]"
+              name="files"
+              :beforeUpload="fileBeforeUpload"
+              accept=".zip"
+            >
+              <p class="ant-upload-drag-icon">
+                <a-icon type="inbox" />
+              </p>
+              <p class="ant-upload-text">点击选取或拖动文件到此处</p>
+              <p class="ant-upload-hint">请将营业执照等照片打包成zip</p>
+            </a-upload-dragger>
+          </div>
+        </a-form-item>
+        <!-- <a-form-item
         v-bind="formItemLayout"
         label="Captcha"
         extra="We must make sure that your are a human."
@@ -183,7 +187,7 @@
             <a-input
               v-decorator="[
               'captcha',
-              {rules: [{ required: true, message: 'Please input the captcha you got!' }]}
+              {rules: [{ required: true, message: '请输入 the captcha you got!' }]}
             ]"
             />
           </a-col>
@@ -194,53 +198,50 @@
           </a-col>
         </a-row>
       </a-form-item>-->
-      <a-form-item v-bind="tailFormItemLayout">
-        <a-checkbox v-decorator="['agreement', {valuePropName: 'checked'}]">
-          I have read the
-          <a href>agreement</a>
-        </a-checkbox>
-      </a-form-item>
-      <a-form-item :wrapperCol="{ span: 24 }" style="text-align: center">
-        <a-button type="primary" html-type="submit">Register</a-button>
-      </a-form-item>
-    </a-form>
-    <button
-      id="TencentCaptcha"
-      data-appid="2085027395"
-      data-cbfn="callback2"
-    >验证</button>
-  </a-card>
-
+        <a-form-item v-bind="tailFormItemLayout">
+          <a-checkbox @change="handleCheckBox()" v-decorator="['agreement', {valuePropName: 'checked'}]">
+            本人保证所提交信息均为真实有效信息 并承担因提供不实信息所产生的全部责任
+          </a-checkbox>
+        </a-form-item>
+        <a-form-item :wrapperCol="{ span: 24 }" style="text-align: center">
+          <a-button
+            size="large"
+            type="default"
+            v-if="!validated"
+            @click="toCaptcha"
+          >点击获取验证码</a-button>
+          <a-button size="large" class="register-button" type="primary" html-type="submit" :disabled="isChecked || !validated">注册</a-button>
+        </a-form-item>
+      </a-form>
+    </a-col>
+  </a-row>
 </template>
 
 <script>
 // import SIdentify from "@/views/enterprise/identify";
+import { register } from '@/api/enterprise'
 export default {
   data () {
     return {
+      validated: false,
       flag: true, // 该值变化，就会触发刷新
       code: '',
       previewVisible: false,
       previewImage: '',
-      fileList: [
-        {
-          uid: '-1',
-          name: 'xxx.png',
-          status: 'done',
-          url:
-            'https://zos.alipayobjects.com/rmsportal/jkjgkEfvpUPVyRjUImniVslZfWPnJuuZ.png'
-        }
+      imageList: [
       ],
+      file: {},
+      isChecked: true,
       confirmDirty: false,
       autoCompleteResult: [],
       formItemLayout: {
         labelCol: {
           xs: { span: 24 },
-          sm: { span: 8 }
+          sm: { span: 5 }
         },
         wrapperCol: {
           xs: { span: 24 },
-          sm: { span: 8 }
+          sm: { span: 14 }
         }
       },
       tailFormItemLayout: {
@@ -260,6 +261,7 @@ export default {
   //   components: {
   //     SIdentify
   //   },
+
   beforeCreate () {
     this.form = this.$form.createForm(this)
   },
@@ -267,6 +269,31 @@ export default {
     this.flag = !this.flag
   },
   methods: {
+    toCaptcha () {
+      var self = this
+      var captcha = new TencentCaptcha('2085027395', (res) => {
+      // res（未通过验证）= {ret: 1, ticket: null}
+      // res（验证成功） = {ret: 0, ticket: "String", randstr: "String"}
+        console.log(self, this)
+        if (res.ret === 0) {
+          self.validated = true
+        }
+      })
+      // 显示验证码
+      captcha.show()
+    },
+    handleCheckBox () {
+      this.isChecked = this.form.getFieldValue('agreement')
+      console.log(this.isChecked)
+    },
+    imageBeforeUpload (file, fileList) {
+      this.imageList.push(file)
+      return false
+    },
+    fileBeforeUpload (file, fileList) {
+      this.file = file
+      return false
+    },
     compareToFirstPassword (rule, value, callback) {
       const form = this.form
       if (value && value !== form.getFieldValue('password')) {
@@ -303,7 +330,7 @@ export default {
       this.previewVisible = true
     },
     handleChange ({ fileList }) {
-      this.fileList = fileList
+      this.imageList = fileList
     },
     handleCancel () {
       this.previewVisible = false
@@ -315,12 +342,23 @@ export default {
       }
       return event1 && event1.fileList
     },
-    handleSubmit (event2) {
-      event2.preventDefault()
+    handleSubmit (e) {
+      e.preventDefault()
       this.form.validateFieldsAndScroll((err, values) => {
         if (!err) {
           this.countDown()
-          console.log('Received values of form: ', values)
+          const formData = new FormData()
+          delete values.prefix
+          delete values.images
+          delete values.dragger
+          for (var key in values) {
+            formData.append(key, values[key])
+          }
+          this.imageList.forEach((file) => {
+            formData.append('images[]', file)
+          })
+          formData.append('qualificate_file', this.file)
+          register(formData)
         }
       })
     },

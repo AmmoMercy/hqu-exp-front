@@ -106,7 +106,12 @@
       </a-tabs>
 
       <a-form-item>
-        <a-checkbox v-decorator="['rememberMe']">自动登录</a-checkbox>
+        <a-button
+          size="large"
+          type="default"
+          v-if="!validated"
+          @click="toCaptcha"
+        >点击获取验证码</a-button>
         <router-link
           :to="{ name: 'register' }"
           class="forge-password"
@@ -121,13 +126,12 @@
           htmlType="submit"
           class="login-button"
           :loading="state.loginBtn"
-          :disabled="state.loginBtn"
+          :disabled="!validated"
 
         >确定</a-button>
       </a-form-item>
     </a-form>
-
-    <button @click="toCaptcha">验证    </button></div>
+  </div>
 </template>
 
 <script>
@@ -135,7 +139,7 @@ import md5 from 'md5'
 import TwoStepCaptcha from '@/components/tools/TwoStepCaptcha'
 import { mapActions } from 'vuex'
 import { timeFix } from '@/utils/util'
-import { getSmsCaptcha, get2step } from '@/api/login'
+import { getSmsCaptcha, get2step, login } from '@/api/login'
 export default {
   components: {
     TwoStepCaptcha
@@ -143,7 +147,7 @@ export default {
   data () {
     return {
       customActiveKey: 'student',
-      loginBtn: false,
+      validated: false,
       // login type: student, admin,  enterprise
       loginType: 'student',
       requiredTwoStepCaptcha: false,
@@ -217,16 +221,17 @@ export default {
         }
       })
     },
+    handleValidate () {
+      console.log('true')
+    },
     toCaptcha () {
-      var captcha = new TencentCaptcha('2085027395', function (res) {
-        console.log(res)
+      var self = this
+      var captcha = new TencentCaptcha('2085027395', (res) => {
         // res（未通过验证）= {ret: 1, ticket: null}
         // res（验证成功） = {ret: 0, ticket: "String", randstr: "String"}
+        console.log(self, this)
         if (res.ret === 0) {
-          // 票据
-          // alert(res.ticket)
-          // 随机串
-          // alert(res.randstr)
+          self.validated = true
         }
       })
       // 显示验证码

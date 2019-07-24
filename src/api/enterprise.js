@@ -18,3 +18,17 @@ export function publish (parameter) {
     data: parameter
   })
 }
+export function register (parameter) {
+  return axios({
+    url: '/api/enterprise/register',
+    method: 'post',
+    data: parameter
+  })
+}
+export function submitprove (parameter) {
+  return axios({
+    url: '/api/enterprise/result',
+    method: 'post',
+    data: parameter
+  })
+}
