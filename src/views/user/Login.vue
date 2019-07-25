@@ -49,7 +49,7 @@
               type="text"
               placeholder="请输入学号"
               v-decorator="[
-                'email',
+                'username',
                 {rules: [{ required: true, message: '请输入帐户名或邮箱地址' }, { validator: validateEmail }], validateTrigger: 'change'}
               ]"
             >
@@ -80,7 +80,7 @@
               type="text"
               placeholder="请输入学号"
               v-decorator="[
-                'email',
+                'username',
                 {rules: [{ required: true, message: '请输入帐户名或邮箱地址' }, { validator: validateEmail ,message:'请输入正确的邮箱'}], validateTrigger: 'change'}
               ]"
             >
@@ -104,21 +104,14 @@
           </a-form-item>
         </a-tab-pane>
       </a-tabs>
-
-      <a-form-item>
-        <a-button
-          size="large"
-          type="default"
-          v-if="!validated"
-          @click="toCaptcha"
-        >点击获取验证码</a-button>
+      <a-form-item v-if="customActiveKey=='enterprise'">
         <router-link
+
           :to="{ name: 'register' }"
           class="forge-password"
           style="float: right;"
         >企业注册</router-link>
       </a-form-item>
-
       <a-form-item style="margin-top:24px">
         <a-button
           size="large"
@@ -126,8 +119,6 @@
           htmlType="submit"
           class="login-button"
           :loading="state.loginBtn"
-          :disabled="!validated"
-
         >确定</a-button>
       </a-form-item>
     </a-form>
@@ -139,7 +130,6 @@ import md5 from 'md5'
 import TwoStepCaptcha from '@/components/tools/TwoStepCaptcha'
 import { mapActions } from 'vuex'
 import { timeFix } from '@/utils/util'
-import { getSmsCaptcha, get2step, login } from '@/api/login'
 export default {
   components: {
     TwoStepCaptcha
@@ -147,30 +137,17 @@ export default {
   data () {
     return {
       customActiveKey: 'student',
-      validated: false,
       // login type: student, admin,  enterprise
       loginType: 'student',
-      requiredTwoStepCaptcha: false,
-      stepCaptchaVisible: false,
       form: this.$form.createForm(this),
+      values: [],
       state: {
         time: 60,
         loginBtn: false,
         // login type: 1 student, 2 admin, 3 enterprise
-        loginType: 'student',
-        smsSendBtn: false
+        loginType: 'student'
       }
     }
-  },
-  created () {
-    get2step({ })
-      .then(res => {
-        this.requiredTwoStepCaptcha = res.result.stepCode
-      })
-      .catch(() => {
-        this.requiredTwoStepCaptcha = false
-      })
-    // this.requiredTwoStepCaptcha = true
   },
   methods: {
     ...mapActions(['Login', 'Logout']),
@@ -179,10 +156,9 @@ export default {
       // if you want to return true just callback with no param, else with a string
       const regex = /^([a-zA-Z0-9_-])+@([a-zA-Z0-9_-])+((\.[a-zA-Z0-9_-]{2,3}){1,2})$/
       if (regex.test(value)) {
-        console.log(value)
         callback()
       } else {
-        callback('请输入正确的邮箱')
+        callback(new Error('请输入正确的邮箱'))
       }
     },
     handleTabClick (key) {
@@ -190,96 +166,57 @@ export default {
       this.state.loginType = this.customActiveKey
       // this.form.resetFields()
     },
-    handleSubmit (e) {
-      e.preventDefault()
-      const {
-        form: { validateFields },
-        state,
-        Login
-      } = this
-
-      state.loginBtn = true
-
-      const validateFieldsKey = ['email', 'password']
-
-      validateFields(validateFieldsKey, { force: true }, (err, values) => {
-        if (!err) {
-          const loginParams = { ...values }
-          loginParams.password = md5(values.password)
-          loginParams.loginType = state.loginType
-          console.log(loginParams)
-          Login(loginParams)
-            .then((res) => this.loginSuccess(res))
-            .catch(err => this.requestFailed(err))
-            .finally(() => {
-              state.loginBtn = false
-            })
-        } else {
-          setTimeout(() => {
-            state.loginBtn = false
-          }, 600)
-        }
-      })
-    },
-    handleValidate () {
-      console.log('true')
-    },
     toCaptcha () {
       var self = this
       var captcha = new TencentCaptcha('2085027395', (res) => {
         // res（未通过验证）= {ret: 1, ticket: null}
         // res（验证成功） = {ret: 0, ticket: "String", randstr: "String"}
-        console.log(self, this)
         if (res.ret === 0) {
-          self.validated = true
+          self.goLogin()
         }
       })
       // 显示验证码
       captcha.show()
     },
-    getCaptcha (e) {
+    handleSubmit (e) {
       e.preventDefault()
-      const { form: { validateFields }, state } = this
-
-      validateFields(['mobile'], { force: true }, (err, values) => {
+      const {
+        form: { validateFields }
+      } = this
+      const validateFieldsKey = ['email', 'password']
+      validateFields(validateFieldsKey, { force: true }, (err, values) => {
         if (!err) {
-          state.smsSendBtn = true
-
-          const interval = window.setInterval(() => {
-            if (state.time-- <= 0) {
-              state.time = 60
-              state.smsSendBtn = false
-              window.clearInterval(interval)
-            }
-          }, 1000)
-
-          const hide = this.$message.loading('验证码发送中..', 0)
-          getSmsCaptcha({ mobile: values.mobile }).then(res => {
-            setTimeout(hide, 2500)
-            this.$notification['success']({
-              message: '提示',
-              description: '验证码获取成功，您的验证码为：' + res.result.captcha,
-              duration: 8
-            })
-          }).catch(err => {
-            setTimeout(hide, 1)
-            clearInterval(interval)
-            state.time = 60
-            state.smsSendBtn = false
-            this.requestFailed(err)
-          })
+          console.log(values)
+          this.toCaptcha()
+          this.values = values
+        } else {
+          setTimeout(() => {
+            this.state.loginBtn = false
+          }, 600)
         }
       })
     },
-    stepCaptchaSuccess () {
-      this.loginSuccess()
+    goLogin () {
+      const {
+        state,
+        Login,
+        values
+      } = this
+      state.loginBtn = true
+      const loginParams = { ...values }
+      loginParams.password = md5(values.password)
+      loginParams.loginType = state.loginType
+      Login(loginParams)
+        .then((res) => this.loginSuccess(res))
+        .catch(err => this.requestFailed(err))
+        .finally(() => {
+          state.loginBtn = false
+        })
     },
-    stepCaptchaCancel () {
-      this.Logout().then(() => {
-        this.loginBtn = false
-        this.stepCaptchaVisible = false
-      })
+    handleValidate () {
+      console.log('true')
     },
+
     loginSuccess (res) {
       console.log(res)
       this.$router.push({ name: 'internship' })

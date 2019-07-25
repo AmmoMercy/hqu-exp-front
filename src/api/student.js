@@ -26,23 +26,11 @@ export function perception (parameter) {
     data: parameter
   })
 }
-export function register (parameter) {
-  return axios({
-    url: '/student/register',
-    method: 'post',
-    data: parameter
-  })
-}
 // export function getExpList (parameter) {
 //   return axios({
 //     url: '/student/completion/table',
 //     method: 'get',
 //     parameter: parameter
-export function getExpList (parameter) {
-  return axios({
-    url: '/student/completion/table',
-    method: 'get',
-    parameter: parameter
 
-  })
-}
+//   })
+// }

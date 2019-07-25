@@ -51,7 +51,7 @@
               <a-icon type="inbox" />
             </p>
             <p class="ant-upload-text">点击选取或拖动文件到此处</p>
-            <p class="ant-upload-hint">请将结业作业打包成一个word</p>
+            <p class="ant-upload-hint">请提交一个实训心得word</p>
           </a-upload-dragger>
         </div>
       </a-form-item>
@@ -72,8 +72,10 @@
 // ];
 
 import store from '@/store'
-import { getExpList, completion, perception } from '@/api/student'
+import { completion } from '@/api/student'
 // import { STable } from "@/components";
+// import { getExpList } from "@/api/student";
+import { perception } from '@/api/student'
 
 const columns = [
   {
@@ -121,13 +123,15 @@ export default {
   beforeCreate () {
     this.form = this.$form.createForm(this)
   },
-  mounted () {
-    getExpList(exp).then(
-      (response) => {
-        if (response.code === 200) { this.exp = response.data }
-      }
-    )
-  },
+  // mounted(){
+  //   if (store.getters.role === 'student') {
+  //     getExpList(exp).then(
+  //       (response) => {
+  //         if (response.code === 200) { this.exp = response.data }
+  //       }
+  //     )
+  //   }
+  // },
   methods: {
     fileBeforeUpload1 (file, fileList1) {
       this.file = file
@@ -158,9 +162,6 @@ export default {
           completion(formData1)
           const formData2 = new FormData()
           delete values.dragger
-          for (var key in values) {
-            formData2.append(key, values[key])
-          }
           formData2.append('perception_file', this.file)
           perception(formData2)
         }
