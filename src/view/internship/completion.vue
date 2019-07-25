@@ -2,21 +2,12 @@
   <div>
     <a-row style="margin-top: 50px">
       <a-col :span="18" :offset="3">
-        <!-- <a-table :columns="columns" :dataSource="data" :pagination="false">
+        <a-table :columns="columns" :dataSource="data" :pagination="false">
           <template slot="name" slot-scope="text">
-            <a href="javascript:;">{{text}}</a>
+            <a href="javascript:;">{{ text }}</a>
           </template>
-        </a-table>-->
+        </a-table>
         <div>
-        <table class="gridtable">
-          <tr>
-            <th>学生姓名</th>
-            <th>实训项目</th>
-          <tr>
-            <td>Text 1A</td>
-            <td>Text 1B</td>
-          </tr>
-        </table>
         </div>
         <br />
         <br />
@@ -71,22 +62,7 @@
   </div>
 </template>
 
-
 <script>
-const columns = [
-  {
-    title: "姓名",
-    dataIndex: "name",
-    className: "user-name",
-    scopedSlots: { customRender: "name" }
-  },
-  {
-    title: "实训项目",
-    className: "exp-name",
-    dataIndex: "topic"
-  }
-];
-
 // const data = [
 //   {
 //     key: "1",
@@ -95,17 +71,31 @@ const columns = [
 //   }
 // ];
 
-import store from "@/store";
-import { completion } from "@/api/student";
+import store from '@/store'
+import { completion } from '@/api/student'
 // import { STable } from "@/components";
 // import { getExpList } from "@/api/student";
-import { perception } from "@/api/student"
- 
+import { perception } from '@/api/student'
+
+const columns = [
+  {
+    title: '姓名',
+    dataIndex: 'name',
+    className: 'user-name',
+    scopedSlots: { customRender: 'name' }
+  },
+  {
+    title: '实训项目',
+    className: 'exp-name',
+    dataIndex: 'topic'
+  }
+]
+
 export default {
   // components: {
   //   STable
   // },
-  data() {
+  data () {
     return {
       file: {},
       columns,
@@ -128,10 +118,10 @@ export default {
       //     }
       //   );
       // }
-    };
+    }
   },
-  beforeCreate() {
-    this.form = this.$form.createForm(this);
+  beforeCreate () {
+    this.form = this.$form.createForm(this)
   },
   // mounted(){
   //   if (store.getters.role === 'student') {
@@ -143,62 +133,62 @@ export default {
   //   }
   // },
   methods: {
-    fileBeforeUpload1(file, fileList1) {
-      this.file = file;
-      return false;
+    fileBeforeUpload1 (file, fileList1) {
+      this.file = file
+      return false
     },
-    fileBeforeUpload2(file, fileList2) {
-      this.file = file;
-      return false;
+    fileBeforeUpload2 (file, fileList2) {
+      this.file = file
+      return false
     },
-    normFile(event1) {
-      console.log("Upload event:", event1);
+    normFile (event1) {
+      console.log('Upload event:', event1)
       if (Array.isArray(event1)) {
-        return event1;
+        return event1
       }
-      return event1 && event1.fileList;
+      return event1 && event1.fileList
     },
-    handleSubmit(e) {
-      e.preventDefault();
+    handleSubmit (e) {
+      e.preventDefault()
       this.form.validateFieldsAndScroll((err, values) => {
         if (!err) {
-          this.countDown();
-          const formData1 = new FormData();
-          delete values.dragger;
+          this.countDown()
+          const formData1 = new FormData()
+          delete values.dragger
           for (var key in values) {
-            formData1.append(key, values[key]);
+            formData1.append(key, values[key])
           }
-          formData1.append("completion_file", this.file);
-          completion(formData1);
-          const formData2 = new FormData();
-          delete values.dragger;
+          formData1.append('completion_file', this.file)
+          completion(formData1)
+          const formData2 = new FormData()
+          delete values.dragger
           for (var key in values) {
-            formData2.append(key, values[key]);
+            formData2.append(key, values[key])
           }
-          formData2.append("perception_file", this.file);
-          perception(formData2);
+          formData2.append('perception_file', this.file)
+          perception(formData2)
         }
-      });
+      })
     },
-    countDown() {
-      let secondsToGo = 5;
+    countDown () {
+      let secondsToGo = 5
       const modal = this.$success({
-        title: "提交成功",
+        title: '提交成功',
         content: `这个窗口将于 ${secondsToGo} s后关闭。`
-      });
+      })
       const interval = setInterval(() => {
-        secondsToGo -= 1;
+        secondsToGo -= 1
         modal.update({
           content: `这个窗口将于 ${secondsToGo} s后关闭。`
-        });
-      }, 1000);
+        })
+      }, 1000)
       setTimeout(() => {
-        clearInterval(interval);
-        modal.destroy();
-      }, secondsToGo * 1000);
+        clearInterval(interval)
+        modal.destroy()
+      }, secondsToGo * 1000)
     }
   }
-};
+}
 </script>
 <style>
 th.exp-name {
