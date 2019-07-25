@@ -51,7 +51,7 @@
               <a-icon type="inbox" />
             </p>
             <p class="ant-upload-text">点击选取或拖动文件到此处</p>
-            <p class="ant-upload-hint">请将结业作业打包成一个word</p>
+            <p class="ant-upload-hint">请提交一个实训心得word</p>
           </a-upload-dragger>
         </div>
       </a-form-item>
@@ -158,9 +158,6 @@ export default {
           completion(formData1)
           const formData2 = new FormData()
           delete values.dragger
-          for (var key in values) {
-            formData2.append(key, values[key])
-          }
           formData2.append('perception_file', this.file)
           perception(formData2)
         }
