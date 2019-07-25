@@ -4,17 +4,12 @@
       <div class="table-page-search-wrapper">
         <a-form layout="inline">
           <a-row :gutter="48">
-            <a-col :md="6" :sm="24">
+            <a-col :md="8" :sm="24">
               <a-form-item label="实训题目">
                 <a-input placeholder="请输入实训题目" />
               </a-form-item>
             </a-col>
-            <a-col :md="6" :sm="24">
-              <a-form-item label="企业名称">
-                <a-input v-model="queryParam.enterprisename" placeholder="请输入企业名称" />
-              </a-form-item>
-            </a-col>
-            <a-col :md="6" :sm="24">
+            <a-col :md="8" :sm="24">
               <a-form-item label="审核状态">
                 <a-select v-model="queryParam.status" placeholder="请选择" default-value="0">
                   <a-select-option value="0">待审核</a-select-option>
@@ -85,17 +80,14 @@ const columns = [
   {
     title: '实训开始日期',
     dataIndex: 'exp_begin_time',
-    sorter: true
   },
   {
     title: '实训结束日期',
     dataIndex: 'exp_end_time',
-    sorter: true
   },
   {
     title: '提交日期',
     dataIndex: 'submit_time',
-    sorter: true
   },
   {
     title: '实训描述',
@@ -109,7 +101,6 @@ const columns = [
   {
     title: '申请截至日期',
     dataIndex: 'apply_end_time',
-    sorter: true
   },
   {
     title: '审核状态',
@@ -134,6 +125,18 @@ const data = [
     need_num:20,
     apply_end_time: '2019-07-02',
     status: 2
+  },
+  {
+    key: '2',
+    topic: 'tencent-exp',
+    enterprise_id: 'tencent',
+    exp_begin_time: '2019-07-02',
+    exp_end_time: '2019-07-30',
+    submit_time: '2019-07-02',
+    description: 'this is intro',
+    need_num:20,
+    apply_end_time: '2019-07-02',
+    status: 0
   }
 ]
 export default {

@@ -1,4 +1,5 @@
 import Mock from 'mockjs2'
+// import { builder, getQueryParameters } from '../util'
 // import { builder } from '../util'
 
 // const expList = (options) => {
@@ -43,6 +44,14 @@ const perception = options => {
     msg: '处理成功'
   }
 }
+const register = options => {
+  console.log(options)
+  return {
+    code: 200,
+    msg: '处理成功'
+  }
+}
+Mock.mock(/\/api\/student\/register/, 'post', register)
 Mock.mock(/\/api\/student\/completion\/perception/, 'post', perception)
 Mock.mock(/\/api\/student\/myinfo/, 'get', student)
 Mock.mock(/\/api\/student\/completion\/work/, 'post', completion)
