@@ -101,6 +101,7 @@ export default {
   beforeCreate () {
     this.form = this.$form.createForm(this)
   },
+
   methods: {
     fileBeforeUpload(file, fileList) {
       this.file = file;

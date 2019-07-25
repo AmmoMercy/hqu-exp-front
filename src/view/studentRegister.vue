@@ -157,7 +157,7 @@
       </a-row>
       </a-form-item>-->
       <a-form-item v-bind="tailFormItemLayout">
-          <a-checkbox @change="handleCheckBox()" v-decorator="['agreement', {valuePropName: 'checked'}]">
+        <a-checkbox @change="handleCheckBox()" v-decorator="['agreement', {valuePropName: 'checked'}]">
             本人保证所提交信息均为真实有效信息 并承担因提供不实信息所产生的全部责任
           </a-checkbox>
         </a-form-item>
@@ -171,7 +171,7 @@
           <a-button size="large" class="register-button" type="primary" html-type="submit" :disabled="isChecked || !validated">注册</a-button>
         </a-form-item>
     </a-form>
-  </a-col>
+    </a-col>
   </a-row>
 </template>
 
