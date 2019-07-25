@@ -38,6 +38,11 @@ export function register (parameter) {
 //     url: '/student/completion/table',
 //     method: 'get',
 //     parameter: parameter
+export function getExpList (parameter) {
+  return axios({
+    url: '/student/completion/table',
+    method: 'get',
+    parameter: parameter
 
-//   })
-// }
+  })
+}
