@@ -32,3 +32,15 @@ export function submitprove (parameter) {
     data: parameter
   })
 }
+export function getEntDetail (parameter) {
+  return axios({
+    url: '/api/enterprise/detail',
+    method: 'get'
+  })
+}
+export function getEntApp (parameter) {
+  return axios({
+    url: '/api/enterprise/applicationlist?' + 'internshipId=' + parameter & 'page=' + parameter & 'status=' + parameter,
+    method: 'get'
+  })
+}

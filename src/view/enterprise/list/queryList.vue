@@ -109,7 +109,6 @@ const columns = [
   {
     title: '注册时间',
     dataIndex: 'register_time',
-    sorter: true
   },
   {
     title: '操作',
