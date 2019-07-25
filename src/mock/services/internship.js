@@ -19,8 +19,7 @@ const internship = (options) => {
       'stu_check_num': '7',
       'apply_end_time': '1970-01-01T00:00:00',
       'status': 2,
-      'type': '企业',
-      'address': '地址地址地址'
+      'type': '企业'
     }
   }
 }
