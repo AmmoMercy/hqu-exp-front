@@ -27,13 +27,19 @@
           contenteditable="false"
           rows="10"
           readonly
-          :value="student.intro"
+          v-model="student.intro"
           style="border:none"
         />
       </a-form-item>
       <a-divider style="margin-bottom: 32px" />
       <a-form-item label="实训经历">
-        <a-textarea contenteditable="false" rows="10" readonly value="我是简介" style="border:none" />
+        <a-textarea
+          contenteditable="false"
+          rows="10"
+          readonly
+          v-model="student.intro"
+          style="border:none"
+        />
       </a-form-item>
 
       <a-modal title="编辑个人简历" :width="800" v-model="visible" @ok="handleSubmit">
@@ -109,6 +115,7 @@ import DetailList from "@/components/tools/DetailList";
 import store from "@/store";
 import { genderChanger } from "@/utils/util";
 import { getStu } from "../../api/student";
+import student from "../../store/modules/jumper";
 const DetailListItem = DetailList.Item;
 
 export default {
@@ -203,6 +210,7 @@ export default {
     handleUpdateEdit(record) {
       this.mdl = Object.assign({}, record);
       this.updateVisible = true;
+      alert(this.student.description);
     },
     handleSubmit(e) {
       e.preventDefault();

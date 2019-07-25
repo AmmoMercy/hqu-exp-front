@@ -151,30 +151,30 @@
 </template>
 
 <script>
-import { mixinDevice } from '@/utils/mixin'
-import { PageView } from '@/layouts'
-import DetailList from '@/components/tools/DetailList'
-import store from '@/store'
-import { getEnt } from '../../api/enterprise'
+import { mixinDevice } from "@/utils/mixin";
+import { PageView } from "@/layouts";
+import DetailList from "@/components/tools/DetailList";
+import store from "@/store";
+import { getEnt } from "../../api/enterprise";
 
-const DetailListItem = DetailList.Item
+const DetailListItem = DetailList.Item;
 const baseUrl =
-  'https://raw.githubusercontent.com/vueComponent/ant-design-vue/master/components/vc-slick/assets/img/react-slick/'
+  "https://raw.githubusercontent.com/vueComponent/ant-design-vue/master/components/vc-slick/assets/img/react-slick/";
 
 export default {
-  name: 'Advanced',
+  name: "Advanced",
   components: {
     PageView,
     DetailList,
     DetailListItem
   },
   mixins: [mixinDevice],
-  data () {
+  data() {
     return {
       form: this.$form.createForm(this),
       config: {
         rules: [
-          { type: 'object', required: true, message: 'Please select time!' }
+          { type: "object", required: true, message: "Please select time!" }
         ]
       },
       confirmDirty: false,
@@ -205,86 +205,86 @@ export default {
       baseUrl,
       mdl: {},
       previewVisible: false,
-      previewImage: '',
+      previewImage: "",
       enterprise: {},
       role: store.getters.role,
       fileList: [
         {
-          uid: '-1',
+          uid: "-1",
           url:
-            'https://zos.alipayobjects.com/rmsportal/jkjgkEfvpUPVyRjUImniVslZfWPnJuuZ.png'
+            "https://zos.alipayobjects.com/rmsportal/jkjgkEfvpUPVyRjUImniVslZfWPnJuuZ.png"
         },
         {
-          uid: '-1',
+          uid: "-1",
           url:
-            'https://zos.alipayobjects.com/rmsportal/jkjgkEfvpUPVyRjUImniVslZfWPnJuuZ.png'
+            "https://zos.alipayobjects.com/rmsportal/jkjgkEfvpUPVyRjUImniVslZfWPnJuuZ.png"
         },
         {
-          uid: '-1',
+          uid: "-1",
           url:
-            'https://zos.alipayobjects.com/rmsportal/jkjgkEfvpUPVyRjUImniVslZfWPnJuuZ.png'
+            "https://zos.alipayobjects.com/rmsportal/jkjgkEfvpUPVyRjUImniVslZfWPnJuuZ.png"
         }
       ]
-    }
+    };
   },
-  mounted () {
-    if (store.getters.role === 'enterprise') {
-      this.enterprise = store.getters.userInfo
+  mounted() {
+    if (store.getters.role === "enterprise") {
+      this.enterprise = store.getters.userInfo;
     } else {
-      const entid = store.getters.entid
+      const entid = store.getters.entid;
       getEnt(entid).then(response => {
         if (response.code === 200) {
-          this.enterprise = response.data
+          this.enterprise = response.data;
         }
-      })
+      });
     }
   },
   methods: {
-    handleCancel () {
-      this.previewVisible = false
+    handleCancel() {
+      this.previewVisible = false;
       // 补充从数据库添加新照片的方法
     },
-    handlePreview (file) {
-      this.previewImage = file.url || file.thumbUrl
-      this.previewVisible = true
+    handlePreview(file) {
+      this.previewImage = file.url || file.thumbUrl;
+      this.previewVisible = true;
     },
-    handleChange ({ fileList }) {
-      this.fileList = fileList
+    handleChange({ fileList }) {
+      this.fileList = fileList;
       // 补充从数据库删除该照片的方法
     },
-    handleEdit (record) {
-      this.mdl = Object.assign({}, record)
-      this.visible = true
+    handleEdit(record) {
+      this.mdl = Object.assign({}, record);
+      this.visible = true;
     },
-    handleOk () {},
-    pass () {
-      this.enterprise.status = 1
+    handleOk() {},
+    pass() {
+      this.enterprise.status = 1;
       // 此处加上保存进数据库的方法
     },
-    fail () {
-      this.enterprise.status = 2
+    fail() {
+      this.enterprise.status = 2;
       // 此处加上保存进数据库的方法
     },
-    reCheck () {
-      this.enterprise.status = 0
+    reCheck() {
+      this.enterprise.status = 0;
       // 此处加上保存进数据库的方法
     },
-    getImgUrl (i) {
-      return `${baseUrl}abstract0${i + 1}.jpg`
+    getImgUrl(i) {
+      return `${baseUrl}abstract0${i + 1}.jpg`;
     },
-    handleSubmit (e) {
-      e.preventDefault()
+    handleSubmit(e) {
+      e.preventDefault();
       const {
         form: { validateFields }
-      } = this
+      } = this;
       const validateFieldsKey = [
-        'name',
-        'address',
-        'email',
-        'contact_name',
-        'contact_tel',
-        'intro'
-      ]
+        "name",
+        "address",
+        "email",
+        "contact_name",
+        "contact_tel",
+        "intro"
+      ];
       // const values = {
       //   ...fieldsValue,
       //   'date-time-picker': fieldsValue['date-time-picker'].format(
@@ -293,17 +293,17 @@ export default {
       // }
       validateFields(validateFieldsKey, { force: true }, (err, values) => {
         if (!err) {
-          const publishParams = { ...values }
-          console.log(publishParams)
+          const publishParams = { ...values };
+          console.log(publishParams);
           publish(publishParams).then(res => {
-            if (res.code === 200) this.countDown()
-          })
+            if (res.code === 200) this.countDown();
+          });
         }
-        console.log('Received values of form: ', values)
-      })
+        console.log("Received values of form: ", values);
+      });
     }
   }
-}
+};
 </script>
 
 <style scoped>
