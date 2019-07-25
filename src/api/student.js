@@ -1,5 +1,5 @@
 import { axios } from '@/utils/request'
-import api from './manage'
+// import api from './manage'
 export function getStu (parameter) {
   return axios({
     url: '/api/student/detail?' + 'student=' + parameter,
@@ -14,7 +14,14 @@ export function getStuInfo () {
 }
 export function completion (parameter) {
   return axios({
-    url: '/api/student/completion',
+    url: '/api/student/completion/work',
+    method: 'post',
+    data: parameter
+  })
+}
+export function perception (parameter) {
+  return axios({
+    url: '/api/student/completion/perception',
     method: 'post',
     data: parameter
   })
