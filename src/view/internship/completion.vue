@@ -72,10 +72,8 @@
 // ];
 
 import store from '@/store'
-import { completion } from '@/api/student'
+import { getExpList, completion, perception } from '@/api/student'
 // import { STable } from "@/components";
-// import { getExpList } from "@/api/student";
-import { perception } from '@/api/student'
 
 const columns = [
   {
@@ -123,15 +121,13 @@ export default {
   beforeCreate () {
     this.form = this.$form.createForm(this)
   },
-  // mounted(){
-  //   if (store.getters.role === 'student') {
-  //     getExpList(exp).then(
-  //       (response) => {
-  //         if (response.code === 200) { this.exp = response.data }
-  //       }
-  //     )
-  //   }
-  // },
+  mounted () {
+    getExpList(exp).then(
+      (response) => {
+        if (response.code === 200) { this.exp = response.data }
+      }
+    )
+  },
   methods: {
     fileBeforeUpload1 (file, fileList1) {
       this.file = file
