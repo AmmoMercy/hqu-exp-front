@@ -19,7 +19,7 @@
               type="text"
               placeholder="请输入学号"
               v-decorator="[
-                'username',
+                'email',
                 {rules: [{ required: true, message: '请输入帐户名或邮箱地址' }, { validator: validateEmail }], validateTrigger: 'change'}
               ]"
             >
@@ -140,7 +140,7 @@ export default {
       // login type: student, admin,  enterprise
       loginType: 'student',
       form: this.$form.createForm(this),
-      values: {},
+      values: [],
       state: {
         time: 60,
         loginBtn: false,
@@ -156,7 +156,6 @@ export default {
       // if you want to return true just callback with no param, else with a string
       const regex = /^([a-zA-Z0-9_-])+@([a-zA-Z0-9_-])+((\.[a-zA-Z0-9_-]{2,3}){1,2})$/
       if (regex.test(value)) {
-        console.log(value)
         callback()
       } else {
         callback(new Error('请输入正确的邮箱'))
@@ -181,10 +180,13 @@ export default {
     },
     handleSubmit (e) {
       e.preventDefault()
-
+      const {
+        form: { validateFields }
+      } = this
       const validateFieldsKey = ['email', 'password']
-      this.form.validateFields(validateFieldsKey, { force: true }, (err, values) => {
+      validateFields(validateFieldsKey, { force: true }, (err, values) => {
         if (!err) {
+          console.log(values)
           this.toCaptcha()
           this.values = values
         } else {
