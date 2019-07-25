@@ -44,7 +44,11 @@
 
     <a-card style="margin-top: 24px" :bordered="false" title="实训详情">
       <a-form-item :wrapperCol="{ span: 24 }" style="text-align: right">
-        <a-button htmlType="submit" v-if="role==='enterprise'" @click="handleEdit(record)">
+        <a-button
+          htmlType="submit"
+          v-if="role==='enterprise'&&internship.status!=1"
+          @click="handleEdit(record)"
+        >
           <a-icon type="edit" />
         </a-button>
       </a-form-item>
@@ -58,7 +62,6 @@
         <detail-list-item term="报名截止日期">{{internship.apply_end_time}}</detail-list-item>
         <detail-list-item term="意向人数">{{internship.need_num}}</detail-list-item>
         <detail-list-item term="已报名人数">{{internship.submit_num}}人</detail-list-item>
-        <detail-list-item term="备注">编辑按钮企业可见，报名按钮学生可见，其余所有人可见，编辑后需要重新审核</detail-list-item>
       </detail-list>
       <a-divider style="margin-bottom: 32px" />
       <a-form-item label="实训描述">
@@ -75,63 +78,53 @@
         <a-button htmlType="submit" type="primary" @click="handleEnter(record)">我要报名</a-button>
       </a-form-item>
 
-      <a-modal title="编辑实训信息" :width="800" v-model="visible" @ok="handleOk">
-        <a-form-item label="实训地址">
-          <a-input
-            v-decorator="[
-            'name',
-            {rules: [{ required: true, message: '必须填写详细地址' }]}
+      <a-modal title="编辑实训信息" :width="800" v-model="visible" @ok="handleSubmit">
+        <a-form :form="form" >
+          <a-form-item v-bind="formItemLayout" label="实训题目">
+            <a-input
+              v-decorator="[
+            'topic',{initialValue:internship.topic,rules: [{ required: true, message: 'Please input your topic!' }],}]"
+              placeholder="Topic"
+            />
+          </a-form-item>
+          <a-form-item v-bind="formItemLayout" label="开始时间">
+            <a-date-picker
+              v-decorator="['exp_begin_time', config]"
+              show-time
+              format="YYYY-MM-DD HH:mm:ss"
+            />
+          </a-form-item>
+          <a-form-item v-bind="formItemLayout" label="结束时间">
+            <a-date-picker
+              v-decorator="['exp_end_time', config]"
+              show-time
+              format="YYYY-MM-DD HH:mm:ss"
+            />
+          </a-form-item>
+          <a-form-item v-bind="formItemLayout" label="项目简介">
+            <a-textarea
+              rows="8"
+              v-decorator="[
+            'description',
+            {initialValue:internship.description,rules: [{ required: true, message: '请输入目标描述' }]}
           ]"
-            name="name"
-            placeholder="详细地址"
-            v-model="internship.address"
-          />
-        </a-form-item>
-        <a-form-item label="实训起止日期">
-          <a-range-picker
-            name="buildTime"
-            style="width: 100%"
-            v-decorator="[
-            'buildTime',
-            {rules: [{ required: true, message: '请选择起止日期' }]}
-          ]"
-          />
-        </a-form-item>
-        <a-form-item label="报名截止日期">
-          <a-DatePicker
-            name="stopTime"
-            style="width: 100%"
-            v-decorator="[
-            'stopTime',
-            {rules: [{ required: true, message: '必须填写报名截止日期' }]}
-          ]"
-          />
-        </a-form-item>
-        <a-form-item label="意向人数">
-          <a-input-number
-            :min="0"
-            :max="100"
-            name="peopleNum"
-            v-decorator="[
-            'peopleNum',
-            {rules: [{ required: true, message: '必须填写意向人数' }]}
-          ]"
-            v-model="internship.need_num"
-          />
-          <span>人</span>
-        </a-form-item>
-        <a-form-item label="实训描述">
-          <a-textarea
-            rows="10"
-            v-decorator="[
-            'name',
-            {rules: [{ required: true, message: '必须填写实训描述' }]}
-          ]"
-            name="name"
-            placeholder="这里填写实训描述"
-            v-model="internship.description"
-          />
-        </a-form-item>
+            />
+          </a-form-item>
+          <a-form-item v-bind="formItemLayout" label="需求人数">
+            <a-input-number
+              v-decorator="['need_num', { initialValue:internship.need_num,rules:[{required:true}] }]"
+              :min="1"
+              :max="100"
+            />
+          </a-form-item>
+          <a-form-item v-bind="formItemLayout" label="申请截至时间">
+            <a-date-picker
+              v-decorator="['apply_end_time',config]"
+              show-time
+              format="YYYY-MM-DD HH:mm:ss"
+            />
+          </a-form-item>
+        </a-form>
       </a-modal>
 
       <a-modal title="确认报名" :width="800" v-model="enterVisible" @ok="handleOk">
@@ -188,7 +181,37 @@ export default {
         percent: 10,
         progressColor: "#FF0000"
       },
-      role: 0,
+      form: this.$form.createForm(this),
+      config: {
+        rules: [
+          { type: "object", required: true, message: "Please select time!" }
+        ]
+      },
+      confirmDirty: false,
+      autoCompleteResult: [],
+      formItemLayout: {
+        labelCol: {
+          xs: { span: 24 },
+          sm: { span: 6 }
+        },
+        wrapperCol: {
+          xs: { span: 24 },
+          sm: { span: 15 }
+        }
+      },
+      tailFormItemLayout: {
+        wrapperCol: {
+          xs: {
+            span: 24,
+            offset: 0
+          },
+          sm: {
+            span: 16,
+            offset: 0
+          }
+        }
+      },
+      role: store.getters.role,
       internship: {},
       visible: false,
       enterVisible: false,
@@ -206,7 +229,6 @@ export default {
         }
       });
     }
-    this.role = store.getters.role;
   },
   methods: {
     handleEdit(record) {
@@ -226,11 +248,48 @@ export default {
       //此处加上保存进数据库的方法
     },
     reCheck() {
-      alert(this.role);
       this.internship.status = 0;
       //此处加上保存进数据库的方法
     },
-    handleOk() {}
+    handleOk() {
+      // if (必填项填写完毕) {
+      //   this.mdl = Object.assign({}, record);
+      //   this.visible = true;
+      //   this.internship.status = 0;
+      // }else{
+      //   alert("必须填写完所有内容")
+      // }
+    },
+    handleSubmit(e) {
+      e.preventDefault();
+      const {
+        form: { validateFields }
+      } = this;
+      const validateFieldsKey = [
+        "topic",
+        "exp_begin_time",
+        "exp_end_time",
+        "description",
+        "need_num",
+        "apply_end_time"
+      ];
+      // const values = {
+      //   ...fieldsValue,
+      //   'date-time-picker': fieldsValue['date-time-picker'].format(
+      //     'YYYY-MM-DD HH:mm:ss'
+      //   )
+      // }
+      validateFields(validateFieldsKey, { force: true }, (err, values) => {
+        if (!err) {
+          const publishParams = { ...values };
+          console.log(publishParams);
+          publish(publishParams).then(res => {
+            if (res.code === 200) this.countDown();
+          });
+        }
+        console.log("Received values of form: ", values);
+      });
+    }
   }
 };
 </script>

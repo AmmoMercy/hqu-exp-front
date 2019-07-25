@@ -23,7 +23,9 @@ const student = (options) => {
       'major': '1436864169',
       'email': '0',
       'tel': '13366668888',
-      'intro': '这是一段描述' }
+      'intro': '这是一段描述',
+      'description': '这是实训经历'
+    }
   }
 }
 

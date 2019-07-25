@@ -78,81 +78,73 @@
           <img :src="baseUrl+'abstract0'+item+'.jpg'" />
         </div>
       </a-carousel>
-      <a-modal title="编辑信息" :width="800" v-model="visible" @ok="handleOk">
-        <a-form-item label="详细地址">
-          <a-input
-            v-decorator="[
-            'name',
-            {rules: [{ required: true, message: '必须填写详细地址' }]}
+
+      <a-modal title="编辑信息" :width="800" v-model="visible" @ok="handleSubmit">
+        <a-form :form="form">
+          <a-form-item v-bind="formItemLayout" label="名称">
+            <a-input
+              v-decorator="[
+            'name',{initialValue:enterprise.name,rules: [{ required: true, message: 'Please input your topic!' }],}]"
+              placeholder="name"
+            />
+          </a-form-item>
+          <a-form-item v-bind="formItemLayout" label="详细地址">
+            <a-input
+              v-decorator="[
+            'address',{initialValue:enterprise.address,rules: [{ required: true, message: 'Please input your topic!' }],}]"
+              placeholder="address"
+            />
+          </a-form-item>
+          <a-form-item v-bind="formItemLayout" label="email地址">
+            <a-input
+              v-decorator="[
+            'email',{initialValue:enterprise.email,rules: [{ required: true, message: 'Please input your topic!' }],}]"
+              placeholder="email"
+            />
+          </a-form-item>
+          <a-form-item v-bind="formItemLayout" label="联系人">
+            <a-input
+              v-decorator="[
+            'contact_name',{initialValue:enterprise.contact_name,rules: [{ required: true, message: 'Please input your topic!' }],}]"
+              placeholder="contact_name"
+            />
+          </a-form-item>
+          <a-form-item v-bind="formItemLayout" label="联系电话">
+            <a-input
+              v-decorator="[
+            'contact_tel',{initialValue:enterprise.contact_tel,rules: [{ required: true, message: 'Please input your topic!' }],}]"
+              placeholder="contact_tel"
+            />
+          </a-form-item>
+
+          <a-form-item v-bind="formItemLayout" label="项目简介">
+            <a-textarea
+              rows="8"
+              v-decorator="[
+            'intro',
+            {initialValue:enterprise.intro,rules: [{ required: true, message: '请输入目标描述' }]}
           ]"
-            name="name"
-            placeholder="address"
-            v-model="enterprise.address"
-          />
-        </a-form-item>
-        <a-form-item label="企业/导师email">
-          <a-input
-            v-decorator="[
-            'name',
-            {rules: [{ required: true, message: '必须填写企业/导师email' }]}
-          ]"
-            name="name"
-            placeholder="email"
-            v-model="enterprise.email"
-          />
-        </a-form-item>
-        <a-form-item label="企业/导师联系人">
-          <a-input
-            v-decorator="[
-            'name',
-            {rules: [{ required: true, message: '必须填写企业/导师联系人' }]}
-          ]"
-            name="name"
-            placeholder="联系人本名"
-            v-model="enterprise.contact_name"
-          />
-        </a-form-item>
-        <a-form-item label="企业/导师联系方式">
-          <a-input
-            v-decorator="[
-            'name',
-            {rules: [{ required: true, message: '必须填写联系方式' }]}
-          ]"
-            name="name"
-            placeholder="手机号码"
-            v-model="enterprise.contact_tel"
-          />
-        </a-form-item>
-        <a-form-item label="简介">
-          <a-textarea
-            rows="10"
-            v-decorator="[
-            'name',
-            {rules: [{ required: true, message: '必须填写简介' }]}
-          ]"
-            name="name"
-            placeholder="这里填写简介"
-            v-model="enterprise.intro"
-          />
-        </a-form-item>
-        <a-divider style="margin-bottom: 32px" orientation="left">上传照片</a-divider>
-        <div class="clearfix">
-          <a-upload
-            action="https://www.mocky.io/v2/5cc8019d300000980a055e76"
-            listType="picture-card"
-            :fileList="fileList"
-            @preview="handlePreview"
-            @change="handleChange"
-          >
-            <div v-if="fileList.length < 3">
-              <a-icon type="plus" />
-              <div class="ant-upload-text">Upload</div>
+            />
+          </a-form-item>
+          <a-form-item a-form-item v-bind="formItemLayout" label="上传照片">
+            <div class="clearfix">
+              <a-upload
+                listType="picture-card"
+                :fileList="fileList"
+                @preview="handlePreview"
+                @change="handleChange"
+              >
+                <div v-if="fileList.length < 3">
+                  <a-icon type="plus" />
+                  <div class="ant-upload-text">Upload</div>
+                </div>
+              </a-upload>
+              <a-modal :visible="previewVisible" :footer="null" @cancel="handleCancel">
+                <img alt="example" style="width: 100%" :src="previewImage" />
+              </a-modal>
             </div>
-          </a-upload>
-          <a-modal :visible="previewVisible" :footer="null" @cancel="handleCancel">
-            <img alt="example" style="width: 100%" :src="previewImage" />
-          </a-modal>
-        </div>
+          </a-form-item>
+        </a-form>
       </a-modal>
     </a-card>
   </page-view>
@@ -179,18 +171,56 @@ export default {
   mixins: [mixinDevice],
   data() {
     return {
+      form: this.$form.createForm(this),
+      config: {
+        rules: [
+          { type: "object", required: true, message: "Please select time!" }
+        ]
+      },
+      confirmDirty: false,
+      autoCompleteResult: [],
+      formItemLayout: {
+        labelCol: {
+          xs: { span: 24 },
+          sm: { span: 6 }
+        },
+        wrapperCol: {
+          xs: { span: 24 },
+          sm: { span: 15 }
+        }
+      },
+      tailFormItemLayout: {
+        wrapperCol: {
+          xs: {
+            span: 24,
+            offset: 0
+          },
+          sm: {
+            span: 16,
+            offset: 0
+          }
+        }
+      },
       visible: false,
       baseUrl,
       mdl: {},
       previewVisible: false,
       previewImage: "",
       enterprise: {},
-      role: 0,
+      role: store.getters.role,
       fileList: [
         {
           uid: "-1",
-          name: "xxx.png",
-          status: "done",
+          url:
+            "https://zos.alipayobjects.com/rmsportal/jkjgkEfvpUPVyRjUImniVslZfWPnJuuZ.png"
+        },
+        {
+          uid: "-1",
+          url:
+            "https://zos.alipayobjects.com/rmsportal/jkjgkEfvpUPVyRjUImniVslZfWPnJuuZ.png"
+        },
+        {
+          uid: "-1",
           url:
             "https://zos.alipayobjects.com/rmsportal/jkjgkEfvpUPVyRjUImniVslZfWPnJuuZ.png"
         }
@@ -208,11 +238,11 @@ export default {
         }
       });
     }
-    this.role = store.getters.role;
   },
   methods: {
     handleCancel() {
       this.previewVisible = false;
+      //补充从数据库添加新照片的方法
     },
     handlePreview(file) {
       this.previewImage = file.url || file.thumbUrl;
@@ -220,6 +250,7 @@ export default {
     },
     handleChange({ fileList }) {
       this.fileList = fileList;
+      //补充从数据库删除该照片的方法
     },
     handleEdit(record) {
       this.mdl = Object.assign({}, record);
@@ -240,6 +271,36 @@ export default {
     },
     getImgUrl(i) {
       return `${baseUrl}abstract0${i + 1}.jpg`;
+    },
+    handleSubmit(e) {
+      e.preventDefault();
+      const {
+        form: { validateFields }
+      } = this;
+      const validateFieldsKey = [
+        "name",
+        "address",
+        "email",
+        "contact_name",
+        "contact_tel",
+        "intro"
+      ];
+      // const values = {
+      //   ...fieldsValue,
+      //   'date-time-picker': fieldsValue['date-time-picker'].format(
+      //     'YYYY-MM-DD HH:mm:ss'
+      //   )
+      // }
+      validateFields(validateFieldsKey, { force: true }, (err, values) => {
+        if (!err) {
+          const publishParams = { ...values };
+          console.log(publishParams);
+          publish(publishParams).then(res => {
+            if (res.code === 200) this.countDown();
+          });
+        }
+        console.log("Received values of form: ", values);
+      });
     }
   }
 };
