@@ -1,5 +1,6 @@
 <template>
-  <a-card :body-style="{padding: '24px 32px'}" :bordered="false">
+  <a-row>
+    <a-col :span="24">
     <a-form :form="form" @submit="handleSubmit">
       <a-form-item v-bind="formItemLayout" label="E-mail">
         <a-input
@@ -156,20 +157,27 @@
       </a-row>
       </a-form-item>-->
       <a-form-item v-bind="tailFormItemLayout">
-        <a-checkbox v-decorator="['agreement', {valuePropName: 'checked'}]">
-          I have read the
-          <a href>agreement</a>
-        </a-checkbox>
-      </a-form-item>
-      <a-form-item :wrapperCol="{ span: 24 }" style="text-align: center">
-        <a-button type="primary" html-type="submit">Register</a-button>
-      </a-form-item>
+          <a-checkbox @change="handleCheckBox()" v-decorator="['agreement', {valuePropName: 'checked'}]">
+            本人保证所提交信息均为真实有效信息 并承担因提供不实信息所产生的全部责任
+          </a-checkbox>
+        </a-form-item>
+        <a-form-item :wrapperCol="{ span: 24 }" style="text-align: center">
+          <a-button
+            size="large"
+            type="default"
+            v-if="!validated"
+            @click="toCaptcha"
+          >点击获取验证码</a-button>
+          <a-button size="large" class="register-button" type="primary" html-type="submit" :disabled="isChecked || !validated">注册</a-button>
+        </a-form-item>
     </a-form>
-  </a-card>
+  </a-col>
+  </a-row>
 </template>
 
 <script>
 // import SIdentify from '@/views/enterprise/identify'
+import { register } from '@/api/student'
 export default {
   data() {
     return {
@@ -211,6 +219,23 @@ export default {
     this.flag = !this.flag;
   },
   methods: {
+    toCaptcha () {
+      var self = this
+      var captcha = new TencentCaptcha('2085027395', (res) => {
+      // res（未通过验证）= {ret: 1, ticket: null}
+      // res（验证成功） = {ret: 0, ticket: "String", randstr: "String"}
+        console.log(self, this)
+        if (res.ret === 0) {
+          self.validated = true
+        }
+      })
+      // 显示验证码
+      captcha.show()
+    },
+    handleCheckBox () {
+      this.isChecked = this.form.getFieldValue('agreement')
+      console.log(this.isChecked)
+    },
     handleConfirmBlur(e) {
       const value = e.target.value;
       this.confirmDirty = this.confirmDirty || !!value;
@@ -254,7 +279,11 @@ export default {
       this.form.validateFieldsAndScroll((err, values) => {
         if (!err) {
           this.countDown();
-          console.log("Received values of form: ", values);
+          const formData = new FormData()
+          for (var key in values) {
+            formData.append(key, values[key])
+          }
+          register(formData)
         }
       });
     },
