@@ -19,7 +19,7 @@
               type="text"
               placeholder="请输入学号"
               v-decorator="[
-                'email',
+                'username',
                 {rules: [{ required: true, message: '请输入帐户名或邮箱地址' }, { validator: validateEmail }], validateTrigger: 'change'}
               ]"
             >
@@ -49,7 +49,7 @@
               type="text"
               placeholder="请输入学号"
               v-decorator="[
-                'email',
+                'username',
                 {rules: [{ required: true, message: '请输入帐户名或邮箱地址' }, { validator: validateEmail }], validateTrigger: 'change'}
               ]"
             >
@@ -80,7 +80,7 @@
               type="text"
               placeholder="请输入学号"
               v-decorator="[
-                'email',
+                'username',
                 {rules: [{ required: true, message: '请输入帐户名或邮箱地址' }, { validator: validateEmail ,message:'请输入正确的邮箱'}], validateTrigger: 'change'}
               ]"
             >
@@ -200,7 +200,7 @@ export default {
 
       state.loginBtn = true
 
-      const validateFieldsKey = ['email', 'password']
+      const validateFieldsKey = ['username', 'password']
 
       validateFields(validateFieldsKey, { force: true }, (err, values) => {
         if (!err) {
