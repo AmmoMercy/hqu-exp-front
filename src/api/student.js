@@ -1,27 +1,34 @@
 import { axios } from '@/utils/request'
-import api from './manage'
+// import api from './manage'
 export function getStu (parameter) {
   return axios({
-    url: '/api/student/detail?' + 'student=' + parameter,
+    url: '/student/detail?' + 'student=' + parameter,
     method: 'get'
   })
 }
 export function getStuInfo () {
   return axios({
-    url: '/api/student/myinfo',
+    url: '/student/myinfo',
     method: 'get'
   })
 }
 export function completion (parameter) {
   return axios({
-    url: '/api/student/completion',
+    url: '/student/completion/work',
+    method: 'post',
+    data: parameter
+  })
+}
+export function perception (parameter) {
+  return axios({
+    url: '/student/completion/perception',
     method: 'post',
     data: parameter
   })
 }
 // export function getExpList (parameter) {
 //   return axios({
-//     url: '/api/student/completion/table',
+//     url: '/student/completion/table',
 //     method: 'get',
 //     parameter: parameter
 

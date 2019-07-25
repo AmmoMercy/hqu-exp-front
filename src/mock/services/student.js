@@ -2,17 +2,14 @@ import Mock from 'mockjs2'
 // import { builder } from '../util'
 
 // const expList = (options) => {
-//   const result = []
-
-//   result.push({
-//     key: '1',
-//     name: '图灵',
-//     exp_name: '亚尔迪'
-//   })
-
-//   return builder({
-//     data: result
-//   })
+//   console.log(options)
+//   return {
+//     'code': 200,
+//     'exp': {
+//       'name': '图灵',
+//       'topic': '2'
+//     }
+//   }
 // }
 const student = (options) => {
   console.log(options)
@@ -39,6 +36,14 @@ const completion = options => {
     msg: '处理成功'
   }
 }
+const perception = options => {
+  console.log(options)
+  return {
+    code: 200,
+    msg: '处理成功'
+  }
+}
+Mock.mock(/\/api\/student\/completion\/perception/, 'post', perception)
 Mock.mock(/\/api\/student\/myinfo/, 'get', student)
-Mock.mock(/\/api\/student\/completion/, 'post', completion)
+Mock.mock(/\/api\/student\/completion\/work/, 'post', completion)
 // Mock.mock(/\/api\/student\/completion\/table/, 'get', expList)

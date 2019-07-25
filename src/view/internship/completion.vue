@@ -1,34 +1,57 @@
-
-
 <template>
   <div>
     <a-row style="margin-top: 50px">
       <a-col :span="18" :offset="3">
-        <a-table :columns="columns" :dataSource="data" >
+        <a-table :columns="columns" :dataSource="data" :pagination="false">
           <template slot="name" slot-scope="text">
-            <a href="javascript:;">{{text}}</a>
+            <a href="javascript:;">{{ text }}</a>
           </template>
         </a-table>
+        <div>
+        </div>
+        <br />
+        <br />
+        <br />
       </a-col>
     </a-row>
     <a-form :form="form" @submit="handleSubmit">
-    <a-form-item v-bind="formItemLayout" label="">
+      <a-form-item v-bind="formItemLayout" label>
         <div class="dropbox">
           <a-upload-dragger
             v-decorator="['dragger', {
               rules: [{ required: true}],
-              valuePropName: 'fileList',
+              valuePropName: 'fileList1',
               getValueFromEvent: normFile,
             }]"
             name="files"
-            :beforeUpload="fileBeforeUpload"
+            :beforeUpload="fileBeforeUpload1"
             accept=".zip"
           >
             <p class="ant-upload-drag-icon">
               <a-icon type="inbox" />
             </p>
             <p class="ant-upload-text">点击选取或拖动文件到此处</p>
-            <p class="ant-upload-hint">请将结业作业和企业证明打包成一个zip</p>
+            <p class="ant-upload-hint">请将结业作业打包成一个zip</p>
+          </a-upload-dragger>
+        </div>
+      </a-form-item>
+      <a-form-item v-bind="formItemLayout" label>
+        <div class="dropbox">
+          <a-upload-dragger
+            v-decorator="['dragger', {
+              rules: [{ required: true}],
+              valuePropName: 'fileList2',
+              getValueFromEvent: normFile,
+            }]"
+            name="files"
+            :beforeUpload="fileBeforeUpload2"
+            accept=".docx"
+          >
+            <p class="ant-upload-drag-icon">
+              <a-icon type="inbox" />
+            </p>
+            <p class="ant-upload-text">点击选取或拖动文件到此处</p>
+            <p class="ant-upload-hint">请将结业作业打包成一个word</p>
           </a-upload-dragger>
         </div>
       </a-form-item>
@@ -39,56 +62,54 @@
   </div>
 </template>
 
-
 <script>
-const columns = [
-  {
-    title: "姓名",
-    dataIndex: "name",
-    className: "user-name",
-    scopedSlots: { customRender: "name" }
-  },
-  {
-    title: "实训项目",
-    className: "exp-name",
-    dataIndex: "exp_name"
-  }
-];
+// const data = [
+//   {
+//     key: "1",
+//     name: "朱鹏屹",
+//     topic: "给你妈一拳"
+//   }
+// ];
 
-const data = [
-  {
-    key: "1",
-    name: '朱鹏屹',
-    exp_name:'给你妈一拳'
-  }
-]
-
-import store from "@/store";
-import { completion } from "@/api/student";
+import store from '@/store'
+import { completion } from '@/api/student'
 // import { STable } from "@/components";
 // import { getExpList } from "@/api/student";
+import { perception } from '@/api/student'
+
+const columns = [
+  {
+    title: '姓名',
+    dataIndex: 'name',
+    className: 'user-name',
+    scopedSlots: { customRender: 'name' }
+  },
+  {
+    title: '实训项目',
+    className: 'exp-name',
+    dataIndex: 'topic'
+  }
+]
 
 export default {
   // components: {
   //   STable
   // },
-  data() {
+  data () {
     return {
       file: {},
-      data,
       columns,
-      student: {},
+      // exp:{},
       formItemLayout: {
-        
         labelCol: {
           xs: { span: 24 },
           sm: { span: 4 }
         },
         wrapperCol: {
           xs: { span: 24 },
-          sm: { span: 18, offset:3}
+          sm: { span: 18, offset: 3 }
         }
-      },
+      }
       // loadData: parameter => {
       //   console.log("loadData.parameter", parameter);
       //   return getExpList(Object.assign(parameter, this.queryParam)).then(
@@ -97,38 +118,57 @@ export default {
       //     }
       //   );
       // }
-    };
+    }
   },
   beforeCreate () {
     this.form = this.$form.createForm(this)
   },
-
+  // mounted(){
+  //   if (store.getters.role === 'student') {
+  //     getExpList(exp).then(
+  //       (response) => {
+  //         if (response.code === 200) { this.exp = response.data }
+  //       }
+  //     )
+  //   }
+  // },
   methods: {
-    fileBeforeUpload(file, fileList) {
-      this.file = file;
-      return false;
+    fileBeforeUpload1 (file, fileList1) {
+      this.file = file
+      return false
     },
-    normFile(event1) {
-      console.log("Upload event:", event1);
+    fileBeforeUpload2 (file, fileList2) {
+      this.file = file
+      return false
+    },
+    normFile (event1) {
+      console.log('Upload event:', event1)
       if (Array.isArray(event1)) {
-        return event1;
+        return event1
       }
-      return event1 && event1.fileList;
+      return event1 && event1.fileList
     },
-    handleSubmit(e) {
-      e.preventDefault();
+    handleSubmit (e) {
+      e.preventDefault()
       this.form.validateFieldsAndScroll((err, values) => {
         if (!err) {
           this.countDown()
-          const formData = new FormData();
-          delete values.dragger;
+          const formData1 = new FormData()
+          delete values.dragger
           for (var key in values) {
-            formData.append(key, values[key]);
+            formData1.append(key, values[key])
           }
-          formData.append("completion_file", this.file);
-          completion(formData);
+          formData1.append('completion_file', this.file)
+          completion(formData1)
+          const formData2 = new FormData()
+          delete values.dragger
+          for (var key in values) {
+            formData2.append(key, values[key])
+          }
+          formData2.append('perception_file', this.file)
+          perception(formData2)
         }
-      });
+      })
     },
     countDown () {
       let secondsToGo = 5
@@ -148,7 +188,7 @@ export default {
       }, secondsToGo * 1000)
     }
   }
-};
+}
 </script>
 <style>
 th.exp-name {
@@ -160,5 +200,32 @@ td.user-name {
 td.exp-name {
   text-align: center !important;
   background: white;
+}
+
+table.gridtable {
+  text-align: center;
+  width: 100%;
+  text-align: center;
+  font-family: verdana, arial, sans-serif;
+  font-size: 14px;
+  color: #333333;
+  border-width: 1px;
+  border-color: #666666;
+  border-collapse: collapse;
+}
+table.gridtable th {
+  border-width: 1px;
+  padding: 15px 20px 15px 20px;
+  border-style: solid;
+  border-color: black;
+  background-color: #87CEFA;
+  filter: alpha(opacity=50);
+}
+table.gridtable td {
+  border-width: 1px;
+  padding: 15px 20px 15px 20px;
+  border-style: solid;
+  border-color: black;
+  background-color: #ffffff;
 }
 </style>
