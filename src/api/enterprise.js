@@ -1,33 +1,33 @@
 import { axios } from '@/utils/request'
 export function getEnt (parameter) {
   return axios({
-    url: '/api/enterprise/detail?' + 'enterprise=' + parameter,
+    url: '/enterprise/detail?' + 'enterprise=' + parameter,
     method: 'get'
   })
 }
 export function getEntInfo (parameter) {
   return axios({
-    url: '/api/enterprise/info',
+    url: '/enterprise/info',
     method: 'get'
   })
 }
 export function publish (parameter) {
   return axios({
-    url: '/api/enterprise/internship',
+    url: '/enterprise/internship',
     method: 'post',
     data: parameter
   })
 }
 export function register (parameter) {
   return axios({
-    url: '/api/enterprise/register',
+    url: '/enterprise/register',
     method: 'post',
     data: parameter
   })
 }
 export function submitprove (parameter) {
   return axios({
-    url: '/api/enterprise/result',
+    url: '/enterprise/result',
     method: 'post',
     data: parameter
   })

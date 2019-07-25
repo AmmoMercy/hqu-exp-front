@@ -11,11 +11,11 @@
       class="detail-layout"
       v-if="role==='admin'"
     >
-      <detail-list-item term="注册时间">{{enterprise.register_time}}</detail-list-item>
+      <detail-list-item term="注册时间">{{ enterprise.register_time }}</detail-list-item>
       <detail-list-item term="资质文件">
         <a>url</a>
       </detail-list-item>
-      <detail-list-item term="类型">{{enterprise.type}}</detail-list-item>
+      <detail-list-item term="类型">{{ enterprise.type }}</detail-list-item>
     </detail-list>
     <!-- actions -->
     <template slot="action" class="steps-action" v-if="role==='admin'">
@@ -52,11 +52,11 @@
         </a-button>
       </a-form-item>
       <detail-list title="一般信息">
-        <detail-list-item term="类型">{{enterprise.type}}</detail-list-item>
-        <detail-list-item term="详细地址">{{enterprise.address}}</detail-list-item>
-        <detail-list-item term="企业/导师email">{{enterprise.email}}</detail-list-item>
-        <detail-list-item term="企业/导师联系人">{{enterprise.contact_name}}</detail-list-item>
-        <detail-list-item term="企业/导师联系方式">{{enterprise.contact_tel}}</detail-list-item>
+        <detail-list-item term="类型">{{ enterprise.type }}</detail-list-item>
+        <detail-list-item term="详细地址">{{ enterprise.address }}</detail-list-item>
+        <detail-list-item term="企业/导师email">{{ enterprise.email }}</detail-list-item>
+        <detail-list-item term="企业/导师联系人">{{ enterprise.contact_name }}</detail-list-item>
+        <detail-list-item term="企业/导师联系方式">{{ enterprise.contact_tel }}</detail-list-item>
       </detail-list>
       <a-divider style="margin-bottom: 32px" />
       <a-form-item label="简介">
@@ -84,35 +84,35 @@
           <a-form-item v-bind="formItemLayout" label="名称">
             <a-input
               v-decorator="[
-            'name',{initialValue:enterprise.name,rules: [{ required: true, message: 'Please input your topic!' }],}]"
+                'name',{initialValue:enterprise.name,rules: [{ required: true, message: 'Please input your topic!' }],}]"
               placeholder="name"
             />
           </a-form-item>
           <a-form-item v-bind="formItemLayout" label="详细地址">
             <a-input
               v-decorator="[
-            'address',{initialValue:enterprise.address,rules: [{ required: true, message: 'Please input your topic!' }],}]"
+                'address',{initialValue:enterprise.address,rules: [{ required: true, message: 'Please input your topic!' }],}]"
               placeholder="address"
             />
           </a-form-item>
           <a-form-item v-bind="formItemLayout" label="email地址">
             <a-input
               v-decorator="[
-            'email',{initialValue:enterprise.email,rules: [{ required: true, message: 'Please input your topic!' }],}]"
+                'email',{initialValue:enterprise.email,rules: [{ required: true, message: 'Please input your topic!' }],}]"
               placeholder="email"
             />
           </a-form-item>
           <a-form-item v-bind="formItemLayout" label="联系人">
             <a-input
               v-decorator="[
-            'contact_name',{initialValue:enterprise.contact_name,rules: [{ required: true, message: 'Please input your topic!' }],}]"
+                'contact_name',{initialValue:enterprise.contact_name,rules: [{ required: true, message: 'Please input your topic!' }],}]"
               placeholder="contact_name"
             />
           </a-form-item>
           <a-form-item v-bind="formItemLayout" label="联系电话">
             <a-input
               v-decorator="[
-            'contact_tel',{initialValue:enterprise.contact_tel,rules: [{ required: true, message: 'Please input your topic!' }],}]"
+                'contact_tel',{initialValue:enterprise.contact_tel,rules: [{ required: true, message: 'Please input your topic!' }],}]"
               placeholder="contact_tel"
             />
           </a-form-item>
@@ -121,9 +121,9 @@
             <a-textarea
               rows="8"
               v-decorator="[
-            'intro',
-            {initialValue:enterprise.intro,rules: [{ required: true, message: '请输入目标描述' }]}
-          ]"
+                'intro',
+                {initialValue:enterprise.intro,rules: [{ required: true, message: '请输入目标描述' }]}
+              ]"
             />
           </a-form-item>
           <a-form-item a-form-item v-bind="formItemLayout" label="上传照片">
@@ -151,30 +151,30 @@
 </template>
 
 <script>
-import { mixinDevice } from "@/utils/mixin";
-import { PageView } from "@/layouts";
-import DetailList from "@/components/tools/DetailList";
-import store from "@/store";
-import { getEnt } from "../../api/enterprise";
+import { mixinDevice } from '@/utils/mixin'
+import { PageView } from '@/layouts'
+import DetailList from '@/components/tools/DetailList'
+import store from '@/store'
+import { getEnt } from '../../api/enterprise'
 
-const DetailListItem = DetailList.Item;
+const DetailListItem = DetailList.Item
 const baseUrl =
-  "https://raw.githubusercontent.com/vueComponent/ant-design-vue/master/components/vc-slick/assets/img/react-slick/";
+  'https://raw.githubusercontent.com/vueComponent/ant-design-vue/master/components/vc-slick/assets/img/react-slick/'
 
 export default {
-  name: "Advanced",
+  name: 'Advanced',
   components: {
     PageView,
     DetailList,
     DetailListItem
   },
   mixins: [mixinDevice],
-  data() {
+  data () {
     return {
       form: this.$form.createForm(this),
       config: {
         rules: [
-          { type: "object", required: true, message: "Please select time!" }
+          { type: 'object', required: true, message: 'Please select time!' }
         ]
       },
       confirmDirty: false,
@@ -205,86 +205,86 @@ export default {
       baseUrl,
       mdl: {},
       previewVisible: false,
-      previewImage: "",
+      previewImage: '',
       enterprise: {},
       role: store.getters.role,
       fileList: [
         {
-          uid: "-1",
+          uid: '-1',
           url:
-            "https://zos.alipayobjects.com/rmsportal/jkjgkEfvpUPVyRjUImniVslZfWPnJuuZ.png"
+            'https://zos.alipayobjects.com/rmsportal/jkjgkEfvpUPVyRjUImniVslZfWPnJuuZ.png'
         },
         {
-          uid: "-1",
+          uid: '-1',
           url:
-            "https://zos.alipayobjects.com/rmsportal/jkjgkEfvpUPVyRjUImniVslZfWPnJuuZ.png"
+            'https://zos.alipayobjects.com/rmsportal/jkjgkEfvpUPVyRjUImniVslZfWPnJuuZ.png'
         },
         {
-          uid: "-1",
+          uid: '-1',
           url:
-            "https://zos.alipayobjects.com/rmsportal/jkjgkEfvpUPVyRjUImniVslZfWPnJuuZ.png"
+            'https://zos.alipayobjects.com/rmsportal/jkjgkEfvpUPVyRjUImniVslZfWPnJuuZ.png'
         }
       ]
-    };
+    }
   },
-  mounted() {
-    if (store.getters.role === "enterprise") {
-      this.enterprise = store.getters.userInfo;
+  mounted () {
+    if (store.getters.role === 'enterprise') {
+      this.enterprise = store.getters.userInfo
     } else {
-      const entid = store.getters.entid;
+      const entid = store.getters.entid
       getEnt(entid).then(response => {
         if (response.code === 200) {
-          this.enterprise = response.data;
+          this.enterprise = response.data
         }
-      });
+      })
     }
   },
   methods: {
-    handleCancel() {
-      this.previewVisible = false;
-      //补充从数据库添加新照片的方法
+    handleCancel () {
+      this.previewVisible = false
+      // 补充从数据库添加新照片的方法
     },
-    handlePreview(file) {
-      this.previewImage = file.url || file.thumbUrl;
-      this.previewVisible = true;
+    handlePreview (file) {
+      this.previewImage = file.url || file.thumbUrl
+      this.previewVisible = true
     },
-    handleChange({ fileList }) {
-      this.fileList = fileList;
-      //补充从数据库删除该照片的方法
+    handleChange ({ fileList }) {
+      this.fileList = fileList
+      // 补充从数据库删除该照片的方法
     },
-    handleEdit(record) {
-      this.mdl = Object.assign({}, record);
-      this.visible = true;
+    handleEdit (record) {
+      this.mdl = Object.assign({}, record)
+      this.visible = true
     },
-    handleOk() {},
-    pass() {
-      this.enterprise.status = 1;
-      //此处加上保存进数据库的方法
+    handleOk () {},
+    pass () {
+      this.enterprise.status = 1
+      // 此处加上保存进数据库的方法
     },
-    fail() {
-      this.enterprise.status = 2;
-      //此处加上保存进数据库的方法
+    fail () {
+      this.enterprise.status = 2
+      // 此处加上保存进数据库的方法
     },
-    reCheck() {
-      this.enterprise.status = 0;
-      //此处加上保存进数据库的方法
+    reCheck () {
+      this.enterprise.status = 0
+      // 此处加上保存进数据库的方法
     },
-    getImgUrl(i) {
-      return `${baseUrl}abstract0${i + 1}.jpg`;
+    getImgUrl (i) {
+      return `${baseUrl}abstract0${i + 1}.jpg`
     },
-    handleSubmit(e) {
-      e.preventDefault();
+    handleSubmit (e) {
+      e.preventDefault()
       const {
         form: { validateFields }
-      } = this;
+      } = this
       const validateFieldsKey = [
-        "name",
-        "address",
-        "email",
-        "contact_name",
-        "contact_tel",
-        "intro"
-      ];
+        'name',
+        'address',
+        'email',
+        'contact_name',
+        'contact_tel',
+        'intro'
+      ]
       // const values = {
       //   ...fieldsValue,
       //   'date-time-picker': fieldsValue['date-time-picker'].format(
@@ -293,17 +293,17 @@ export default {
       // }
       validateFields(validateFieldsKey, { force: true }, (err, values) => {
         if (!err) {
-          const publishParams = { ...values };
-          console.log(publishParams);
+          const publishParams = { ...values }
+          console.log(publishParams)
           publish(publishParams).then(res => {
-            if (res.code === 200) this.countDown();
-          });
+            if (res.code === 200) this.countDown()
+          })
         }
-        console.log("Received values of form: ", values);
-      });
+        console.log('Received values of form: ', values)
+      })
     }
   }
-};
+}
 </script>
 
 <style scoped>
