@@ -17,7 +17,7 @@
             <a-input
               size="large"
               type="text"
-              placeholder="请输入学号"
+              placeholder="请输入邮箱"
               v-decorator="[
                 'email',
                 {rules: [{ required: true, message: '请输入帐户名或邮箱地址' }, { validator: validateEmail }], validateTrigger: 'change'}
@@ -47,7 +47,7 @@
             <a-input
               size="large"
               type="text"
-              placeholder="请输入学号"
+              placeholder="请输入邮箱"
               v-decorator="[
                 'username',
                 {rules: [{ required: true, message: '请输入帐户名或邮箱地址' }, { validator: validateEmail }], validateTrigger: 'change'}
@@ -78,7 +78,7 @@
             <a-input
               size="large"
               type="text"
-              placeholder="请输入学号"
+              placeholder="请输入邮箱"
               v-decorator="[
                 'username',
                 {rules: [{ required: true, message: '请输入帐户名或邮箱地址' }, { validator: validateEmail ,message:'请输入正确的邮箱'}], validateTrigger: 'change'}
