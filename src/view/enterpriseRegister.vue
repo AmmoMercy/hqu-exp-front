@@ -221,6 +221,7 @@
 <script>
 // import SIdentify from "@/views/enterprise/identify";
 import { register } from '@/api/enterprise'
+import md5 from 'md5'
 export default {
   data () {
     return {
@@ -361,6 +362,7 @@ export default {
       delete values.prefix
       delete values.images
       delete values.dragger
+      values.password = md5(values.password)
       for (var key in values) {
         formData.append(key, values[key])
       }
