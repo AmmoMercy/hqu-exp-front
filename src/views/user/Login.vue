@@ -19,7 +19,7 @@
               type="text"
               placeholder="请输入邮箱"
               v-decorator="[
-                'email',
+                'studentEmail',
                 {rules: [{ required: true, message: '请输入帐户名或邮箱地址' }, { validator: validateEmail }], validateTrigger: 'change'}
               ]"
             >
@@ -33,7 +33,7 @@
               autocomplete="false"
               placeholder="密码: admin or ant.design"
               v-decorator="[
-                'password',
+                'studentPassword',
                 {rules: [{ required: true, message: '请输入密码' }], validateTrigger: 'blur'}
               ]"
             >
@@ -49,7 +49,7 @@
               type="text"
               placeholder="请输入邮箱"
               v-decorator="[
-                'username',
+                'adminEmail',
                 {rules: [{ required: true, message: '请输入帐户名或邮箱地址' }, { validator: validateEmail }], validateTrigger: 'change'}
               ]"
             >
@@ -64,7 +64,7 @@
               autocomplete="false"
               placeholder="密码: admin or ant.design"
               v-decorator="[
-                'password',
+                'adminPassword',
                 {rules: [{ required: true, message: '请输入密码' }], validateTrigger: 'blur'}
               ]"
             >
@@ -80,7 +80,7 @@
               type="text"
               placeholder="请输入邮箱"
               v-decorator="[
-                'username',
+                'enterpriseEmail',
                 {rules: [{ required: true, message: '请输入帐户名或邮箱地址' }, { validator: validateEmail ,message:'请输入正确的邮箱'}], validateTrigger: 'change'}
               ]"
             >
@@ -95,7 +95,7 @@
               autocomplete="false"
               placeholder="密码: admin or ant.design"
               v-decorator="[
-                'password',
+                'enterprisePassword',
                 {rules: [{ required: true, message: '请输入密码' }], validateTrigger: 'blur'}
               ]"
             >
@@ -187,7 +187,8 @@ export default {
       const {
         form: { validateFields }
       } = this
-      const validateFieldsKey = ['email', 'password']
+      const validateFieldsKey = [this.customActiveKey + 'Email', this.customActiveKey + 'Password']
+      console.log(validateFieldsKey)
       validateFields(validateFieldsKey, { force: true }, (err, values) => {
         if (!err) {
           console.log(values)
@@ -206,11 +207,25 @@ export default {
         Login,
         values,
         ticket,
-        randstr
+        randstr,
+        loginType
       } = this
       state.loginBtn = true
       const loginParams = { ...values }
-      loginParams.password = md5(values.password)
+      if (loginType === 'enterprise') {
+        loginParams.email = loginParams.enterpriseEmail
+        delete loginParams.enterpriseEmail
+        loginParams.password = md5(values.enterprisePassword)
+      } else if (loginType === 'admin') {
+        loginParams.email = loginParams.adminEmail
+        delete loginParams.adminEmail
+        loginParams.password = md5(values.adminPassword)
+      } else {
+        loginParams.email = loginParams.studentEmail
+        delete loginParams.studentEmail
+        loginParams.password = md5(values.studentPassword)
+      }
+
       loginParams.loginType = state.loginType
       loginParams.Ticket = ticket
       loginParams.Randstr = randstr
