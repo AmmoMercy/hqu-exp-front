@@ -207,23 +207,28 @@ export default {
         Login,
         values,
         ticket,
-        randstr,
-        loginType
+        randstr
+
       } = this
+      const loginType = this.state.loginType
       state.loginBtn = true
       const loginParams = { ...values }
+
       if (loginType === 'enterprise') {
         loginParams.email = loginParams.enterpriseEmail
+        loginParams.password = md5(loginParams.enterprisePassword)
         delete loginParams.enterpriseEmail
-        loginParams.password = md5(values.enterprisePassword)
+        delete loginParams.enterprisePassword
       } else if (loginType === 'admin') {
         loginParams.email = loginParams.adminEmail
+        loginParams.password = md5(loginParams.adminPassword)
         delete loginParams.adminEmail
-        loginParams.password = md5(values.adminPassword)
+        delete loginParams.adminPassword
       } else {
         loginParams.email = loginParams.studentEmail
+        loginParams.password = md5(loginParams.studentPassword)
         delete loginParams.studentEmail
-        loginParams.password = md5(values.studentPassword)
+        delete loginParams.studentPassword
       }
 
       loginParams.loginType = state.loginType
