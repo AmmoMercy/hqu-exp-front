@@ -27,7 +27,7 @@
           contenteditable="false"
           rows="10"
           readonly
-          v-model="student.intro"
+          v-model="student.introduction"
           style="border:none"
         />
       </a-form-item>
@@ -37,7 +37,7 @@
           contenteditable="false"
           rows="10"
           readonly
-          v-model="student.intro"
+          v-model="student.exps"
           style="border:none"
         />
       </a-form-item>
@@ -62,8 +62,8 @@
             <a-textarea
               rows="8"
               v-decorator="[
-            'intro',
-            {initialValue:student.intro,rules: [{ required: true, message: '请输入目标描述' }]}
+            'introduction',
+            {initialValue:student.introduction,rules: [{ required: true, message: '请输入目标描述' }]}
           ]"
             />
           </a-form-item>
@@ -71,8 +71,8 @@
             <a-textarea
               rows="8"
               v-decorator="[
-            'description',
-            {initialValue:student.description,rules: [{ required: true, message: '请输入目标描述' }]}
+            'exps',
+            {initialValue:student.exps,rules: [{ required: true, message: '请输入目标描述' }]}
           ]"
             />
           </a-form-item>
@@ -87,13 +87,7 @@
       </a-form-item>
       <detail-list>
         <detail-list-item term="学生作品名">
-          <a>url</a>
-        </detail-list-item>
-        <detail-list-item term="学生作品名">
-          <a>url</a>
-        </detail-list-item>
-        <detail-list-item term="学生作品名">
-          <a>url</a>
+          <a :href="student.works">url</a>
         </detail-list-item>
       </detail-list>
 
