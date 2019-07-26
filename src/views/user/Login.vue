@@ -141,6 +141,8 @@ export default {
       loginType: 'student',
       form: this.$form.createForm(this),
       values: [],
+      ticket: '',
+      randstr: '',
       state: {
         time: 60,
         loginBtn: false,
@@ -172,6 +174,8 @@ export default {
         // res（未通过验证）= {ret: 1, ticket: null}
         // res（验证成功） = {ret: 0, ticket: "String", randstr: "String"}
         if (res.ret === 0) {
+          self.ticket = res.ticket
+          self.randstr = res.randstr
           self.goLogin()
         }
       })
@@ -200,12 +204,16 @@ export default {
       const {
         state,
         Login,
-        values
+        values,
+        ticket,
+        randstr
       } = this
       state.loginBtn = true
       const loginParams = { ...values }
       loginParams.password = md5(values.password)
       loginParams.loginType = state.loginType
+      loginParams.Ticket = ticket
+      loginParams.Randstr = randstr
       Login(loginParams)
         .then((res) => this.loginSuccess(res))
         .catch(err => this.requestFailed(err))
