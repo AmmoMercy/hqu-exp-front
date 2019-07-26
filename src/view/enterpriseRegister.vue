@@ -105,7 +105,7 @@
         <a-form-item v-bind="formItemLayout" label="联系人电话">
           <a-input
             v-decorator="[
-              'contact-tel',
+              'contact_tel',
               {
                 rules: [{ required: true, message: '请输入联系人电话' },{validator:validatePhone}],
               }
@@ -129,7 +129,7 @@
           <a-textarea
             rows="20"
             v-decorator="[
-              'description',
+              'intro',
               {rules: [{ required: true, message: '请输入公司概述' }]}
             ]"
             placeholder="公司概述"
