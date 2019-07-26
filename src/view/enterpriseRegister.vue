@@ -72,7 +72,7 @@
           </span>
           <a-input
             v-decorator="[
-              'nickname',
+              'name',
               {
                 rules: [{ required: true, message: '请输入公司名称', whitespace: true }]
               }
@@ -94,7 +94,7 @@
         <a-form-item v-bind="formItemLayout" label="联系人姓名">
           <a-input
             v-decorator="[
-              'contact-name',
+              'contact_name',
               {
                 rules: [{ required: true, message: '请输入联系人姓名' }],
               }
@@ -237,11 +237,11 @@ export default {
       formItemLayout: {
         labelCol: {
           xs: { span: 24 },
-          sm: { span: 5 }
+          sm: { span: 7 }
         },
         wrapperCol: {
           xs: { span: 24 },
-          sm: { span: 14 }
+          sm: { span: 10 }
         }
       },
       tailFormItemLayout: {

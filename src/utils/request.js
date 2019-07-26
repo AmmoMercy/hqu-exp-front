@@ -12,7 +12,7 @@ const service = axios.create({
     //   ? 'http://hqu-internship.hqu-internship.kooboo.site/api'
     //   : '/api', // api base_url
     '/api',
-  timeout: 6000 // 请求超时时间
+  timeout: 100000 // 请求超时时间
 })
 
 const err = error => {
