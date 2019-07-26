@@ -206,11 +206,12 @@
         <a-form-item :wrapperCol="{ span: 24 }" style="text-align: center">
           <a-button
             size="large"
-            type="default"
-            v-if="!validated"
-            @click="toCaptcha"
-          >点击获取验证码</a-button>
-          <a-button size="large" class="register-button" type="primary" html-type="submit" :disabled="isChecked || !validated">注册</a-button>
+            class="register-button"
+            type="primary"
+            html-type="submit"
+            :disabled="isChecked "
+            :loading="registerBtn"
+          >注册</a-button>
         </a-form-item>
       </a-form>
     </a-col>
@@ -223,6 +224,8 @@ import { register } from '@/api/enterprise'
 export default {
   data () {
     return {
+      values: {},
+      registerBtn: false,
       validated: false,
       flag: true, // 该值变化，就会触发刷新
       code: '',
@@ -276,7 +279,7 @@ export default {
       // res（验证成功） = {ret: 0, ticket: "String", randstr: "String"}
         console.log(self, this)
         if (res.ret === 0) {
-          self.validated = true
+          this.goRegister()
         }
       })
       // 显示验证码
@@ -297,7 +300,7 @@ export default {
     compareToFirstPassword (rule, value, callback) {
       const form = this.form
       if (value && value !== form.getFieldValue('password')) {
-        callback('Two passwords that you enter is inconsistent!')
+        callback('两次密码输入不一致!')
       } else {
         callback()
       }
@@ -346,29 +349,37 @@ export default {
       e.preventDefault()
       this.form.validateFieldsAndScroll((err, values) => {
         if (!err) {
-          this.countDown()
-          const formData = new FormData()
-          delete values.prefix
-          delete values.images
-          delete values.dragger
-          for (var key in values) {
-            formData.append(key, values[key])
-          }
-          this.imageList.forEach((file) => {
-            formData.append('images[]', file)
-          })
-          formData.append('qualificate_file', this.file)
-          register(formData)
+          this.toCaptcha()
+          this.values = values
         }
       })
     },
-    // refreshCode() {
-    //   this.flag = !this.flag;
-    // },
-    // getMakedCode(code) {
-    //   this.code = code;
-    //   console.log("getMakedCode:", this.code);
-    // }
+    goRegister () {
+      var values = this.values
+      var self = this
+      const formData = new FormData()
+      delete values.prefix
+      delete values.images
+      delete values.dragger
+      for (var key in values) {
+        formData.append(key, values[key])
+      }
+      this.imageList.forEach((file) => {
+        formData.append('images[]', file)
+      })
+      formData.append('qualificate_file', this.file)
+      self.registerBtn = true
+      register(formData)
+        .then(res => {
+          if (res.code === '200') {
+            self.countDown()
+          } else {
+            this.registerFailed(res)
+          }
+        })
+        .catch(err => { this.requestFailed(err) })
+        .finally(() => { self.registerBtn = false })
+    },
     countDown () {
       let secondsToGo = 5
       const modal = this.$success({
@@ -385,6 +396,20 @@ export default {
         clearInterval(interval)
         modal.destroy()
       }, secondsToGo * 1000)
+    },
+    requestFailed (err) {
+      this.$notification['error']({
+        message: '错误',
+        description: ((err.response || {}).data || {}).message || '请求出现错误，请稍后再试',
+        duration: 4
+      })
+    },
+    registerFailed (err) {
+      this.$notification['error']({
+        message: '错误',
+        description: (err || {}).msg || '请求出现错误，请稍后再试',
+        duration: 4
+      })
     }
   }
 }
