@@ -15,12 +15,13 @@
       <a-form-item v-bind="formItemLayout" label="开始时间">
         <a-date-picker
           v-decorator="['exp_begin_time', config]"
-          show-time
-          format="YYYY-MM-DD HH:mm:ss"
+          format="YYYY-MM-DD"
         />
       </a-form-item>
       <a-form-item v-bind="formItemLayout" label="结束时间">
-        <a-date-picker v-decorator="['exp_end_time', config]" show-time format="YYYY-MM-DD HH:mm:ss" />
+        <a-date-picker
+          v-decorator="['exp_end_time', config]"
+          format="YYYY-MM-DD " />
       </a-form-item>
       <a-form-item v-bind="formItemLayout" label="项目简介">
         <a-textarea
@@ -43,6 +44,7 @@
           v-decorator="['apply_end_time',config]"
           show-time
           format="YYYY-MM-DD HH:mm:ss"
+
         />
       </a-form-item>
       <a-form-item :wrapperCol="{ span: 24 }" style="text-align: center">
@@ -57,14 +59,15 @@
 <script>
 import { publish } from '@/api/enterprise'
 export default {
-  data() {
+  data () {
     return {
       form: this.$form.createForm(this),
       config: {
         rules: [
-          { type: "object", required: true, message: "Please select time!" }
+          { type: 'object', required: true, message: 'Please select time!' }
         ]
       },
+
       confirmDirty: false,
       autoCompleteResult: [],
       formItemLayout: {
@@ -89,55 +92,56 @@ export default {
           }
         }
       }
-     
-    };
+
+    }
   },
 
   methods: {
-    countDown() {
-      let secondsToGo = 5;
+    countDown () {
+      let secondsToGo = 5
       const modal = this.$success({
-        title: "发布成功",
+        title: '发布成功',
         content: `这个窗口将于 ${secondsToGo} s后关闭。`
-      });
+      })
       const interval = setInterval(() => {
-        secondsToGo -= 1;
+        secondsToGo -= 1
         modal.update({
           content: `这个窗口将于 ${secondsToGo} s后关闭。`
-        });
-      }, 1000);
+        })
+      }, 1000)
       setTimeout(() => {
-        clearInterval(interval);
-        modal.destroy();
-      }, secondsToGo * 1000);
+        clearInterval(interval)
+        modal.destroy()
+      }, secondsToGo * 1000)
     },
-    handleSubmit(e) {
-      e.preventDefault();
+    handleSubmit (e) {
+      e.preventDefault()
       const {
-        form: { validateFields },
-        
+        form: { validateFields }
       } = this
-      const validateFieldsKey=['topic','exp_begin_time','exp_end_time','description','need_num','apply_end_time']
+      const validateFieldsKey = ['topic', 'exp_begin_time', 'exp_end_time', 'description', 'need_num', 'apply_end_time']
       // const values = {
       //   ...fieldsValue,
       //   'date-time-picker': fieldsValue['date-time-picker'].format(
       //     'YYYY-MM-DD HH:mm:ss'
       //   )
       // }
-       validateFields(validateFieldsKey, { force: true }, (err, values) => {
+      validateFields(validateFieldsKey, { force: true }, (err, values) => {
         if (!err) {
           const publishParams = { ...values }
+          publishParams.exp_begin_time = Date.parse(publishParams.exp_begin_time)
+          publishParams.exp_end_time = Date.parse(publishParams.exp_end_time)
+          publishParams.apply_end_time = Date.parse(publishParams.apply_end_time)
           console.log(publishParams)
           publish(publishParams)
-          .then((res) =>{ 
-          if (res.code === 200) 
-          this.countDown();
-          })
+            .then((res) => {
+              if (res.code === 200) { this.countDown() }
+            })
         }
-        console.log("Received values of form: ", values);
-      });
-    },
-    
+        console.log('Received values of form: ', values)
+      })
+    }
+
   }
-};
+}
 </script>
