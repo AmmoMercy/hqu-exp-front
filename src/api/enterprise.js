@@ -44,3 +44,9 @@ export function getEntApp (parameter) {
     method: 'get'
   })
 }
+export function getInternshipList () {
+  return axios({
+    url: '/enterprise/internshiplist',
+    method: 'get'
+  })
+}
