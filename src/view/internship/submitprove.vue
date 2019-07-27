@@ -2,7 +2,7 @@
 
 <template>
   <div>
-    <a-row style="margin-top: 50px">
+    <!-- <a-row style="margin-top: 50px">
       <a-col :span="18" :offset="3">
         <a-table :columns="columns" :dataSource="data" >
           <template slot="name" slot-scope="text">
@@ -10,7 +10,10 @@
           </template>
         </a-table>
       </a-col>
-    </a-row>
+    </a-row> --><br>
+    <br>
+    <br>
+    <a-card :bordered="false">
      <a-form :form="form" @submit="handleSubmit">
     <a-form-item v-bind="formItemLayout" label="">
         <div class="dropbox">
@@ -36,6 +39,7 @@
         <a-button size="large" class="register-button" type="primary" html-type="submit">提交</a-button>
       </a-form-item>
     </a-form>  
+    </a-card>
   </div>
 </template>
 
