@@ -81,11 +81,12 @@ const data = [
     exp_mark: '60'
   },
 ]
-
+const exp_id = "4a12d708-c612-4595-847f-fbae66bd597c"
 import { submitprove } from "@/api/enterprise";
 export default {
   data () {
     return {
+      exp_id,
       data,
       columns,
       file: {},
@@ -128,6 +129,7 @@ export default {
           for (var key in values) {
             formData.append(key, values[key]);
           }
+          formData.append("exp_id",exp_id)
           formData.append("certificate_file", this.file);
           submitprove(formData);
         }
