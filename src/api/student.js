@@ -26,6 +26,12 @@ export function perception (parameter) {
     data: parameter
   })
 }
+export function getProcessingExp () {
+  return axios({
+    url: '/student/exping',
+    methodd: 'get'
+  })
+}
 // export function getExpList (parameter) {
 //   return axios({
 //     url: '/student/completion/table',
