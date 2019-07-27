@@ -20,13 +20,13 @@
                 </a-select>
               </a-form-item>
             </a-col>
-              <span>
-                <a-button type="primary" @click="Searchlist">查询</a-button>
-              </span>
+            <span>
+              <a-button type="primary" @click="Searchlist">查询</a-button>
+            </span>
           </a-row>
         </a-form>
       </div>
-      <a-table :columns="columns" :dataSource="data">
+      <a-table :columns="enterpriseColumns" :dataSource="internships">
         <!-- <a slot="name" slot-scope="text" href="javascript:;">{{text}}</a> -->
         <span slot="serial" slot-scope="text, record, index">{{ index + 1 }}</span>
         <span slot="qualificate_file">
@@ -45,7 +45,7 @@
 <script>
 /* import moment from 'moment'
 import { getRoleList, getServiceList } from '@/api/manage' */
-
+import { getInternshipList } from '@/api/enterprise'
 const statusMap = {
   0: {
     status: 'default',
@@ -64,7 +64,7 @@ const statusMap = {
     text: '审核未通过'
   }
 }
-const columns = [
+const enterpriseColumns = [
   {
     title: '#',
     scopedSlots: { customRender: 'serial' }
@@ -74,33 +74,29 @@ const columns = [
     dataIndex: 'topic'
   },
   {
-    title: '实训公司',
-    dataIndex: 'enterprise_id'
-  },
-  {
     title: '实训开始日期',
-    dataIndex: 'exp_begin_time',
+    dataIndex: 'exp_begin_time'
   },
   {
     title: '实训结束日期',
-    dataIndex: 'exp_end_time',
+    dataIndex: 'exp_end_time'
   },
   {
     title: '提交日期',
-    dataIndex: 'submit_time',
+    dataIndex: 'submit_time'
   },
   {
     title: '实训描述',
     dataIndex: 'description',
     scopedSlots: { customRender: 'description' }
   },
-   {
+  {
     title: '意向人数',
     dataIndex: 'need_num'
   },
   {
     title: '申请截至日期',
-    dataIndex: 'apply_end_time',
+    dataIndex: 'apply_end_time'
   },
   {
     title: '审核状态',
@@ -113,53 +109,32 @@ const columns = [
     scopedSlots: { customRender: 'action' }
   }
 ]
-const data = [
-  {
-    key: '1',
-    topic: 'KooBoo-exp',
-    enterprise_id: 'KooBoo',
-    exp_begin_time: '2019-07-02',
-    exp_end_time: '2019-07-30',
-    submit_time: '2019-07-02',
-    description: 'this is intro',
-    need_num:20,
-    apply_end_time: '2019-07-02',
-    status: 2
-  },
-  {
-    key: '2',
-    topic: 'tencent-exp',
-    enterprise_id: 'tencent',
-    exp_begin_time: '2019-07-02',
-    exp_end_time: '2019-07-30',
-    submit_time: '2019-07-02',
-    description: 'this is intro',
-    need_num:20,
-    apply_end_time: '2019-07-02',
-    status: 0
-  }
-]
 export default {
   name: 'ExpTableList',
-  data() {
+  data () {
     return {
-      data,
-      columns,
+      enterpriseColumns,
       mdl: {},
       queryParam: {},
-      loading: false
+      loading: false,
+      internships: []
     }
   },
+  mounted () {
+    getInternshipList().then((res) => {
+      this.internships = res.data
+    })
+  },
   filters: {
-    statusFilter(type) {
+    statusFilter (type) {
       return statusMap[type].text
     },
-    statusTypeFilter(type) {
+    statusTypeFilter (type) {
       return statusMap[type].status
     }
   },
   methods: {
-    Searchlist() {
+    Searchlist () {
       this.loading = true
       setTimeout(() => {
         this.data = data
