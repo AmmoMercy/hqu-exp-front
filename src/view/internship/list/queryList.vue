@@ -42,6 +42,8 @@
         <span slot="action" slot-scope="text,record">
           <template>
             <a slot="action" @click="goToExpDetail(record)" >查看</a>
+            <a-divider type="vertical" />
+            <a @click="goToAppList(record)">查看申请</a>
           </template>
         </span>
       </a-table>
@@ -199,6 +201,12 @@ export default {
     console.log(e)
     store.commit('SET_EXP_ID', e._id)
     _this.$router.push({ name: 'internshipdetail' })
+  },
+  goToAppList(e) {
+    const _this = this
+    console.log(e)
+    store.commit('SET_EXP_ID', e._id)
+    _this.$router.push({ name: 'applicatinlist' })
   },
   columnsSelector () {
     this.role = store.getters.role
