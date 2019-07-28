@@ -27,8 +27,8 @@ export function register (parameter) {
 }
 export function submitprove (parameter) {
   return axios({
-    url: '/enterprise/result',
-    method: 'post',
+    url: '/enterprise/result/certificate',
+    method: 'put',
     data: parameter
   })
 }

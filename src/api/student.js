@@ -15,14 +15,14 @@ export function getStuInfo () {
 export function completion (parameter) {
   return axios({
     url: '/student/completion/work',
-    method: 'post',
+    method: 'put',
     data: parameter
   })
 }
 export function perception (parameter) {
   return axios({
     url: '/student/completion/perception',
-    method: 'post',
+    method: 'put',
     data: parameter
   })
 }
