@@ -53,6 +53,8 @@
 import { getRoleList, getServiceList } from '@/api/manage' */
 import store from '@/store'
 import { getInternshipList } from '@/api/enterprise'
+import { dateTransformer } from '@/utils/util'
+
 const statusMap = {
   0: {
     status: 'default',
@@ -173,7 +175,7 @@ export default {
   },
   mounted () {
     getInternshipList().then((res) => {
-      this.internships = res.data
+      this.internships = dateTransformer(res.data)
     })
   },
   filters: {

@@ -67,3 +67,37 @@ export function genderChanger (gnerderNum) {
   }
   return '未知'
 }
+export function dateTransformer (data) {
+  if (Array.isArray(data)) {
+    for (const item of data) {
+      transformer(item)
+    }
+  } else {
+    transformer(data)
+  }
+  return data
+  function transformer (item) {
+    if (item.exp_begin_time !== undefined) {
+      item.exp_begin_time = dateBuilder(item.exp_begin_time)
+    }
+    if (item.exp_end_time) {
+      item.exp_end_time = dateBuilder(item.exp_end_time)
+    }
+    if (item.submit_time) {
+      item.submit_time = dateBuilder(item.submit_time)
+    }
+    if (item.apply_end_time) {
+      item.apply_end_time = dateBuilder(item.apply_end_time)
+    }
+    if (item.exp_modify_time) {
+      item.exp_modify_time = dateBuilder(item.exp_modify_time)
+    }
+  }
+}
+function dateBuilder (date) {
+  date = new Date(date)
+  const year = date.getFullYear()
+  const month = date.getMonth() + 1
+  const day = date.getDay()
+  return year + '-' + month + '-' + day
+}
