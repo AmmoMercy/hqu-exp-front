@@ -27,8 +27,8 @@ export function register (parameter) {
 }
 export function submitprove (parameter) {
   return axios({
-    url: '/enterprise/result',
-    method: 'post',
+    url: '/enterprise/result/certificate',
+    method: 'put',
     data: parameter
   })
 }
@@ -41,6 +41,12 @@ export function getEntDetail (parameter) {
 export function getEntApp (parameter) {
   return axios({
     url: '/api/enterprise/applicationlist?' + 'internshipId=' + parameter & 'page=' + parameter & 'status=' + parameter,
+    method: 'get'
+  })
+}
+export function getInternshipList () {
+  return axios({
+    url: '/enterprise/internshiplist',
     method: 'get'
   })
 }

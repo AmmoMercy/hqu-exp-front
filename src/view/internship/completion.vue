@@ -2,7 +2,7 @@
   <div>
     <a-row style="margin-top: 50px">
       <a-col :span="18" :offset="3">
-        <a-table :columns="columns" :dataSource="data" :pagination="false">
+        <a-table :columns="columns" :dataSource="this.exp" :pagination="false">
           <template slot="name" slot-scope="text">
             <a href="javascript:;">{{ text }}</a>
           </template>
@@ -72,10 +72,9 @@
 // ];
 
 import store from '@/store'
-import { completion } from '@/api/student'
+import { completion, getProcessingExp, perception } from '@/api/student'
 // import { STable } from "@/components";
 // import { getExpList } from "@/api/student";
-import { perception } from '@/api/student'
 
 const columns = [
   {
@@ -99,7 +98,7 @@ export default {
     return {
       file: {},
       columns,
-      // exp:{},
+      exp: [],
       formItemLayout: {
         labelCol: {
           xs: { span: 24 },
@@ -123,15 +122,18 @@ export default {
   beforeCreate () {
     this.form = this.$form.createForm(this)
   },
-  // mounted(){
-  //   if (store.getters.role === 'student') {
-  //     getExpList(exp).then(
-  //       (response) => {
-  //         if (response.code === 200) { this.exp = response.data }
-  //       }
-  //     )
-  //   }
-  // },
+  mounted () {
+    if (store.getters.role === 'student') {
+      getProcessingExp().then(
+        (response) => {
+          if (response.code === '200') {
+            this.exp.push(response.data)
+            this.exp[0].name = store.getters.userInfo.name
+          }
+        }
+      )
+    }
+  },
   methods: {
     fileBeforeUpload1 (file, fileList1) {
       this.file = file
@@ -158,10 +160,14 @@ export default {
           for (var key in values) {
             formData1.append(key, values[key])
           }
+          formData1.append('apply_id',this.exp[0].apply_id)
+          formData1.append('exp_id',this.exp[0].exp_id)
           formData1.append('completion_file', this.file)
           completion(formData1)
           const formData2 = new FormData()
           delete values.dragger
+          formData2.append('apply_id',this.exp[0].apply_id)
+          formData2.append('exp_id',this.exp[0].exp_id)
           formData2.append('perception_file', this.file)
           perception(formData2)
         }
