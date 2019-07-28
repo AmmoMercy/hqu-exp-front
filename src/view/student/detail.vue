@@ -27,7 +27,7 @@
           contenteditable="false"
           rows="10"
           readonly
-          v-model="student.intro"
+          v-model="student.introduction"
           style="border:none"
         />
       </a-form-item>
@@ -37,13 +37,20 @@
           contenteditable="false"
           rows="10"
           readonly
-          v-model="student.intro"
+          v-model="student.exps"
           style="border:none"
         />
       </a-form-item>
 
       <a-modal title="编辑个人简历" :width="800" v-model="visible" @ok="handleSubmit">
         <a-form :form="form">
+          <a-form-item v-bind="formItemLayout" label="专业">
+            <a-input
+              v-decorator="[
+            'major',{initialValue:student.major,rules: [{ required: true, message: 'Please input your topic!' }],}]"
+              placeholder="major"
+            />
+          </a-form-item>
           <a-form-item v-bind="formItemLayout" label="手机号码">
             <a-input
               v-decorator="[
@@ -51,19 +58,12 @@
               placeholder="tel"
             />
           </a-form-item>
-          <a-form-item v-bind="formItemLayout" label="email地址">
-            <a-input
-              v-decorator="[
-            'email',{initialValue:student.email,rules: [{ required: true, message: 'Please input your topic!' }],}]"
-              placeholder="email"
-            />
-          </a-form-item>
           <a-form-item v-bind="formItemLayout" label="个人简介">
             <a-textarea
               rows="8"
               v-decorator="[
-            'intro',
-            {initialValue:student.intro,rules: [{ required: true, message: '请输入目标描述' }]}
+            'introduction',
+            {initialValue:student.introduction,rules: [{ required: true, message: '请输入目标描述' }]}
           ]"
             />
           </a-form-item>
@@ -71,8 +71,8 @@
             <a-textarea
               rows="8"
               v-decorator="[
-            'description',
-            {initialValue:student.description,rules: [{ required: true, message: '请输入目标描述' }]}
+            'exps',
+            {initialValue:student.exps,rules: [{ required: true, message: '请输入目标描述' }]}
           ]"
             />
           </a-form-item>
@@ -87,13 +87,7 @@
       </a-form-item>
       <detail-list>
         <detail-list-item term="学生作品名">
-          <a>url</a>
-        </detail-list-item>
-        <detail-list-item term="学生作品名">
-          <a>url</a>
-        </detail-list-item>
-        <detail-list-item term="学生作品名">
-          <a>url</a>
+          <a :href="student.works">url</a>
         </detail-list-item>
       </detail-list>
 
@@ -114,7 +108,7 @@ import { PageView } from "@/layouts";
 import DetailList from "@/components/tools/DetailList";
 import store from "@/store";
 import { genderChanger } from "@/utils/util";
-import { getStu } from "../../api/student";
+import { getStu, editStudent } from "../../api/student";
 import student from "../../store/modules/jumper";
 const DetailListItem = DetailList.Item;
 
@@ -210,14 +204,13 @@ export default {
     handleUpdateEdit(record) {
       this.mdl = Object.assign({}, record);
       this.updateVisible = true;
-      alert(this.student.description);
     },
     handleSubmit(e) {
       e.preventDefault();
       const {
         form: { validateFields }
       } = this;
-      const validateFieldsKey = ["tel", "email", "intro", "description"];
+      const validateFieldsKey = ["major", "tel", "introduction", "exps"];
       // const values = {
       //   ...fieldsValue,
       //   'date-time-picker': fieldsValue['date-time-picker'].format(
@@ -228,7 +221,7 @@ export default {
         if (!err) {
           const publishParams = { ...values };
           console.log(publishParams);
-          publish(publishParams).then(res => {
+          editStudent(publishParams).then(res => {
             if (res.code === 200) this.countDown();
           });
         }
