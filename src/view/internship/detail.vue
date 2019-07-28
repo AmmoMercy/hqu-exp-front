@@ -175,7 +175,7 @@ export default {
   mixins: [mixinDevice],
   data () {
     return {
-      expid: '',
+      expid: store.getters.expid,
       state: {
         time: 60,
         smsSendBtn: false,
@@ -219,23 +219,34 @@ export default {
       mdl: {}
     }
   },
-
+  computed: {
+    getId () {
+      return store.getters.expid
+    }
+  },
+  mounted () {
+    this.getExpInfo(this.expid)
+  },
   watch: {
-    expid: function (val, oldVal) {
+
+    getId: function (val, oldVal) {
+      this.getExpInfo(val)
+    }
+  },
+  methods: {
+    getExpInfo (id) {
       var self = this
       if (store.getters.role === 'internship') {
         this.internship = store.getters.userInfo
       } else {
-        this.expid = store.getters.expid
+        this.expid = id
         getInternship(this.expid).then(response => {
           if (response.code === '200') {
             self.internship = response.data
           }
         })
       }
-    }
-  },
-  methods: {
+    },
     handleEdit (record) {
       this.mdl = Object.assign({}, record)
       this.visible = true
