@@ -56,3 +56,15 @@ export function getInternship (id) {
     method: 'get'
   })
 }
+export function putmark (id) {
+  return axios({
+    url: '/enterprise/result/mark',
+    method: 'put'
+  })
+}
+export function getMark () {
+  return axios({
+    url: '/enterprise/applicationlist',
+    method: 'get'
+  })
+}

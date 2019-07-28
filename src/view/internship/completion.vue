@@ -154,7 +154,6 @@ export default {
       e.preventDefault()
       this.form.validateFieldsAndScroll((err, values) => {
         if (!err) {
-          this.countDown()
           const formData1 = new FormData()
           delete values.dragger
           for (var key in values) {
@@ -170,6 +169,7 @@ export default {
           formData2.append('exp_id',this.exp[0].exp_id)
           formData2.append('perception_file', this.file)
           perception(formData2)
+          this.countDown()
         }
       })
     },
