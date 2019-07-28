@@ -69,7 +69,6 @@ const user = {
         if (userRole) {
           commit('SET_ROLE', userRole)
 
-          resolve()
           if (userRole === 'enterprise') {
             getEntInfo().then(response => {
               commit('SET_INFO', response.data)
@@ -81,6 +80,7 @@ const user = {
               commit('SET_NAME', { name: response.data.name, welcome: welcome() })
             })
           }
+          resolve()
         } else {
           reject()
         }

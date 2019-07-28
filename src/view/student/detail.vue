@@ -19,7 +19,7 @@
       </a-form-item>
       <detail-list>
         <detail-list-item term="手机号码">{{ student.tel }}</detail-list-item>
-        <detail-list-item term="emial">{{student.email}}</detail-list-item>
+        <detail-list-item term="emial">{{ student.email }}</detail-list-item>
       </detail-list>
       <a-divider style="margin-bottom: 32px" />
       <a-form-item label="个人简介">
@@ -47,14 +47,14 @@
           <a-form-item v-bind="formItemLayout" label="专业">
             <a-input
               v-decorator="[
-            'major',{initialValue:student.major,rules: [{ required: true, message: 'Please input your topic!' }],}]"
+                'major',{initialValue:student.major,rules: [{ required: true, message: 'Please input your topic!' }],}]"
               placeholder="major"
             />
           </a-form-item>
           <a-form-item v-bind="formItemLayout" label="手机号码">
             <a-input
               v-decorator="[
-            'tel',{initialValue:student.tel,rules: [{ required: true, message: 'Please input your topic!' }],}]"
+                'tel',{initialValue:student.tel,rules: [{ required: true, message: 'Please input your topic!' }],}]"
               placeholder="tel"
             />
           </a-form-item>
@@ -62,18 +62,18 @@
             <a-textarea
               rows="8"
               v-decorator="[
-            'introduction',
-            {initialValue:student.introduction,rules: [{ required: true, message: '请输入目标描述' }]}
-          ]"
+                'introduction',
+                {initialValue:student.introduction,rules: [{ required: true, message: '请输入目标描述' }]}
+              ]"
             />
           </a-form-item>
           <a-form-item v-bind="formItemLayout" label="实训经历">
             <a-textarea
               rows="8"
               v-decorator="[
-            'exps',
-            {initialValue:student.exps,rules: [{ required: true, message: '请输入目标描述' }]}
-          ]"
+                'exps',
+                {initialValue:student.exps,rules: [{ required: true, message: '请输入目标描述' }]}
+              ]"
             />
           </a-form-item>
         </a-form>
@@ -97,10 +97,10 @@
             <div class="dropbox">
               <a-upload-dragger
                 v-decorator="['dragger', {
-              rules: [{ required: true}],
-              valuePropName: 'fileList',
-              getValueFromEvent: normFile,
-            }]"
+                  rules: [{ required: true}],
+                  valuePropName: 'fileList',
+                  getValueFromEvent: normFile,
+                }]"
                 name="files"
                 :beforeUpload="fileBeforeUpload"
                 accept=".zip"
@@ -120,29 +120,29 @@
 </template>
 
 <script>
-import { mixinDevice } from "@/utils/mixin";
-import { PageView } from "@/layouts";
-import DetailList from "@/components/tools/DetailList";
-import store from "@/store";
-import { genderChanger } from "@/utils/util";
-import { getStu, editStudent, studentUpload } from "../../api/student";
-import student from "../../store/modules/jumper";
-const DetailListItem = DetailList.Item;
+import { mixinDevice } from '@/utils/mixin'
+import { PageView } from '@/layouts'
+import DetailList from '@/components/tools/DetailList'
+import store from '@/store'
+import { genderChanger } from '@/utils/util'
+import { getStu, editStudent, studentUpload } from '../../api/student'
+import student from '../../store/modules/jumper'
+const DetailListItem = DetailList.Item
 
 export default {
-  name: "Advanced",
+  name: 'Advanced',
   components: {
     PageView,
     DetailList,
     DetailListItem
   },
   mixins: [mixinDevice],
-  data() {
+  data () {
     return {
       form: this.$form.createForm(this),
       config: {
         rules: [
-          { type: "object", required: true, message: "Please select time!" }
+          { type: 'object', required: true, message: 'Please select time!' }
         ]
       },
       confirmDirty: false,
@@ -186,59 +186,65 @@ export default {
       mdl: {},
       student: {},
       stuid: store.getters.stuid
-    };
-  },
-  computed: {
-    getId() {
-      return store.getters.stuid;
     }
   },
-  mounted() {
-    this.getStuInfo(this.stuid);
-    this.student.gender = genderChanger(this.student.gender);
+  computed: {
+    getId () {
+      return store.getters.stuid
+    },
+    getInfo () {
+      return store.getters.userInfo
+    }
+  },
+  mounted () {
+    this.getStuInfo(this.stuid)
+    this.student.gender = genderChanger(this.student.gender)
   },
   watch: {
-    getId: function(val, oldVal) {
-      this.getStuInfo(val);
+    getId: function (val, oldVal) {
+      this.getStuInfo(val)
+    },
+    getInfo: function (val, oldVa) {
+      this.student = val
     }
   },
   methods: {
-    fileBeforeUpload(file, fileList) {
-      this.file = file;
-      return false;
+    fileBeforeUpload (file, fileList) {
+      this.file = file
+      return false
     },
-    getStuInfo(id) {
-      var self = this;
-      if (store.getters.role === "student") {
-        this.student = store.getters.userInfo;
+    getStuInfo (id) {
+      var self = this
+      if (store.getters.role === 'student') {
+        this.student = store.getters.userInfo
       } else {
-        this.stuid = id;
+        this.stuid = id
         getStu(this.stuid).then(response => {
-          if (response.code === "200") {
-            self.student = response.data;
+          if (response.code === '200') {
+            self.student = response.data
           }
-        });
+        })
       }
     },
-    handleChange({ file, fileList }) {
-      if (file.status !== "uploading") {
-        console.log(file, fileList);
+    handleChange ({ file, fileList }) {
+      if (file.status !== 'uploading') {
+        console.log(file, fileList)
       }
     },
-    handleEdit(record) {
-      this.mdl = Object.assign({}, record);
-      this.visible = true;
+    handleEdit (record) {
+      this.mdl = Object.assign({}, record)
+      this.visible = true
     },
-    handleUpdateEdit(record) {
-      this.mdl = Object.assign({}, record);
-      this.updateVisible = true;
+    handleUpdateEdit (record) {
+      this.mdl = Object.assign({}, record)
+      this.updateVisible = true
     },
-    handleSubmit(e) {
-      e.preventDefault();
+    handleSubmit (e) {
+      e.preventDefault()
       const {
         form: { validateFields }
-      } = this;
-      const validateFieldsKey = ["major", "tel", "introduction", "exps"];
+      } = this
+      const validateFieldsKey = ['major', 'tel', 'introduction', 'exps']
       // const values = {
       //   ...fieldsValue,
       //   'date-time-picker': fieldsValue['date-time-picker'].format(
@@ -247,53 +253,54 @@ export default {
       // }
       validateFields(validateFieldsKey, { force: true }, (err, values) => {
         if (!err) {
-          const publishParams = { ...values };
-          console.log(publishParams);
+          const publishParams = { ...values }
+          console.log(publishParams)
           editStudent(publishParams).then(res => {
-            if (res.code === 200) this.countDown();
-          });
+            if (res.code === '200') this.countDown()
+            store.dispatch('GetInfo')
+          })
         }
-        console.log("Received values of form: ", values);
-      });
+        console.log('Received values of form: ', values)
+      })
     },
-    normFile(event1) {
-      console.log("Upload event:", event1);
+    normFile (event1) {
+      console.log('Upload event:', event1)
       if (Array.isArray(event1)) {
-        return event1;
+        return event1
       }
-      return event1 && event1.fileList;
+      return event1 && event1.fileList
     },
-    handleOk(e) {
-      e.preventDefault();
+    handleOk (e) {
+      e.preventDefault()
       this.form.validateFieldsAndScroll((err, values) => {
         if (!err) {
-          this.countDown();
-          const formData = new FormData();
-          delete values.dragger;
-          formData.append("file", this.file);
-          studentUpload(formData);
+          this.countDown()
+          const formData = new FormData()
+          delete values.dragger
+          formData.append('file', this.file)
+          studentUpload(formData)
         }
-      });
+      })
     },
-    countDown() {
-      let secondsToGo = 5;
+    countDown () {
+      let secondsToGo = 5
       const modal = this.$success({
-        title: "提交成功",
+        title: '提交成功',
         content: `这个窗口将于 ${secondsToGo} s后关闭。`
-      });
+      })
       const interval = setInterval(() => {
-        secondsToGo -= 1;
+        secondsToGo -= 1
         modal.update({
           content: `这个窗口将于 ${secondsToGo} s后关闭。`
-        });
-      }, 1000);
+        })
+      }, 1000)
       setTimeout(() => {
-        clearInterval(interval);
-        modal.destroy();
-      }, secondsToGo * 1000);
+        clearInterval(interval)
+        modal.destroy()
+      }, secondsToGo * 1000)
     }
   }
-};
+}
 </script>
 
 <style scoped>
