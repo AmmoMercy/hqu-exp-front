@@ -50,3 +50,9 @@ export function getInternshipList () {
     method: 'get'
   })
 }
+export function getInternship (id) {
+  return axios({
+    url: '/enterprise/internship?internship=' + id,
+    method: 'get'
+  })
+}
