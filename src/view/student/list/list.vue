@@ -18,10 +18,10 @@
       <a-table :columns="columnsSelector()" :dataSource="managestu" rowKey="_id">
         <span slot="serial" slot-scope="text, record, index">{{ index + 1 }}</span>
         <span slot="introduction" slot-scope="text">
-          <ellipsis :length="4" tooltip>{{ text }}</ellipsis>
+          <!-- <ellipsis :length="4" tooltip>{{ text }}</ellipsis> -->
         </span>
         <span slot="exps" slot-scope="text">
-          <ellipsis :length="4" tooltip>{{ text }}</ellipsis>
+          <!-- <ellipsis :length="4" tooltip>{{ text }}</ellipsis> -->
         </span>
         <span slot="works">
           <a href="#">filestitle</a>
@@ -30,12 +30,37 @@
           <template>
           <a>查看</a>
           <a-divider type="vertical" />
-          <a>评分</a>
+          <a @click="handleEdit()">评分</a>
           </template>
         </span>
       </a-table>
+
+      <a-modal title="请给学生打分" :width="800" v-model="visible" @ok="handleSubmit">
+        <a-form :form="form">
+          <!-- <a-form-item v-bind="formItemLayout" label="学生">
+            <a-input
+              v-decorator="[
+            'stu_id',{initialValue:student.stu_id,}]"
+              placeholder="stu_id"
+              disabled="true"
+            />
+          </a-form-item> -->
+          <a-form-item
+      v-bind="formItemLayout"
+      label="实训成绩"
+    >
+      <a-input-number
+        v-decorator="['mark', { initialValue: 0 }]"
+        :min="1"
+        :max="100"
+      />
+          </a-form-item>
+        </a-form>
+      </a-modal>
     </a-card>
   </a-spin>
+
+  
 </template>
 <script>
 import store from '@/store'
@@ -99,8 +124,11 @@ const columns = [
     scopedSlots: { customRender: "action" }
   }
 ];
+
+const apply_id="ec08d708-6c07-f3d0-a45a-1d702861e3d9"
+import {putmark} from '@/api/enterprise'
 export default {
-  name: "StudentList",
+  // name: "StudentList",
   data() {
     return {
       columns,
@@ -109,8 +137,23 @@ export default {
       loading: false,
       managestu: [],
       role: '',
-      search: ""
+      search: "",
+      visible: false,
+      student: {},
+      formItemLayout: {
+        labelCol: {
+          xs: { span: 24 },
+          sm: { span: 6 }
+        },
+        wrapperCol: {
+          xs: { span: 24 },
+          sm: { span: 15 }
+        }
+      },
     };
+  },
+  beforeCreate () {
+    this.form = this.$form.createForm(this)
   },
   mounted () {
     getInternshipList().then((res) => {
@@ -118,6 +161,10 @@ export default {
     })
   },
   methods: {
+    handleEdit() {
+      // this.mdl = Object.assign({}, record);
+      this.visible = true;
+    },
     columnsSelector () {
     this.role = store.getters.role
     if (this.role === 'enterprise') {
@@ -138,6 +185,41 @@ export default {
         }
       }
       return searchData;
+    },
+    handleSubmit (e) {
+      e.preventDefault()
+      const {
+        form: { validateFields }
+      } = this
+      const validateFieldsKey = ['mark',]
+      validateFields(validateFieldsKey, { force: true }, (err, values) => {
+        if (!err) {
+          const publishParams = { ...values }
+          console.log(publishParams)
+          putmark(publishParams)
+            .then((res) => {
+              if (res.code === 200) { this.countDown() }
+            })
+        }
+        console.log('Received values of form: ', values)
+      })
+    },
+    countDown () {
+      let secondsToGo = 5
+      const modal = this.$success({
+        title: '提交成功',
+        content: `这个窗口将于 ${secondsToGo} s后关闭。`
+      })
+      const interval = setInterval(() => {
+        secondsToGo -= 1
+        modal.update({
+          content: `这个窗口将于 ${secondsToGo} s后关闭。`
+        })
+      }, 1000)
+      setTimeout(() => {
+        clearInterval(interval)
+        modal.destroy()
+      }, secondsToGo * 1000)
     }
   }
 };
