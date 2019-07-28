@@ -60,3 +60,9 @@ export function saveService (parameter) {
     data: parameter
   })
 }
+export function getEnt () {
+  return axios({
+    url: '/admin/enterpriselist',
+    method: 'get'
+  })
+}

@@ -11,7 +11,7 @@
             </a-col>
             <a-col :md="8" :sm="24">
               <a-form-item label="审核状态">
-                <a-select v-model="queryParam.status" placeholder="请选择" default-value="0">
+                <a-select placeholder="请选择" default-value="0">
                   <a-select-option value="0">待审核</a-select-option>
                   <a-select-option value="1">审核中</a-select-option>
                   <a-select-option value="2">审核通过</a-select-option>
@@ -28,7 +28,7 @@
           </a-row>
         </a-form>
       </div>
-      <a-table :columns="columns" :dataSource="data">
+      <a-table :columns="columnsSelector()" :dataSource="enterprises" rowKey="_id">
         <!-- <a slot="name" slot-scope="text" href="javascript:;">{{text}}</a> -->
         <span slot="serial" slot-scope="text, record, index">{{ index + 1 }}</span>
         <span slot="qualificate_file">
@@ -47,7 +47,9 @@
 <script>
 /* import moment from 'moment'
 import { getRoleList, getServiceList } from '@/api/manage' */
-
+import store from '@/store'
+import { getEnt } from '@/api/manage'
+// import { getInternshipList } from '@/api/enterprise'
 const statusMap = {
   0: {
     status: 'default',
@@ -116,74 +118,23 @@ const columns = [
     scopedSlots: { customRender: 'action' }
   }
 ]
-const data = [
-  {
-    key: '1',
-    name: 'KooBoo',
-    address: 'New York No. 1 Lake Park',
-    email: 'Kooboo@qq.com',
-    contact_name: 'Decay',
-    contact_tel: '123132',
-    intro: 'this is intro',
-    status: 2,
-    register_time: '2019-07-02'
-  },
-  {
-    key: '2',
-    name: 'tencent',
-    address: 'New York No. 1 Lake Park',
-    email: 'tencent@qq.com',
-    contact_name: 'Decay',
-    contact_tel: '123132',
-    intro: 'this is intro',
-    status: 1,
-    register_time: '2019-07-02'
-  },
-  {
-    key: '1',
-    name: 'KooBoo',
-    address: 'New York No. 1 Lake Park',
-    email: 'Kooboo@qq.com',
-    contact_name: 'Decay',
-    contact_tel: '123132',
-    intro: 'this is intro',
-    status: 1,
-    register_time: '2019-07-02'
-  },
-  {
-    key: '1',
-    name: 'KooBoo',
-    address: 'New York No. 1 Lake Park',
-    email: 'Kooboo@qq.com',
-    contact_name: 'Decay',
-    contact_tel: '123132',
-    intro: 'this is intro',
-    status: 1,
-    register_time: '2019-07-02'
-  },
-  {
-    key: '1',
-    name: 'KooBoo',
-    address: 'New York No. 1 Lake Park',
-    email: 'Kooboo@qq.com',
-    contact_name: 'Decay',
-    contact_tel: '123132',
-    intro: 'this is intro',
-    status: 1,
-    register_time: '2019-07-02'
-  }
-]
 
 export default {
   name: 'EnterpriseList',
   data() {
     return {
-      data,
       columns,
       mdl: {},
       queryParam: {},
+      enterprises: [],
+      role: '',
       loading: false
     }
+  },
+  mounted () {
+    getEnt().then((res) => {
+      this.enterprises = res.data
+    })
   },
   filters: {
     statusFilter(type) {
@@ -194,6 +145,20 @@ export default {
     }
   },
   methods: {
+    goToExpDetail (e) {
+    const _this = this
+    console.log(e)
+    store.commit('SET_EXP_ID', e._id)
+    _this.$router.push({ name: 'internshipdetail' })
+  },
+  columnsSelector () {
+    this.role = store.getters.role
+    if (this.role === 'enterprise') {
+      return this.enterpriseColumns
+    } else if (this.role === 'student') {
+      return this.studentColumns
+    } else { return this.columns }
+  },
     Searchlist() {
       this.loading = true
       setTimeout(() => {

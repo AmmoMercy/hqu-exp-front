@@ -37,7 +37,7 @@
 </template>
 <script>
 import store from '@/store'
-import {getEntApp} from '@/api/enterprise'
+import { getExpInfo,getInternshipList } from '@/api/enterprise'
 const statusMap = {
   0: {
     status: 'default',
@@ -112,19 +112,35 @@ const columns = [
   }
 ];
 export default {
-  name: "ApplicationList",
+  name: "Applicationlist",
   data() {
     return {
       columns,
       mdl: {},
       queryParam: {},
       applications:[],
+      role:'',
       loading: false
     };
   },
+  computed: {
+    getId () {
+      return store.getters.expid
+    }
+  },
   mounted () {
+    this.getInternshipList(this.expid)
+  },
+  watch: {
+
+    getId: function (val, oldVal) {
+      this.getExpInfo(val)
+    }
+  },
+  /* mounted () {
     if (store.getters.role === "enterprise") {
-      this.enterprise = store.getters.userInfo;
+      this.applications = store.getters.userInfo
+      console.log(this.applications)
     } else {
       const entid = store.getters.entid;
       getEntApp(entid).then(response => {
@@ -132,11 +148,11 @@ export default {
           this.applications = response.data;
         }
       });
-    }
+    } */
    /*  getEntApp(entid).then((res) => {
       this.applications = res.data
     }) */
-  },
+  // },
   filters: {
     statusFilter(type) {
       return statusMap[type].text;
@@ -146,12 +162,19 @@ export default {
     }
   },
   methods: {
-    goToExpDetail (e) {
-    const _this = this
-    console.log(e)
-    store.commit('SET_EXP_ID', e._id)
-    _this.$router.push({ name: 'internshipdetail' })
-  },
+    getExpInfo (id) {
+      var self = this
+      if (store.getters.role === 'internship') {
+        this.applications = store.getters.userInfo
+      } else {
+        this.expid = id
+        getInternshipList(this.expid).then(response => {
+          if (response.code === '200') {
+            self.applications = response.data
+          }
+        })
+      }
+    },
     columnsSelector () {
     this.role = store.getters.role
     if (this.role === 'enterprise') {
