@@ -32,6 +32,13 @@ export function getProcessingExp () {
     methodd: 'get'
   })
 }
+export function editStudent (parameter) {
+  return axios({
+    url: '/student/edit',
+    method: 'put',
+    data: parameter
+  })
+}
 // export function getExpList (parameter) {
 //   return axios({
 //     url: '/student/completion/table',

@@ -44,18 +44,18 @@
 
       <a-modal title="编辑个人简历" :width="800" v-model="visible" @ok="handleSubmit">
         <a-form :form="form">
+          <a-form-item v-bind="formItemLayout" label="专业">
+            <a-input
+              v-decorator="[
+            'major',{initialValue:student.major,rules: [{ required: true, message: 'Please input your topic!' }],}]"
+              placeholder="major"
+            />
+          </a-form-item>
           <a-form-item v-bind="formItemLayout" label="手机号码">
             <a-input
               v-decorator="[
             'tel',{initialValue:student.tel,rules: [{ required: true, message: 'Please input your topic!' }],}]"
               placeholder="tel"
-            />
-          </a-form-item>
-          <a-form-item v-bind="formItemLayout" label="email地址">
-            <a-input
-              v-decorator="[
-            'email',{initialValue:student.email,rules: [{ required: true, message: 'Please input your topic!' }],}]"
-              placeholder="email"
             />
           </a-form-item>
           <a-form-item v-bind="formItemLayout" label="个人简介">
@@ -108,7 +108,7 @@ import { PageView } from "@/layouts";
 import DetailList from "@/components/tools/DetailList";
 import store from "@/store";
 import { genderChanger } from "@/utils/util";
-import { getStu } from "../../api/student";
+import { getStu, editStudent } from "../../api/student";
 import student from "../../store/modules/jumper";
 const DetailListItem = DetailList.Item;
 
@@ -204,14 +204,13 @@ export default {
     handleUpdateEdit(record) {
       this.mdl = Object.assign({}, record);
       this.updateVisible = true;
-      alert(this.student.description);
     },
     handleSubmit(e) {
       e.preventDefault();
       const {
         form: { validateFields }
       } = this;
-      const validateFieldsKey = ["tel", "email", "intro", "description"];
+      const validateFieldsKey = ["major", "tel", "introduction", "exps"];
       // const values = {
       //   ...fieldsValue,
       //   'date-time-picker': fieldsValue['date-time-picker'].format(
@@ -222,7 +221,7 @@ export default {
         if (!err) {
           const publishParams = { ...values };
           console.log(publishParams);
-          publish(publishParams).then(res => {
+          editStudent(publishParams).then(res => {
             if (res.code === 200) this.countDown();
           });
         }
