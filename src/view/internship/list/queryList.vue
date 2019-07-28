@@ -53,6 +53,7 @@
 import { getRoleList, getServiceList } from '@/api/manage' */
 import store from '@/store'
 import { getInternshipList } from '@/api/enterprise'
+import { getInternships } from '@/api/student'
 import { dateTransformer } from '@/utils/util'
 
 const statusMap = {
@@ -174,9 +175,16 @@ export default {
     }
   },
   mounted () {
-    getInternshipList().then((res) => {
-      this.internships = dateTransformer(res.data)
-    })
+    this.role = store.getters.role
+    if (this.role === 'enterprise') {
+      getInternshipList().then((res) => {
+        this.internships = dateTransformer(res.data)
+      })
+    } else if (this.role === 'student') {
+      getInternships().then((res) => {
+        this.internships = res.data
+      })
+    }
   },
   filters: {
     statusFilter (type) {

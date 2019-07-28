@@ -39,6 +39,13 @@ export function editStudent (parameter) {
     data: parameter
   })
 }
+export function getInternships () {
+  return axios(
+    {
+      url: '/student/internshiplist'
+    }
+  )
+}
 // export function getExpList (parameter) {
 //   return axios({
 //     url: '/student/completion/table',
