@@ -50,6 +50,12 @@ export function getInternshipList () {
     method: 'get'
   })
 }
+export function getApplyList (internshipId) {
+  return axios({
+    url: '/enterprise/applicationlist?internshipId=' + internshipId + '&page=1',
+    method: 'get'
+  })
+}
 export function getInternship (id) {
   return axios({
     url: '/enterprise/internship?internship=' + id,
@@ -63,9 +69,8 @@ export function putmark (param) {
     data: param
   })
 }
-export function getMark () {
+export function getMark (parameter) {
   return axios({
-    url: '/enterprise/applicationlist',
-    method: 'get'
+    url: '/enterprise/applicationlist?' + 'internshipId=' + parameter & 'page=' + parameter & 'status=' + parameter
   })
 }

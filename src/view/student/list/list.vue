@@ -26,11 +26,11 @@
         <span slot="works">
           <a href="#">filestitle</a>
         </span>
-        <span slot="action">
+        <span slot="action" slot-scope="text,record">
           <template>
             <a>查看</a>
             <a-divider type="vertical" />
-            <a @click="handleEdit()">评分</a>
+            <a @click="handleEdit(record)">评分</a>
           </template>
         </span>
       </a-table>
@@ -63,7 +63,7 @@
 </template>
 <script>
 import store from '@/store'
-import { getInternshipList, putmark } from '@/api/enterprise'
+import {getMark, getInternshipList, putmark ,getApplyList} from '@/api/enterprise'
 
 const columns = [
   {
@@ -125,11 +125,13 @@ const columns = [
   }
 ]
 
-const apply_id = 'ec08d708-6c07-f3d0-a45a-1d702861e3d9'
+
 export default {
   // name: "StudentList",
   data () {
     return {
+      applyId:'',
+      intershipId:store.getters.expid,
       columns,
       mdl: {},
       queryParam: {},
@@ -155,12 +157,17 @@ export default {
     this.form = this.$form.createForm(this)
   },
   mounted () {
-    getInternshipList().then((res) => {
+    getApplyList(this.intershipId).then((res) => {
       this.managestu = res.data
+    })
+    getMark().then((res) => {
+      this.apply_id = res.data
     })
   },
   methods: {
-    handleEdit () {
+    handleEdit (e) {
+      console.log(e)
+      this.applyId=e._id
       // this.mdl = Object.assign({}, record);
       this.visible = true
     },
@@ -186,6 +193,7 @@ export default {
       return searchData
     },
     handleSubmit (e) {
+      let _this= this
       e.preventDefault()
       const {
         form: { validateFields }
@@ -194,7 +202,8 @@ export default {
       validateFields(validateFieldsKey, { force: true }, (err, values) => {
         if (!err) {
           const publishParams = { ...values }
-          publishParams.apply_id = apply_id
+          
+          publishParams.apply_id = _this.applyId
           console.log(publishParams)
           putmark(publishParams)
             .then((res) => {

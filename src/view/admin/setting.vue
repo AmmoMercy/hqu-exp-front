@@ -128,8 +128,8 @@ export default {
       validateFields(validateFieldsKey, { force: true }, (err, values) => {
         if (!err) {
           const publishParams = { ...values }
-          console.log(publishParams)
-          publish(publishParams)
+          console.log(pushParams)
+          pus(pushParams)
           .then((res) =>{ 
           if (res.code === 200) 
           this.countDown();

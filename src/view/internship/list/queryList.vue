@@ -44,6 +44,8 @@
             <a slot="action" @click="goToExpDetail(record)" >查看</a>
             <a-divider type="vertical" />
             <a @click="goToAppList(record)">查看申请</a>
+            <a-divider type="vertical" />
+            <a @click="goToStudentList(record)">学生管理</a>
           </template>
         </span>
       </a-table>
@@ -185,6 +187,7 @@ export default {
     } else if (this.role === 'student') {
       getInternships().then((res) => {
         this.internships = res.data
+        this.internships = dateTransformer(res.data)
       })
     }
   },
@@ -196,7 +199,8 @@ export default {
       return statusMap[type].status
     }
   },
-  methods: { goToExpDetail (e) {
+  methods: { 
+  goToExpDetail (e) {
     const _this = this
     console.log(e)
     store.commit('SET_EXP_ID', e._id)
@@ -207,6 +211,12 @@ export default {
     console.log(e)
     store.commit('SET_EXP_ID', e._id)
     _this.$router.push({ name: 'applicatinlist' })
+  },
+  goToStudentList(e) {
+    const _this = this
+    console.log(e)
+    store.commit('SET_EXP_ID', e._id)
+    _this.$router.push({ name: 'studentmanage' })
   },
   columnsSelector () {
     this.role = store.getters.role
