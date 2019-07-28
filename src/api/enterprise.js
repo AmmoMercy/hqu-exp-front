@@ -56,10 +56,11 @@ export function getInternship (id) {
     method: 'get'
   })
 }
-export function putmark (id) {
+export function putmark (param) {
   return axios({
     url: '/enterprise/result/mark',
-    method: 'put'
+    method: 'put',
+    data: param
   })
 }
 export function getMark () {

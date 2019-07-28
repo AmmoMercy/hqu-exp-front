@@ -28,9 +28,9 @@
         </span>
         <span slot="action">
           <template>
-          <a>查看</a>
-          <a-divider type="vertical" />
-          <a @click="handleEdit()">评分</a>
+            <a>查看</a>
+            <a-divider type="vertical" />
+            <a @click="handleEdit()">评分</a>
           </template>
         </span>
       </a-table>
@@ -46,90 +46,89 @@
             />
           </a-form-item> -->
           <a-form-item
-      v-bind="formItemLayout"
-      label="实训成绩"
-    >
-      <a-input-number
-        v-decorator="['mark', { initialValue: 0 }]"
-        :min="1"
-        :max="100"
-      />
+            v-bind="formItemLayout"
+            label="实训成绩"
+          >
+            <a-input-number
+              v-decorator="['mark', { initialValue: 0 }]"
+              :min="1"
+              :max="100"
+            />
           </a-form-item>
         </a-form>
       </a-modal>
     </a-card>
   </a-spin>
 
-  
 </template>
 <script>
 import store from '@/store'
-import { getInternshipList } from '@/api/enterprise'
+import { getInternshipList, putmark } from '@/api/enterprise'
+
 const columns = [
   {
-    title: "#",
-    scopedSlots: { customRender: "serial" }
+    title: '#',
+    scopedSlots: { customRender: 'serial' }
   },
   {
-    title: "学号",
-    dataIndex: "stu_id"
+    title: '学号',
+    dataIndex: 'stu_id'
   },
   {
-    title: "姓名",
-    dataIndex: "name"
+    title: '姓名',
+    dataIndex: 'name'
   },
   {
-    title: "性别",
-    dataIndex: "gender",
-    scopedSlots: { customRender: "gender" }
+    title: '性别',
+    dataIndex: 'gender',
+    scopedSlots: { customRender: 'gender' }
   },
   {
-    title: "入学年份",
-    dataIndex: "enterence_year"
+    title: '入学年份',
+    dataIndex: 'enterence_year'
   },
   {
-    title: "专业",
-    dataIndex: "major"
+    title: '专业',
+    dataIndex: 'major'
   },
   {
-    title: "联系方式",
-    dataIndex: "tel"
+    title: '联系方式',
+    dataIndex: 'tel'
   },
   {
-    title: "简介",
-    dataIndex: "introduction",
-    scopedSlots: { customRender: "introduction" }
+    title: '简介',
+    dataIndex: 'introduction',
+    scopedSlots: { customRender: 'introduction' }
   },
   {
-    title: "邮箱",
-    dataIndex: "email"
+    title: '邮箱',
+    dataIndex: 'email'
   },
   {
-    title: "实训经历",
-    dataIndex: "exps",
-    scopedSlots: { customRender: "exps" }
+    title: '实训经历',
+    dataIndex: 'exps',
+    scopedSlots: { customRender: 'exps' }
   },
   {
-    title: "实训成绩",
-    dataIndex: "grade"
+    title: '实训成绩',
+    dataIndex: 'grade'
   },
   {
-    title: "作品",
-    dataIndex: "works",
-    scopedSlots: { customRender: "works" }
+    title: '作品',
+    dataIndex: 'works',
+    scopedSlots: { customRender: 'works' }
   },
   {
-    title: "操作",
-    dataIndex: "action",
-    scopedSlots: { customRender: "action" }
+    title: '操作',
+    dataIndex: 'action',
+    scopedSlots: { customRender: 'action' }
   }
-];
+]
 
-const apply_id="ec08d708-6c07-f3d0-a45a-1d702861e3d9"
-import {putmark} from '@/api/enterprise'
+const apply_id = 'ec08d708-6c07-f3d0-a45a-1d702861e3d9'
 export default {
   // name: "StudentList",
-  data() {
+  data () {
     return {
       columns,
       mdl: {},
@@ -137,7 +136,7 @@ export default {
       loading: false,
       managestu: [],
       role: '',
-      search: "",
+      search: '',
       visible: false,
       student: {},
       formItemLayout: {
@@ -149,8 +148,8 @@ export default {
           xs: { span: 24 },
           sm: { span: 15 }
         }
-      },
-    };
+      }
+    }
   },
   beforeCreate () {
     this.form = this.$form.createForm(this)
@@ -161,40 +160,41 @@ export default {
     })
   },
   methods: {
-    handleEdit() {
+    handleEdit () {
       // this.mdl = Object.assign({}, record);
-      this.visible = true;
+      this.visible = true
     },
     columnsSelector () {
-    this.role = store.getters.role
-    if (this.role === 'enterprise') {
-      return this.columns
-    } else if (this.role === 'student') {
-      return this.studentColumns
-    } else { return this.adminColums }
-  },
-    Searchlist: function(data) {
-      this.loading = true;
+      this.role = store.getters.role
+      if (this.role === 'enterprise') {
+        return this.columns
+      } else if (this.role === 'student') {
+        return this.studentColumns
+      } else { return this.adminColums }
+    },
+    Searchlist: function (data) {
+      this.loading = true
       setTimeout(() => {
-        this.data = data;
-        this.loading = false;
-      }, 300);
+        this.data = data
+        this.loading = false
+      }, 300)
       for (var i = 0; i < this.data; i++) {
         if (this.data[i].stu_id.search(this.searchVal) != -1) {
-          searchData.push(this.data[i]);
+          searchData.push(this.data[i])
         }
       }
-      return searchData;
+      return searchData
     },
     handleSubmit (e) {
       e.preventDefault()
       const {
         form: { validateFields }
       } = this
-      const validateFieldsKey = ['mark',]
+      const validateFieldsKey = ['mark' ]
       validateFields(validateFieldsKey, { force: true }, (err, values) => {
         if (!err) {
           const publishParams = { ...values }
+          publishParams.apply_id = apply_id
           console.log(publishParams)
           putmark(publishParams)
             .then((res) => {
@@ -222,5 +222,5 @@ export default {
       }, secondsToGo * 1000)
     }
   }
-};
+}
 </script>
