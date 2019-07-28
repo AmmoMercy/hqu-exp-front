@@ -40,7 +40,7 @@ export function getEntDetail (parameter) {
 }
 export function getEntApp (parameter) {
   return axios({
-    url: '/api/enterprise/applicationlist?' + 'internshipId=' + parameter & 'page=' + parameter & 'status=' + parameter,
+    url: '/api/enterprise/applicationlist?' + 'internshipId=' + parameter & 'page=' + parameter,
     method: 'get'
   })
 }

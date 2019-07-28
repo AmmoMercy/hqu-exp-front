@@ -21,19 +21,23 @@
           </a-row>
         </a-form>
       </div>
-      <a-table :columns="columns" :dataSource="data">
+      <a-table :columns="columnsSelector()" :dataSource="applications" rowKey="_id">
         <span slot="serial" slot-scope="text, record, index">{{ index + 1 }}</span>
         <span slot="status" slot-scope="text">
           <a-badge :status="text | statusTypeFilter" :text="text | statusFilter" />
         </span>
         <span slot="action">
-          <a href="#">查看</a>
+          <template>
+            <a slot="action" @click="goToExpDetail(record)" >查看</a>
+          </template>
         </span>
       </a-table>
     </a-card>
   </a-spin>
 </template>
 <script>
+import store from '@/store'
+import {getEntApp} from '@/api/enterprise'
 const statusMap = {
   0: {
     status: 'default',
@@ -107,44 +111,31 @@ const columns = [
     scopedSlots: { customRender: "action" }
   }
 ];
-const data = [
-  {
-    key: "1",
-    stu_id: "21313131",
-    name: "KooBoo",
-    gender: '男',
-    enterence_year: "2019",
-    major: "IT",
-    tel: "123456",
-    introduction: "this is intro",
-    email: "Kooboo@qq.com",
-    exps: "this is exps",
-    status:2
-  },
-  {
-    key: "2",
-    stu_id: "123123",
-    name: "tencent",
-    gender: '女',
-    enterence_year: "2019",
-    major: "IT",
-    tel: "123456",
-    introduction: "this is intro",
-    email: "tencent@qq.com",
-    exps: "this is exps",
-    status:3
-  }
-];
 export default {
   name: "ApplicationList",
   data() {
     return {
-      data,
       columns,
       mdl: {},
       queryParam: {},
+      applications:[],
       loading: false
     };
+  },
+  mounted () {
+    if (store.getters.role === "enterprise") {
+      this.enterprise = store.getters.userInfo;
+    } else {
+      const entid = store.getters.entid;
+      getEntApp(entid).then(response => {
+        if (response.code === 200) {
+          this.applications = response.data;
+        }
+      });
+    }
+   /*  getEntApp(entid).then((res) => {
+      this.applications = res.data
+    }) */
   },
   filters: {
     statusFilter(type) {
@@ -155,29 +146,26 @@ export default {
     }
   },
   methods: {
-    Searchlist: function(data) {
+    goToExpDetail (e) {
+    const _this = this
+    console.log(e)
+    store.commit('SET_EXP_ID', e._id)
+    _this.$router.push({ name: 'internshipdetail' })
+  },
+    columnsSelector () {
+    this.role = store.getters.role
+    if (this.role === 'enterprise') {
+      return this.columns
+    } else if (this.role === 'student') {
+      return this.studentColumns
+    } else { return this.adminColums }
+  },
+    Searchlist(){
       this.loading = true;
       setTimeout(() => {
-        // this.data = data
         this.loading = false;
       }, 300);
     },
-    /* computed: {
-      filteredData: function() {
-        var data_arry = this.data,
-          sid = this.sid;
-          if(!sid){
-                return data_arry;
-            }
-            sid = sid.trim().toLowerCase();
-            data_arry = data_arry.filter(function(item){
-                if(item.stu_id.toLowerCase().indexOf(sid) !== -1){
-                    return item;
-                }
-            })
-            return data_arry;;
-      }
-    } */
   }
 };
 </script>

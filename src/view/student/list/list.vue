@@ -15,7 +15,7 @@
           </a-row>
         </a-form>
       </div>
-      <s-table ref="table" size="default" :columns="columns" :data="loadData" :pagination=false>
+      <a-table :columns="columnsSelector()" :dataSource="managestu" rowKey="_id">
         <span slot="serial" slot-scope="text, record, index">{{ index + 1 }}</span>
         <span slot="introduction" slot-scope="text">
           <ellipsis :length="4" tooltip>{{ text }}</ellipsis>
@@ -27,16 +27,19 @@
           <a href="#">filestitle</a>
         </span>
         <span slot="action">
-          <a href="#">查看</a>
+          <template>
+          <a>查看</a>
+          <a-divider type="vertical" />
+          <a>评分</a>
+          </template>
         </span>
-      </s-table>
+      </a-table>
     </a-card>
   </a-spin>
 </template>
 <script>
-import moment from "moment";
-import { STable, Ellipsis } from "@/components";
-import { getRoleList, getServiceList } from "@/api/manage";
+import store from '@/store'
+import { getInternshipList } from '@/api/enterprise'
 const columns = [
   {
     title: "#",
@@ -96,92 +99,39 @@ const columns = [
     scopedSlots: { customRender: "action" }
   }
 ];
-/* const data = [
-  {
-    key: "1",
-    stu_id: "21313131",
-    name: "KooBoo",
-    gender: '男',
-    enterence_year: "2019",
-    major: "IT",
-    tel: "123456",
-    introduction: "this is intro",
-    email: "Kooboo@qq.com",
-    exps: "this is exps",
-    grade: 80
-  },
-  {
-    key: "2",
-    stu_id: "123123",
-    name: "tencent",
-    gender: '女',
-    enterence_year: "2019",
-    major: "IT",
-    tel: "123456",
-    introduction: "this is intro",
-    email: "tencent@qq.com",
-    exps: "this is exps",
-    grade: 80
-  }
-]; */
 export default {
   name: "StudentList",
-  components: {
-    STable,
-    Ellipsis
-  },
   data() {
     return {
       columns,
       mdl: {},
       queryParam: {},
       loading: false,
-      loadData: parameter => {
-        console.log("loadData.parameter", parameter);
-        return getServiceList(Object.assign(parameter, this.queryParam)).then(
-          res => {
-            return res.result;
-          }
-        );
-      },
+      managestu: [],
+      role: '',
       search: ""
     };
   },
-  /* created() {
-    // 获取的接口数据
-    this.getList();
-  }, */
-  /* mounted(){
-    getStuInfo(Object.assign(parameter, this.queryParam)).then(
-        (response) => {
-          if (response.code === 200) { return response.data }
-        }
-      )
-  }, */
+  mounted () {
+    getInternshipList().then((res) => {
+      this.managestu = res.data
+    })
+  },
   methods: {
+    columnsSelector () {
+    this.role = store.getters.role
+    if (this.role === 'enterprise') {
+      return this.columns
+    } else if (this.role === 'student') {
+      return this.studentColumns
+    } else { return this.adminColums }
+  },
     Searchlist: function(data) {
       this.loading = true;
       setTimeout(() => {
         this.data = data;
         this.loading = false;
       }, 300);
-      var search = this.search;
-      var searchData = [];
-      /* if (search) {
-        this.searchData = this.data.filter(function(product) {
-          return Object.keys(product).some(function(key) {
-            return (
-              String(product[key])
-                .toLowerCase()
-                .indexOf(search) > -1
-            );
-          });
-        });
-      } else if (search.length === 0) {
-        this.searchData = this.data;
-      } else {
-        return this.searchData;
-      } */
       for (var i = 0; i < this.data; i++) {
         if (this.data[i].stu_id.search(this.searchVal) != -1) {
           searchData.push(this.data[i]);
