@@ -79,7 +79,14 @@
       </a-form-item>
 
       <a-modal title="编辑实训信息" :width="800" v-model="visible" @ok="handleSubmit">
-        <a-form :form="form" >
+        <a-form :form="form">
+          <a-form-item v-bind="formItemLayout" label="id" v-if="0">
+            <a-input
+              v-decorator="[
+                'id',{initialValue:internship._id,rules: [{ required: true, message: 'Please input your topic!' }],}]"
+              placeholder="id"
+            />
+          </a-form-item>
           <a-form-item v-bind="formItemLayout" label="实训题目">
             <a-input
               v-decorator="[
@@ -157,35 +164,35 @@
 </template>
 
 <script>
-import { mixinDevice } from '@/utils/mixin'
-import { PageView } from '@/layouts'
-import DetailList from '@/components/tools/DetailList'
-import store from '@/store'
-import { getInternship } from '../../api/enterprise'
+import { mixinDevice } from "@/utils/mixin";
+import { PageView } from "@/layouts";
+import DetailList from "@/components/tools/DetailList";
+import store from "@/store";
+import { getInternship } from "../../api/enterprise";
 
-const DetailListItem = DetailList.Item
+const DetailListItem = DetailList.Item;
 
 export default {
-  name: 'Advanced',
+  name: "Advanced",
   components: {
     PageView,
     DetailList,
     DetailListItem
   },
   mixins: [mixinDevice],
-  data () {
+  data() {
     return {
       expid: store.getters.expid,
       state: {
         time: 60,
         smsSendBtn: false,
         percent: 10,
-        progressColor: '#FF0000'
+        progressColor: "#FF0000"
       },
       form: this.$form.createForm(this),
       config: {
         rules: [
-          { type: 'object', required: true, message: 'Please select time!' }
+          { type: "object", required: true, message: "Please select time!" }
         ]
       },
       confirmDirty: false,
@@ -217,57 +224,56 @@ export default {
       visible: false,
       enterVisible: false,
       mdl: {}
-    }
+    };
   },
   computed: {
-    getId () {
-      return store.getters.expid
+    getId() {
+      return store.getters.expid;
     }
   },
-  mounted () {
-    this.getExpInfo(this.expid)
+  mounted() {
+    this.getExpInfo(this.expid);
   },
   watch: {
-
-    getId: function (val, oldVal) {
-      this.getExpInfo(val)
+    getId: function(val, oldVal) {
+      this.getExpInfo(val);
     }
   },
   methods: {
-    getExpInfo (id) {
-      var self = this
-      if (store.getters.role === 'internship') {
-        this.internship = store.getters.userInfo
+    getExpInfo(id) {
+      var self = this;
+      if (store.getters.role === "internship") {
+        this.internship = store.getters.userInfo;
       } else {
-        this.expid = id
+        this.expid = id;
         getInternship(this.expid).then(response => {
-          if (response.code === '200') {
-            self.internship = response.data
+          if (response.code === "200") {
+            self.internship = response.data;
           }
-        })
+        });
       }
     },
-    handleEdit (record) {
-      this.mdl = Object.assign({}, record)
-      this.visible = true
+    handleEdit(record) {
+      this.mdl = Object.assign({}, record);
+      this.visible = true;
     },
-    handleEnter (record) {
-      this.mdl = Object.assign({}, record)
-      this.enterVisible = true
+    handleEnter(record) {
+      this.mdl = Object.assign({}, record);
+      this.enterVisible = true;
     },
-    pass () {
-      this.internship.status = 1
+    pass() {
+      this.internship.status = 1;
       // 此处加上保存进数据库的方法
     },
-    fail () {
-      this.internship.status = 2
+    fail() {
+      this.internship.status = 2;
       // 此处加上保存进数据库的方法
     },
-    reCheck () {
-      this.internship.status = 0
+    reCheck() {
+      this.internship.status = 0;
       // 此处加上保存进数据库的方法
     },
-    handleOk () {
+    handleOk() {
       // if (必填项填写完毕) {
       //   this.mdl = Object.assign({}, record);
       //   this.visible = true;
@@ -276,19 +282,20 @@ export default {
       //   alert("必须填写完所有内容")
       // }
     },
-    handleSubmit (e) {
-      e.preventDefault()
+    handleSubmit(e) {
+      e.preventDefault();
       const {
         form: { validateFields }
-      } = this
+      } = this;
       const validateFieldsKey = [
-        'topic',
-        'exp_begin_time',
-        'exp_end_time',
-        'description',
-        'need_num',
-        'apply_end_time'
-      ]
+        "expId",
+        "topic",
+        "exp_begin_time",
+        "exp_end_time",
+        "description",
+        "need_num",
+        "apply_end_time"
+      ];
       // const values = {
       //   ...fieldsValue,
       //   'date-time-picker': fieldsValue['date-time-picker'].format(
@@ -297,17 +304,17 @@ export default {
       // }
       validateFields(validateFieldsKey, { force: true }, (err, values) => {
         if (!err) {
-          const publishParams = { ...values }
-          console.log(publishParams)
+          const publishParams = { ...values };
+          console.log(publishParams);
           publish(publishParams).then(res => {
-            if (res.code === 200) this.countDown()
-          })
+            if (res.code === 200) this.countDown();
+          });
         }
-        console.log('Received values of form: ', values)
-      })
+        console.log("Received values of form: ", values);
+      });
     }
   }
-}
+};
 </script>
 
 <style lang="less" scoped>
