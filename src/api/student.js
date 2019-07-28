@@ -39,12 +39,21 @@ export function editStudent (parameter) {
     data: parameter
   })
 }
+<<<<<<< Updated upstream
 export function getInternships () {
   return axios(
     {
       url: '/student/internshiplist'
     }
   )
+=======
+export function studentUpload (parameter) {
+  return axios({
+    url: '/student/work',
+    method: 'put',
+    data: parameter
+  })
+>>>>>>> Stashed changes
 }
 // export function getExpList (parameter) {
 //   return axios({

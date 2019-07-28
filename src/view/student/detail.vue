@@ -87,16 +87,33 @@
       </a-form-item>
       <detail-list>
         <detail-list-item term="学生作品名">
-          <a :href="student.works">url</a>
+          <a :href="student.works" target="_blank">点击下载</a>
         </detail-list-item>
       </detail-list>
 
       <a-modal title="编辑信息" :width="800" v-model="updateVisible" @ok="handleOk">
-        <a-upload :defaultFileList="defaultFileList">
-          <a-button>
-            <a-icon type="upload" />Upload
-          </a-button>
-        </a-upload>
+        <a-form :form="form">
+          <a-form-item v-bind="formItemLayout1">
+            <div class="dropbox">
+              <a-upload-dragger
+                v-decorator="['dragger', {
+              rules: [{ required: true}],
+              valuePropName: 'fileList',
+              getValueFromEvent: normFile,
+            }]"
+                name="files"
+                :beforeUpload="fileBeforeUpload"
+                accept=".zip"
+              >
+                <p class="ant-upload-drag-icon">
+                  <a-icon type="inbox" />
+                </p>
+                <p class="ant-upload-text">点击选取或拖动文件到此处</p>
+                <p class="ant-upload-hint">多个文件请打包成一个文件上传</p>
+              </a-upload-dragger>
+            </div>
+          </a-form-item>
+        </a-form>
       </a-modal>
     </a-card>
   </page-view>
@@ -108,7 +125,7 @@ import { PageView } from "@/layouts";
 import DetailList from "@/components/tools/DetailList";
 import store from "@/store";
 import { genderChanger } from "@/utils/util";
-import { getStu, editStudent } from "../../api/student";
+import { getStu, editStudent, studentUpload } from "../../api/student";
 import student from "../../store/modules/jumper";
 const DetailListItem = DetailList.Item;
 
@@ -152,46 +169,57 @@ export default {
           }
         }
       },
-      defaultFileList: [
-        {
-          uid: "1",
-          name: "xxx.png",
-          response: "Server Error 500", // custom error message to show
-          url: "http://www.baidu.com/xxx.png"
+      file: {},
+      formItemLayout1: {
+        labelCol: {
+          xs: { span: 24 },
+          sm: { span: 4 }
         },
-        {
-          uid: "2",
-          name: "yyy.png",
-          url: "http://www.baidu.com/yyy.png"
-        },
-        {
-          uid: "3",
-          name: "zzz.png",
-          response: "Server Error 500", // custom error message to show
-          url: "http://www.baidu.com/zzz.png"
+        wrapperCol: {
+          xs: { span: 24 },
+          sm: { span: 18, offset: 3 }
         }
-      ],
+      },
       role: store.getters.role,
       updateVisible: false,
       visible: false,
       mdl: {},
-      student: {}
+      student: {},
+      stuid: store.getters.stuid
     };
   },
-  mounted() {
-    if (store.getters.role === "student") {
-      this.student = store.getters.userInfo;
-    } else {
-      const stuid = store.getters.stuid;
-      getStu(stuid).then(response => {
-        if (response.code === 200) {
-          this.student = response.data;
-        }
-      });
+  computed: {
+    getId() {
+      return store.getters.stuid;
     }
+  },
+  mounted() {
+    this.getStuInfo(this.stuid);
     this.student.gender = genderChanger(this.student.gender);
   },
+  watch: {
+    getId: function(val, oldVal) {
+      this.getStuInfo(val);
+    }
+  },
   methods: {
+    fileBeforeUpload(file, fileList) {
+      this.file = file;
+      return false;
+    },
+    getStuInfo(id) {
+      var self = this;
+      if (store.getters.role === "student") {
+        this.student = store.getters.userInfo;
+      } else {
+        this.stuid = id;
+        getStu(this.stuid).then(response => {
+          if (response.code === "200") {
+            self.student = response.data;
+          }
+        });
+      }
+    },
     handleChange({ file, fileList }) {
       if (file.status !== "uploading") {
         console.log(file, fileList);
@@ -228,8 +256,41 @@ export default {
         console.log("Received values of form: ", values);
       });
     },
-    handleOk() {
-      //点击确定之后更新数据库里的学生作品数据
+    normFile(event1) {
+      console.log("Upload event:", event1);
+      if (Array.isArray(event1)) {
+        return event1;
+      }
+      return event1 && event1.fileList;
+    },
+    handleOk(e) {
+      e.preventDefault();
+      this.form.validateFieldsAndScroll((err, values) => {
+        if (!err) {
+          this.countDown();
+          const formData = new FormData();
+          delete values.dragger;
+          formData.append("file", this.file);
+          studentUpload(formData);
+        }
+      });
+    },
+    countDown() {
+      let secondsToGo = 5;
+      const modal = this.$success({
+        title: "提交成功",
+        content: `这个窗口将于 ${secondsToGo} s后关闭。`
+      });
+      const interval = setInterval(() => {
+        secondsToGo -= 1;
+        modal.update({
+          content: `这个窗口将于 ${secondsToGo} s后关闭。`
+        });
+      }, 1000);
+      setTimeout(() => {
+        clearInterval(interval);
+        modal.destroy();
+      }, secondsToGo * 1000);
     }
   }
 };
