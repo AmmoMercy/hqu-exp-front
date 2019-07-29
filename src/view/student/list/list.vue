@@ -18,17 +18,17 @@
       <a-table :columns="columnsSelector()" :dataSource="managestu" rowKey="_id">
         <span slot="serial" slot-scope="text, record, index">{{ index + 1 }}</span>
         <span slot="introduction" slot-scope="text">
-          <ellipsis :length="4" tooltip>{{ text }}</ellipsis>
+          <!-- <ellipsis :length="4" tooltip>{{ text }}</ellipsis> -->
         </span>
         <span slot="exps" slot-scope="text">
-          <ellipsis :length="4" tooltip>{{ text }}</ellipsis>
+          <!-- <ellipsis :length="4" tooltip>{{ text }}</ellipsis> -->
         </span>
         <span slot="works">
           <a href="#">filestitle</a>
         </span>
         <span slot="action" slot-scope="text,record">
           <template>
-            <a>查看</a>
+            <a @click="goToStuDetail(record)">查看</a>
             <a-divider type="vertical" />
             <a @click="handleEdit(record)">评分</a>
           </template>
@@ -166,6 +166,12 @@ export default {
     })
   },
   methods: {
+    goToStuDetail (e) {
+    const _this = this
+    console.log(e)
+    store.commit('SET_STU_ID', e.stu_id)
+    _this.$router.push({ name: 'detail' })
+  },
     handleEdit (e) {
       console.log(e)
       this.applyId=e._id
