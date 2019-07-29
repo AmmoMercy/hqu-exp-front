@@ -37,7 +37,7 @@
 </template>
 <script>
 import store from '@/store'
-import { getExpInfo,getInternshipList } from '@/api/enterprise'
+import { getApplyList,getExpInfo,getEntApp } from '@/api/enterprise'
 const statusMap = {
   0: {
     status: 'default',
@@ -115,6 +115,8 @@ export default {
   name: "Applicationlist",
   data() {
     return {
+      applyId:'',
+      intershipId:store.getters.expid,
       columns,
       mdl: {},
       queryParam: {},
@@ -129,14 +131,22 @@ export default {
     }
   },
   mounted () {
-    this.getInternshipList(this.expid)
+    getApplyList(this.intershipId).then((res) => {
+      this.applications = res.data
+    })
+    getEntApp().then((res) => {
+      this.apply_id = res.data
+    })
+  },
+  /* mounted () {
+    this.getExpInfo(this.expid)
   },
   watch: {
 
     getId: function (val, oldVal) {
       this.getExpInfo(val)
     }
-  },
+  }, */
   /* mounted () {
     if (store.getters.role === "enterprise") {
       this.applications = store.getters.userInfo
@@ -162,7 +172,7 @@ export default {
     }
   },
   methods: {
-    getExpInfo (id) {
+    /* getExpInfo (id) {
       var self = this
       if (store.getters.role === 'internship') {
         this.applications = store.getters.userInfo
@@ -174,6 +184,12 @@ export default {
           }
         })
       }
+    }, */
+    handleEdit (e) {
+      console.log(e)
+      this.applyId=e._id
+      // this.mdl = Object.assign({}, record);
+      this.visible = true
     },
     columnsSelector () {
     this.role = store.getters.role
