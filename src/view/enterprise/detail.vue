@@ -46,11 +46,11 @@
     </a-card>
 
     <a-card style="margin-top: 24px" :bordered="false" title="企业信息">
-      <a-form-item :wrapperCol="{ span: 24 }" style="text-align: right">
+      <!-- <a-form-item :wrapperCol="{ span: 24 }" style="text-align: right">
         <a-button htmlType="submit" @click="handleEdit(record)" v-if="role==='enterprise'">
           <a-icon type="edit" />
         </a-button>
-      </a-form-item>
+      </a-form-item>-->
       <detail-list title="一般信息">
         <detail-list-item term="类型">{{ enterprise.type }}</detail-list-item>
         <detail-list-item term="详细地址">{{ enterprise.address }}</detail-list-item>
@@ -79,7 +79,7 @@
         </div>
       </a-carousel>
 
-      <a-modal title="编辑信息" :width="800" v-model="visible" @ok="handleSubmit">
+      <!-- <a-modal title="编辑信息" :width="800" v-model="visible" @ok="handleSubmit">
         <a-form :form="form">
           <a-form-item v-bind="formItemLayout" label="名称">
             <a-input
@@ -145,34 +145,34 @@
             </div>
           </a-form-item>
         </a-form>
-      </a-modal>
+      </a-modal>-->
     </a-card>
   </page-view>
 </template>
 
 <script>
-import { mixinDevice } from '@/utils/mixin'
-import { PageView } from '@/layouts'
-import DetailList from '@/components/tools/DetailList'
-import store from '@/store'
-import { getEnt } from '../../api/enterprise'
+import { mixinDevice } from "@/utils/mixin";
+import { PageView } from "@/layouts";
+import DetailList from "@/components/tools/DetailList";
+import store from "@/store";
+import { getEnt } from "../../api/enterprise";
 
-const DetailListItem = DetailList.Item
+const DetailListItem = DetailList.Item;
 
 export default {
-  name: 'Advanced',
+  name: "Advanced",
   components: {
     PageView,
     DetailList,
     DetailListItem
   },
   mixins: [mixinDevice],
-  data () {
+  data() {
     return {
       form: this.$form.createForm(this),
       config: {
         rules: [
-          { type: 'object', required: true, message: 'Please select time!' }
+          { type: "object", required: true, message: "Please select time!" }
         ]
       },
       confirmDirty: false,
@@ -202,89 +202,89 @@ export default {
       visible: false,
       mdl: {},
       previewVisible: false,
-      previewImage: '',
+      previewImage: "",
       enterprise: {},
       role: store.getters.role,
       imageList: [],
       fileList: [
         {
-          uid: '-1',
+          uid: "-1",
           url:
-            'https://zos.alipayobjects.com/rmsportal/jkjgkEfvpUPVyRjUImniVslZfWPnJuuZ.png'
+            "https://zos.alipayobjects.com/rmsportal/jkjgkEfvpUPVyRjUImniVslZfWPnJuuZ.png"
         },
         {
-          uid: '-1',
+          uid: "-1",
           url:
-            'https://zos.alipayobjects.com/rmsportal/jkjgkEfvpUPVyRjUImniVslZfWPnJuuZ.png'
+            "https://zos.alipayobjects.com/rmsportal/jkjgkEfvpUPVyRjUImniVslZfWPnJuuZ.png"
         },
         {
-          uid: '-1',
+          uid: "-1",
           url:
-            'https://zos.alipayobjects.com/rmsportal/jkjgkEfvpUPVyRjUImniVslZfWPnJuuZ.png'
+            "https://zos.alipayobjects.com/rmsportal/jkjgkEfvpUPVyRjUImniVslZfWPnJuuZ.png"
         }
       ]
-    }
+    };
   },
-  mounted () {
-    if (store.getters.role === 'enterprise') {
-      this.enterprise = store.getters.userInfo
-      console.log(this.enterprise)
+  mounted() {
+    if (store.getters.role === "enterprise") {
+      this.enterprise = store.getters.userInfo;
+      console.log(this.enterprise);
     } else {
-      const entid = store.getters.entid
+      const entid = store.getters.entid;
       getEnt(entid).then(response => {
         if (response.code === 200) {
-          this.enterprise = response.data
+          this.enterprise = response.data;
         }
-      })
+      });
     }
-    this.imageList = this.enterprise.images.split(',')
+    this.imageList = this.enterprise.images.split(",");
   },
   methods: {
-    handleCancel () {
-      this.previewVisible = false
+    handleCancel() {
+      this.previewVisible = false;
       // 补充从数据库添加新照片的方法
     },
-    handlePreview (file) {
-      this.previewImage = file.url || file.thumbUrl
-      this.previewVisible = true
+    handlePreview(file) {
+      this.previewImage = file.url || file.thumbUrl;
+      this.previewVisible = true;
     },
-    handleChange ({ fileList }) {
-      this.fileList = fileList
+    handleChange({ fileList }) {
+      this.fileList = fileList;
       // 补充从数据库删除该照片的方法
     },
-    handleEdit (record) {
-      this.mdl = Object.assign({}, record)
-      this.visible = true
+    handleEdit(record) {
+      this.mdl = Object.assign({}, record);
+      this.visible = true;
     },
-    handleOk () {},
-    pass () {
-      this.enterprise.status = 1
+    handleOk() {},
+    pass() {
+      this.enterprise.status = 1;
       // 此处加上保存进数据库的方法
     },
-    fail () {
-      this.enterprise.status = 2
+    fail() {
+      this.enterprise.status = 2;
       // 此处加上保存进数据库的方法
     },
-    reCheck () {
-      this.enterprise.status = 0
+    reCheck() {
+      this.enterprise.status = 0;
       // 此处加上保存进数据库的方法
     },
-    getImgUrl (i) {
-      return this.imageList[i]
+    getImgUrl(i) {
+      return this.imageList[i];
     },
-    handleSubmit (e) {
-      e.preventDefault()
+    handleSubmit(e) {
+      e.preventDefault();
       const {
         form: { validateFields }
-      } = this
+      } = this;
       const validateFieldsKey = [
-        'name',
-        'address',
-        'email',
-        'contact_name',
-        'contact_tel',
-        'intro'
-      ]
+        "name",
+        "address",
+        "email",
+        "contact_name",
+        "contact_tel",
+        "intro"
+      ];
       // const values = {
       //   ...fieldsValue,
       //   'date-time-picker': fieldsValue['date-time-picker'].format(
@@ -293,17 +293,17 @@ export default {
       // }
       validateFields(validateFieldsKey, { force: true }, (err, values) => {
         if (!err) {
-          const publishParams = { ...values }
-          console.log(publishParams)
+          const publishParams = { ...values };
+          console.log(publishParams);
           publish(publishParams).then(res => {
-            if (res.code === 200) this.countDown()
-          })
+            if (res.code === 200) this.countDown();
+          });
         }
-        console.log('Received values of form: ', values)
-      })
+        console.log("Received values of form: ", values);
+      });
     }
   }
-}
+};
 </script>
 
 <style scoped>

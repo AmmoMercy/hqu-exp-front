@@ -54,7 +54,7 @@
           <a-form-item v-bind="formItemLayout" label="手机号码">
             <a-input
               v-decorator="[
-                'tel',{initialValue:student.tel,rules: [{ required: true, message: 'Please input your topic!' }],}]"
+                'tel',{initialValue:student.tel,rules: [{ required: true, message: 'Please input your topic!' },{validator:validatePhone}]}]"
               placeholder="tel"
             />
           </a-form-item>
@@ -82,16 +82,22 @@
     <a-card style="margin-top: 24px" :bordered="false" title="学生作品">
       <a-form-item :wrapperCol="{ span: 24 }" style="text-align: right">
         <a-button htmlType="submit" @click="handleUpdateEdit(record)" v-if="role==='student'">
-          <a-icon type="edit" />
+          <a-icon type="upload" />上传作品
         </a-button>
       </a-form-item>
       <detail-list>
-        <detail-list-item term="学生作品名">
+        <detail-list-item term="全部作品">
           <a :href="student.works" target="_blank">点击下载</a>
         </detail-list-item>
       </detail-list>
 
-      <a-modal title="编辑信息" :width="800" v-model="updateVisible" @ok="handleOk">
+      <a-modal
+        title="编辑信息"
+        :width="800"
+        v-model="updateVisible"
+        @ok="handleOk"
+        :confirmLoading="confirmLoading"
+      >
         <a-form :form="form">
           <a-form-item v-bind="formItemLayout1">
             <div class="dropbox">
@@ -109,7 +115,7 @@
                   <a-icon type="inbox" />
                 </p>
                 <p class="ant-upload-text">点击选取或拖动文件到此处</p>
-                <p class="ant-upload-hint">多个文件请打包成一个文件上传</p>
+                <p class="ant-upload-hint">多个文件请分别命名后打包成一个文件上传</p>
               </a-upload-dragger>
             </div>
           </a-form-item>
@@ -120,29 +126,29 @@
 </template>
 
 <script>
-import { mixinDevice } from '@/utils/mixin'
-import { PageView } from '@/layouts'
-import DetailList from '@/components/tools/DetailList'
-import store from '@/store'
-import { genderChanger } from '@/utils/util'
-import { getStu, editStudent, studentUpload } from '../../api/student'
-import student from '../../store/modules/jumper'
-const DetailListItem = DetailList.Item
+import { mixinDevice } from "@/utils/mixin";
+import { PageView } from "@/layouts";
+import DetailList from "@/components/tools/DetailList";
+import store from "@/store";
+import { genderChanger } from "@/utils/util";
+import { getStu, editStudent, studentUpload } from "../../api/student";
+import student from "../../store/modules/jumper";
+const DetailListItem = DetailList.Item;
 
 export default {
-  name: 'Advanced',
+  name: "Advanced",
   components: {
     PageView,
     DetailList,
     DetailListItem
   },
   mixins: [mixinDevice],
-  data () {
+  data() {
     return {
       form: this.$form.createForm(this),
       config: {
         rules: [
-          { type: 'object', required: true, message: 'Please select time!' }
+          { type: "object", required: true, message: "Please select time!" }
         ]
       },
       confirmDirty: false,
@@ -185,66 +191,79 @@ export default {
       visible: false,
       mdl: {},
       student: {},
-      stuid: store.getters.stuid
-    }
+      stuid: store.getters.stuid,
+      confirmLoading: false
+    };
   },
   computed: {
-    getId () {
-      return store.getters.stuid
+    getId() {
+      return store.getters.stuid;
     },
-    getInfo () {
-      return store.getters.userInfo
+    getInfo() {
+      return store.getters.userInfo;
     }
   },
-  mounted () {
-    this.getStuInfo(this.stuid)
-    this.student.gender = genderChanger(this.student.gender)
+  mounted() {
+    this.getStuInfo(this.stuid);
+    this.student.gender = genderChanger(this.student.gender);
   },
   watch: {
-    getId: function (val, oldVal) {
-      this.getStuInfo(val)
+    getId: function(val, oldVal) {
+      this.getStuInfo(val);
     },
-    getInfo: function (val, oldVa) {
-      this.student = val
+    getInfo: function(val, oldVa) {
+      this.student = val;
     }
   },
   methods: {
-    fileBeforeUpload (file, fileList) {
-      this.file = file
-      return false
-    },
-    getStuInfo (id) {
-      var self = this
-      if (store.getters.role === 'student') {
-        this.student = store.getters.userInfo
+    validatePhone(rule, value, callback) {
+      const reg = /^[1][3,4,5,7,8][0-9]{9}$/;
+      if (value === "" || value === undefined || value == null) {
+        callback();
       } else {
-        this.stuid = id
+        if (!reg.test(value) && value !== "") {
+          callback(new Error("请输入正确的电话号码"));
+        } else {
+          callback();
+        }
+      }
+    },
+    fileBeforeUpload(file, fileList) {
+      this.file = file;
+      return false;
+    },
+    getStuInfo(id) {
+      var self = this;
+      if (store.getters.role === "student") {
+        this.student = store.getters.userInfo;
+      } else {
+        this.stuid = id;
         getStu(this.stuid).then(response => {
-          if (response.code === '200') {
-            self.student = response.data
+          if (response.code === "200") {
+            self.student = response.data;
           }
-        })
+        });
       }
     },
-    handleChange ({ file, fileList }) {
-      if (file.status !== 'uploading') {
-        console.log(file, fileList)
+    handleChange({ file, fileList }) {
+      if (file.status !== "uploading") {
+        console.log(file, fileList);
       }
     },
-    handleEdit (record) {
-      this.mdl = Object.assign({}, record)
-      this.visible = true
+    handleEdit(record) {
+      this.mdl = Object.assign({}, record);
+      this.visible = true;
     },
-    handleUpdateEdit (record) {
-      this.mdl = Object.assign({}, record)
-      this.updateVisible = true
+    handleUpdateEdit(record) {
+      this.mdl = Object.assign({}, record);
+      this.updateVisible = true;
     },
-    handleSubmit (e) {
-      e.preventDefault()
+    handleSubmit(e) {
+      e.preventDefault();
       const {
         form: { validateFields }
-      } = this
-      const validateFieldsKey = ['major', 'tel', 'introduction', 'exps']
+      } = this;
+      const validateFieldsKey = ["major", "tel", "introduction", "exps"];
       // const values = {
       //   ...fieldsValue,
       //   'date-time-picker': fieldsValue['date-time-picker'].format(
@@ -253,54 +272,60 @@ export default {
       // }
       validateFields(validateFieldsKey, { force: true }, (err, values) => {
         if (!err) {
-          const publishParams = { ...values }
-          console.log(publishParams)
+          const publishParams = { ...values };
+          console.log(publishParams);
           editStudent(publishParams).then(res => {
-            if (res.code === '200') this.countDown()
-            store.dispatch('GetInfo')
-          })
+            if (res.code === "200") this.countDown();
+            store.dispatch("GetInfo");
+          });
         }
-        console.log('Received values of form: ', values)
-      })
+        console.log("Received values of form: ", values);
+      });
     },
-    normFile (event1) {
-      console.log('Upload event:', event1)
+    normFile(event1) {
+      console.log("Upload event:", event1);
       if (Array.isArray(event1)) {
-        return event1
+        return event1;
       }
-      return event1 && event1.fileList
+      return event1 && event1.fileList;
     },
-    handleOk (e) {
-      e.preventDefault()
+    handleOk(e) {
+      e.preventDefault();
       this.form.validateFieldsAndScroll((err, values) => {
         if (!err) {
-          this.countDown()
-          const formData = new FormData()
-          delete values.dragger
-          formData.append('file', this.file)
-          studentUpload(formData)
+          const formData = new FormData();
+          delete values.dragger;
+          formData.append("file", this.file);
+          studentUpload(formData).then(res => {
+            if (res.code === "200") this.countDown();
+            store.dispatch("GetInfo");
+          });
         }
-      })
+      });
     },
-    countDown () {
-      let secondsToGo = 5
+    countDown() {
+      let secondsToGo = 3;
       const modal = this.$success({
-        title: '提交成功',
+        title: "提交成功",
         content: `这个窗口将于 ${secondsToGo} s后关闭。`
-      })
+      });
       const interval = setInterval(() => {
-        secondsToGo -= 1
+        secondsToGo -= 1;
         modal.update({
           content: `这个窗口将于 ${secondsToGo} s后关闭。`
-        })
-      }, 1000)
+        });
+      }, 1000);
+      this.confirmLoading = true;
       setTimeout(() => {
-        clearInterval(interval)
-        modal.destroy()
-      }, secondsToGo * 1000)
+        clearInterval(interval);
+        modal.destroy();
+        this.visible = false;
+        this.updateVisible = false;
+        this.confirmLoading = false;
+      }, secondsToGo * 1000);
     }
   }
-}
+};
 </script>
 
 <style scoped>

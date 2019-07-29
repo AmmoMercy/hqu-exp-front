@@ -229,6 +229,9 @@ export default {
   computed: {
     getId() {
       return store.getters.expid;
+    },
+    getInfo() {
+      return store.getters.userInfo;
     }
   },
   mounted() {
@@ -237,6 +240,9 @@ export default {
   watch: {
     getId: function(val, oldVal) {
       this.getExpInfo(val);
+    },
+    getInfo: function(val, oldVa) {
+      this.internship = val;
     }
   },
   methods: {
@@ -308,10 +314,31 @@ export default {
           console.log(publishParams);
           publish(publishParams).then(res => {
             if (res.code === 200) this.countDown();
+            store.dispatch("GetInfo");
           });
         }
         console.log("Received values of form: ", values);
       });
+    },
+    countDown() {
+      let secondsToGo = 3;
+      const modal = this.$success({
+        title: "提交成功",
+        content: `这个窗口将于 ${secondsToGo} s后关闭。`
+      });
+      const interval = setInterval(() => {
+        secondsToGo -= 1;
+        modal.update({
+          content: `这个窗口将于 ${secondsToGo} s后关闭。`
+        });
+      }, 1000);
+      this.confirmLoading = true;
+      setTimeout(() => {
+        clearInterval(interval);
+        modal.destroy();
+        this.visible = false;
+        this.confirmLoading = false;
+      }, secondsToGo * 1000);
     }
   }
 };
