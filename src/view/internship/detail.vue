@@ -78,7 +78,13 @@
         <a-button htmlType="submit" type="primary" @click="handleEnter(record)">我要报名</a-button>
       </a-form-item>
 
-      <a-modal title="编辑实训信息" :width="800" v-model="visible" @ok="handleSubmit">
+      <a-modal
+        title="编辑实训信息"
+        :width="800"
+        v-model="visible"
+        @ok="handleSubmit"
+        :confirmLoading="confirmLoading"
+      >
         <a-form :form="form">
           <a-form-item v-bind="formItemLayout" label="id" v-if="0">
             <a-input
@@ -223,7 +229,8 @@ export default {
       internship: {},
       visible: false,
       enterVisible: false,
-      mdl: {}
+      mdl: {},
+      confirmLoading: false
     };
   },
   computed: {
