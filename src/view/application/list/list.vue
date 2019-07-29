@@ -37,23 +37,39 @@
 </template>
 <script>
 import store from '@/store'
-import { getApplyList, getExpInfo, getEntApp } from '@/api/enterprise'
+import { getApplyList } from '@/api/enterprise'
 const statusMap = {
   0: {
     status: 'default',
     text: '待审核'
   },
   1: {
-    status: 'processing',
-    text: '审核中'
+    status: 'default',
+    text: '学生已取消'
   },
   2: {
-    status: 'success',
-    text: '审核通过'
+    status: 'processing',
+    text: '已通过'
   },
   3: {
     status: 'error',
-    text: '审核未通过'
+    text: '已拒绝'
+  },
+  4:{
+    status:'success',
+    text:'学生已同意'
+  },
+  5:{
+    status:'error',
+    text:'学生已拒绝'
+  },
+  6:{
+    status:'success',
+    text:'正常结业'
+  },
+  7:{
+    status:'default',
+    text:'非正常结业'
   }
 }
 
@@ -68,7 +84,7 @@ const columns = [
   },
   {
     title: '姓名',
-    dataIndex: 'name'
+    dataIndex: 'stuName'
   },
   {
     title: '入学年份',
@@ -80,7 +96,7 @@ const columns = [
   },
   {
     title: '审核状态',
-    dataIndex: 'status',
+    dataIndex: 'apply_status',
     scopedSlots: { customRender: 'status' }
   },
   {
@@ -120,9 +136,9 @@ export default {
     getApplyList(this.intershipId).then((res) => {
       this.applications = res.data
     })
-    getEntApp().then((res) => {
+    /* getEntApp().then((res) => {
       this.apply_id = res.data
-    })
+    }) */
   },
   filters: {
     statusFilter (type) {
@@ -133,12 +149,12 @@ export default {
     },
   },
   methods: {
-    handleEdit (e) {
+    /* handleEdit (e) {
       console.log(e)
       this.applyId = e._id
       // this.mdl = Object.assign({}, record);
       this.visible = true
-    },
+    }, */
     columnsSelector () {
       this.role = store.getters.role
       if (this.role === 'enterprise') {

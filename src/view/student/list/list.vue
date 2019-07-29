@@ -10,7 +10,7 @@
               </a-form-item>
             </a-col>
             <span>
-              <a-button type="primary" @click="Searchlist">查询</a-button>
+              <a-button type="primary" @click="getStu">查询</a-button>
             </span>
           </a-row>
         </a-form>
@@ -54,8 +54,9 @@
   </a-spin>
 </template>
 <script>
-import store from "@/store";
-import { putmark, getApplyList } from "@/api/enterprise";
+import store from '@/store'
+import {getStu} from '@/api/student'
+import { putmark, getApplyList } from '@/api/enterprise'
 
 const columns = [
   {
@@ -68,7 +69,7 @@ const columns = [
   },
   {
     title: "姓名",
-    dataIndex: "name"
+    dataIndex: "stuName"
   },
   {
     title: "入学年份",
@@ -166,7 +167,7 @@ export default {
         return this.adminColums;
       }
     },
-    Searchlist: function(data) {
+    getStu: function(data) {
       this.loading = true;
       setTimeout(() => {
         this.data = data;
