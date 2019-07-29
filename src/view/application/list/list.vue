@@ -37,7 +37,7 @@
 </template>
 <script>
 import store from '@/store'
-import { getExpInfo,getInternshipList } from '@/api/enterprise'
+import { getApplyList,getExpInfo,getEntApp } from '@/api/enterprise'
 const statusMap = {
   0: {
     status: 'default',
@@ -115,6 +115,8 @@ export default {
   name: "Applicationlist",
   data() {
     return {
+      applyId:'',
+      intershipId:store.getters.expid,
       columns,
       mdl: {},
       queryParam: {},
@@ -129,30 +131,13 @@ export default {
     }
   },
   mounted () {
-    this.getInternshipList(this.expid)
-  },
-  watch: {
-
-    getId: function (val, oldVal) {
-      this.getExpInfo(val)
-    }
-  },
-  /* mounted () {
-    if (store.getters.role === "enterprise") {
-      this.applications = store.getters.userInfo
-      console.log(this.applications)
-    } else {
-      const entid = store.getters.entid;
-      getEntApp(entid).then(response => {
-        if (response.code === 200) {
-          this.applications = response.data;
-        }
-      });
-    } */
-   /*  getEntApp(entid).then((res) => {
+    getApplyList(this.intershipId).then((res) => {
       this.applications = res.data
-    }) */
-  // },
+    })
+    getEntApp().then((res) => {
+      this.apply_id = res.data
+    })
+  },
   filters: {
     statusFilter(type) {
       return statusMap[type].text;
@@ -162,18 +147,11 @@ export default {
     }
   },
   methods: {
-    getExpInfo (id) {
-      var self = this
-      if (store.getters.role === 'internship') {
-        this.applications = store.getters.userInfo
-      } else {
-        this.expid = id
-        getInternshipList(this.expid).then(response => {
-          if (response.code === '200') {
-            self.applications = response.data
-          }
-        })
-      }
+    handleEdit (e) {
+      console.log(e)
+      this.applyId=e._id
+      // this.mdl = Object.assign({}, record);
+      this.visible = true
     },
     columnsSelector () {
     this.role = store.getters.role

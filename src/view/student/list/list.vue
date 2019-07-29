@@ -18,10 +18,10 @@
       <a-table :columns="columnsSelector()" :dataSource="managestu" rowKey="_id">
         <span slot="serial" slot-scope="text, record, index">{{ index + 1 }}</span>
         <span slot="introduction" slot-scope="text">
-          <!-- <ellipsis :length="4" tooltip>{{ text }}</ellipsis> -->
+          <ellipsis :length="4" tooltip>{{ text }}</ellipsis>
         </span>
         <span slot="exps" slot-scope="text">
-          <!-- <ellipsis :length="4" tooltip>{{ text }}</ellipsis> -->
+          <ellipsis :length="4" tooltip>{{ text }}</ellipsis>
         </span>
         <span slot="works">
           <a href="#">filestitle</a>
@@ -63,7 +63,7 @@
 </template>
 <script>
 import store from '@/store'
-import { getMark, putmark, getApplyList } from '@/api/enterprise'
+import { putmark, getApplyList } from '@/api/enterprise'
 
 const columns = [
   {
