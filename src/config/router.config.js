@@ -173,7 +173,7 @@ export const adminRouterMap = [
         meta: { title: '项目列表', icon: 'snippets' }
       },
       {
-        path: '/enterprise',
+        path: '/enterpriselist',
         name: 'enterpriselist',
         component: () => import('@/view/enterprise/list/queryList'),
         meta: { title: '企业列表', icon: 'deployment-unit' }
@@ -189,6 +189,12 @@ export const adminRouterMap = [
         component: () => import('@/view/admin/setting'),
         name: 'setting',
         meta: { title: '个人设置', icon: 'user' }
+      },
+      { path: '/enterprise',
+        name: 'enterprise',
+        component: () => import('@/view/enterprise/detail'),
+        meta: { title: '企业信息', icon: 'deployment-unit' },
+        hidden: true
       }
 
     ]
