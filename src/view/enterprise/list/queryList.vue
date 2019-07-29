@@ -28,17 +28,21 @@
           </a-row>
         </a-form>
       </div>
-      <a-table :columns="columnsSelector()" :dataSource="enterprises" rowKey="_id">
+      <a-table :columns="columns" :dataSource="enterprises" rowKey="_id">
         <!-- <a slot="name" slot-scope="text" href="javascript:;">{{text}}</a> -->
         <span slot="serial" slot-scope="text, record, index">{{ index + 1 }}</span>
         <span slot="qualificate_file">
-          <a href="#">filestitle</a>
+          <a href="#">下载</a>
         </span>
         <span slot="status" slot-scope="text">
           <a-badge :status="text | statusTypeFilter" :text="text | statusFilter" />
         </span>
-        <span slot="action">
-          <a href="#">查看</a>
+        <span slot="action" slot-scope="text, record">
+          <template>
+
+            <a @click="goToEnterprise(record)" >查看</a>
+
+          </template>
         </span>
       </a-table>
     </a-card>
@@ -110,7 +114,7 @@ const columns = [
   },
   {
     title: '注册时间',
-    dataIndex: 'register_time',
+    dataIndex: 'register_time'
   },
   {
     title: '操作',
@@ -121,7 +125,7 @@ const columns = [
 
 export default {
   name: 'EnterpriseList',
-  data() {
+  data () {
     return {
       columns,
       mdl: {},
@@ -137,29 +141,21 @@ export default {
     })
   },
   filters: {
-    statusFilter(type) {
+    statusFilter (type) {
       return statusMap[type].text
     },
-    statusTypeFilter(type) {
+    statusTypeFilter (type) {
       return statusMap[type].status
     }
   },
   methods: {
-    goToExpDetail (e) {
-    const _this = this
-    console.log(e)
-    store.commit('SET_EXP_ID', e._id)
-    _this.$router.push({ name: 'internshipdetail' })
-  },
-  columnsSelector () {
-    this.role = store.getters.role
-    if (this.role === 'enterprise') {
-      return this.enterpriseColumns
-    } else if (this.role === 'student') {
-      return this.studentColumns
-    } else { return this.columns }
-  },
-    Searchlist() {
+    goToEnterprise (r) {
+      const _this = this
+      store.commit('SET_ENT_ID', r._id)
+      _this.$router.push({ name: 'enterprise' })
+    },
+
+    Searchlist () {
       this.loading = true
       setTimeout(() => {
         this.data = data
