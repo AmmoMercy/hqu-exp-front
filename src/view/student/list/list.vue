@@ -156,15 +156,33 @@ export default {
     this.form = this.$form.createForm(this)
   },
   mounted () {
-    getApplyList(this.intershipId).then((res) => {
-      this.managestu = res.data
-    })
+    getApplyList(this.intershipId)
+      .then(
+        (res) => {
+          this.managestu = res.data
+        })
+  },
+  computed: {
+    getExpId: function () {
+      return store.getters.expid
+    }
+  },
+  watch: {
+    getExpId: function (val, oldVal) {
+      this.intershipId = val
+      getApplyList(this.intershipId)
+        .then(
+          (res) => {
+            this.managestu = res.data
+          }
+        )
+    }
   },
   filters: {
     ellipsis (value) {
       if (!value) return ''
       if (value.length > 4) {
-        return value.slice(0,4) + '...'
+        return value.slice(0, 4) + '...'
       }
       return value
     }
