@@ -128,6 +128,11 @@ export const enterpriseRouterMap = [
         component: () => import('@/view/internship/detail'),
         meta: { title: '实训信息', keepAlive: false }
 
+      },
+      {
+        path: '/student/detail',
+        name: 'studentdetail',
+        component: () => import('@/view/student/detail')
       }
     ]
   },

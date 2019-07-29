@@ -162,11 +162,11 @@ export default {
   },
   methods: {
     goToStuDetail (e) {
-    const _this = this
-    console.log(e)
-    store.commit('SET_STU_ID', e.stu_id)
-    _this.$router.push({ name: 'detail' })
-  },
+      const _this = this
+      console.log(e)
+      store.commit('SET_STU_ID', e.stu_id)
+      _this.$router.push({ name: 'studentdetail' })
+    },
     handleEdit (e) {
       console.log(e)
       this.applyId = e._id
