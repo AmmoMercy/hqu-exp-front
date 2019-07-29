@@ -17,12 +17,8 @@
       </div>
       <a-table :columns="columnsSelector()" :dataSource="managestu" rowKey="_id">
         <span slot="serial" slot-scope="text, record, index">{{ index + 1 }}</span>
-        <span slot="introduction" slot-scope="text">
-          {{ text|ellipsis }}
-        </span>
-        <span slot="exps" slot-scope="text">
-          {{ text|ellipsis }}
-        </span>
+        <span slot="introduction" slot-scope="text">{{ text|ellipsis }}</span>
+        <span slot="exps" slot-scope="text">{{ text|ellipsis }}</span>
         <span slot="works">
           <a href="#">filestitle</a>
         </span>
@@ -35,7 +31,13 @@
         </span>
       </a-table>
 
-      <a-modal title="请给学生打分" :width="800" v-model="visible" @ok="handleSubmit">
+      <a-modal
+        title="请给学生打分"
+        :width="800"
+        v-model="visible"
+        @ok="handleSubmit"
+        :confirmLoading="confirmLoading"
+      >
         <a-form :form="form">
           <!-- <a-form-item v-bind="formItemLayout" label="学生">
             <a-input
@@ -44,100 +46,93 @@
               placeholder="stu_id"
               disabled="true"
             />
-          </a-form-item> -->
-          <a-form-item
-            v-bind="formItemLayout"
-            label="实训成绩"
-          >
-            <a-input-number
-              v-decorator="['mark', { initialValue: 0 }]"
-              :min="1"
-              :max="100"
-            />
+          </a-form-item>-->
+          <a-form-item v-bind="formItemLayout" label="实训成绩">
+            <a-input-number v-decorator="['mark', { initialValue: 0 }]" :min="1" :max="100" />
           </a-form-item>
         </a-form>
       </a-modal>
     </a-card>
   </a-spin>
-
 </template>
 <script>
-import store from '@/store'
-import { putmark, getApplyList } from '@/api/enterprise'
+import store from "@/store";
+import { putmark, getApplyList } from "@/api/enterprise";
 
 const columns = [
   {
-    title: '#',
-    scopedSlots: { customRender: 'serial' }
+    title: "#",
+    scopedSlots: { customRender: "serial" }
   },
   {
-    title: '学号',
-    dataIndex: 'stu_id'
+    title: "学号",
+    dataIndex: "stu_id"
   },
   {
-    title: '姓名',
-    dataIndex: 'name'
+    title: "姓名",
+    dataIndex: "name"
   },
   {
-    title: '性别',
-    dataIndex: 'gender',
-    scopedSlots: { customRender: 'gender' }
+    title: "性别",
+    dataIndex: "gender",
+    scopedSlots: { customRender: "gender" }
   },
   {
-    title: '入学年份',
-    dataIndex: 'enterence_year'
+    title: "入学年份",
+    dataIndex: "enterence_year"
   },
   {
-    title: '专业',
-    dataIndex: 'major'
+    title: "专业",
+    dataIndex: "major"
   },
   {
-    title: '联系方式',
-    dataIndex: 'tel'
+    title: "联系方式",
+    dataIndex: "tel"
   },
   {
-    title: '简介',
-    dataIndex: 'introduction',
-    scopedSlots: { customRender: 'introduction' }
+    title: "简介",
+    dataIndex: "introduction",
+    scopedSlots: { customRender: "introduction" }
   },
   {
-    title: '邮箱',
-    dataIndex: 'email'
+    title: "邮箱",
+    dataIndex: "email"
   },
   {
-    title: '实训经历',
-    dataIndex: 'exps',
-    scopedSlots: { customRender: 'exps' }
+    title: "实训经历",
+    dataIndex: "exps",
+    scopedSlots: { customRender: "exps" }
   },
   {
-    title: '实训成绩',
-    dataIndex: 'grade'
+    title: "实训成绩",
+    dataIndex: "grade"
   },
   {
-    title: '作品',
-    dataIndex: 'works',
-    scopedSlots: { customRender: 'works' }
+    title: "作品",
+    dataIndex: "works",
+    scopedSlots: { customRender: "works" }
   },
   {
-    title: '操作',
-    dataIndex: 'action',
-    scopedSlots: { customRender: 'action' }
+    title: "操作",
+    dataIndex: "action",
+    scopedSlots: { customRender: "action" }
   }
-]
+];
 
 export default {
   // name: "StudentList",
-  data () {
+  data() {
     return {
-      applyId: '',
+      confirmLoading: false,
+      applyId: "",
       intershipId: store.getters.expid,
       columns,
       mdl: {},
       queryParam: {},
       loading: false,
       managestu: [],
-      role: '',
-      search: '',
+      role: "",
+      search: "",
       visible: false,
       student: {},
       formItemLayout: {
@@ -150,115 +145,116 @@ export default {
           sm: { span: 15 }
         }
       }
-    }
+    };
   },
-  beforeCreate () {
-    this.form = this.$form.createForm(this)
+  beforeCreate() {
+    this.form = this.$form.createForm(this);
   },
-  mounted () {
-    getApplyList(this.intershipId)
-      .then(
-        (res) => {
-          this.managestu = res.data
-        })
+  mounted() {
+    getApplyList(this.intershipId).then(res => {
+      this.managestu = res.data;
+    });
   },
   computed: {
-    getExpId: function () {
-      return store.getters.expid
+    getExpId: function() {
+      return store.getters.expid;
     }
   },
   watch: {
-    getExpId: function (val, oldVal) {
-      this.intershipId = val
-      getApplyList(this.intershipId)
-        .then(
-          (res) => {
-            this.managestu = res.data
-          }
-        )
+    getExpId: function(val, oldVal) {
+      this.intershipId = val;
+      getApplyList(this.intershipId).then(res => {
+        this.managestu = res.data;
+      });
     }
   },
   filters: {
-    ellipsis (value) {
-      if (!value) return ''
+    ellipsis(value) {
+      if (!value) return "";
       if (value.length > 4) {
-        return value.slice(0, 4) + '...'
+        return value.slice(0, 4) + "...";
       }
-      return value
+      return value;
     }
   },
   methods: {
-    goToStuDetail (e) {
-      const _this = this
-      console.log(e)
-      store.commit('SET_STU_ID', e.stu_id)
-      _this.$router.push({ name: 'studentdetail' })
+    goToStuDetail(e) {
+      const _this = this;
+      console.log(e);
+      store.commit("SET_STU_ID", e.stu_id);
+      _this.$router.push({ name: "studentdetail" });
     },
-    handleEdit (e) {
-      console.log(e)
-      this.applyId = e._id
+    handleEdit(e) {
+      console.log(e);
+      this.applyId = e._id;
       // this.mdl = Object.assign({}, record);
-      this.visible = true
+      this.visible = true;
     },
-    columnsSelector () {
-      this.role = store.getters.role
-      if (this.role === 'enterprise') {
-        return this.columns
-      } else if (this.role === 'student') {
-        return this.studentColumns
-      } else { return this.adminColums }
+    columnsSelector() {
+      this.role = store.getters.role;
+      if (this.role === "enterprise") {
+        return this.columns;
+      } else if (this.role === "student") {
+        return this.studentColumns;
+      } else {
+        return this.adminColums;
+      }
     },
-    Searchlist: function (data) {
-      this.loading = true
+    Searchlist: function(data) {
+      this.loading = true;
       setTimeout(() => {
-        this.data = data
-        this.loading = false
-      }, 300)
+        this.data = data;
+        this.loading = false;
+      }, 300);
       for (var i = 0; i < this.data; i++) {
         if (this.data[i].stu_id.search(this.searchVal) != -1) {
-          searchData.push(this.data[i])
+          searchData.push(this.data[i]);
         }
       }
-      return searchData
+      return searchData;
     },
-    handleSubmit (e) {
-      const _this = this
-      e.preventDefault()
+    handleSubmit(e) {
+      const _this = this;
+      e.preventDefault();
       const {
         form: { validateFields }
-      } = this
-      const validateFieldsKey = ['mark' ]
+      } = this;
+      const validateFieldsKey = ["mark"];
       validateFields(validateFieldsKey, { force: true }, (err, values) => {
         if (!err) {
-          const publishParams = { ...values }
+          const publishParams = { ...values };
 
-          publishParams.apply_id = _this.applyId
-          console.log(publishParams)
-          putmark(publishParams)
-            .then((res) => {
-              if (res.code === 200) { this.countDown() }
-            })
+          publishParams.apply_id = _this.applyId;
+          console.log(publishParams);
+          putmark(publishParams).then(res => {
+            if (res.code === "200") {
+              this.countDown();
+            }
+          });
         }
-        console.log('Received values of form: ', values)
-      })
+        console.log("Received values of form: ", values);
+      });
     },
-    countDown () {
-      let secondsToGo = 5
+    countDown() {
+      let secondsToGo = 3;
       const modal = this.$success({
-        title: '提交成功',
+        title: "提交成功",
         content: `这个窗口将于 ${secondsToGo} s后关闭。`
-      })
+      });
       const interval = setInterval(() => {
-        secondsToGo -= 1
+        secondsToGo -= 1;
         modal.update({
           content: `这个窗口将于 ${secondsToGo} s后关闭。`
-        })
-      }, 1000)
+        });
+      }, 1000);
+      this.confirmLoading = true;
       setTimeout(() => {
-        clearInterval(interval)
-        modal.destroy()
-      }, secondsToGo * 1000)
+        clearInterval(interval);
+        modal.destroy();
+        this.visible = false;
+        this.confirmLoading = false;
+      }, secondsToGo * 1000);
     }
   }
-}
+};
 </script>
