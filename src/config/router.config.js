@@ -126,8 +126,8 @@ export const enterpriseRouterMap = [
       { path: '/internshipdetail',
         name: 'internshipdetail',
         component: () => import('@/view/internship/detail'),
-        meta: { hidden: true, title: '实训信息', keepAlive: false }
-
+        meta: { title: '实训信息', keepAlive: false },
+        hidden: true
       },
       {
         path: '/student/detail',
