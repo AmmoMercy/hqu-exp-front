@@ -63,6 +63,7 @@
 </template>
 <script>
 import store from '@/store'
+import { Ellipsis } from '@/components'
 import {getMark, getInternshipList, putmark ,getApplyList} from '@/api/enterprise'
 
 const columns = [

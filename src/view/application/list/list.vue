@@ -138,31 +138,6 @@ export default {
       this.apply_id = res.data
     })
   },
-  /* mounted () {
-    this.getExpInfo(this.expid)
-  },
-  watch: {
-
-    getId: function (val, oldVal) {
-      this.getExpInfo(val)
-    }
-  }, */
-  /* mounted () {
-    if (store.getters.role === "enterprise") {
-      this.applications = store.getters.userInfo
-      console.log(this.applications)
-    } else {
-      const entid = store.getters.entid;
-      getEntApp(entid).then(response => {
-        if (response.code === 200) {
-          this.applications = response.data;
-        }
-      });
-    } */
-   /*  getEntApp(entid).then((res) => {
-      this.applications = res.data
-    }) */
-  // },
   filters: {
     statusFilter(type) {
       return statusMap[type].text;
@@ -172,19 +147,6 @@ export default {
     }
   },
   methods: {
-    /* getExpInfo (id) {
-      var self = this
-      if (store.getters.role === 'internship') {
-        this.applications = store.getters.userInfo
-      } else {
-        this.expid = id
-        getInternshipList(this.expid).then(response => {
-          if (response.code === '200') {
-            self.applications = response.data
-          }
-        })
-      }
-    }, */
     handleEdit (e) {
       console.log(e)
       this.applyId=e._id
