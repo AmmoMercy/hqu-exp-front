@@ -126,14 +126,18 @@ export const enterpriseRouterMap = [
       { path: '/internshipdetail',
         name: 'internshipdetail',
         component: () => import('@/view/internship/detail'),
-        meta: { title: '实训信息', keepAlive: false }
+        meta: { hidden: true, title: '实训信息', keepAlive: false }
 
       },
       {
         path: '/student/detail',
         name: 'studentdetail',
-        component: () => import('@/view/student/detail')
+        component: () => import('@/view/student/detail'),
+        meta: { title: '学生信息', icon: 'user' },
+        hidden: true
+
       }
+
     ]
   },
   {
@@ -186,6 +190,7 @@ export const adminRouterMap = [
         name: 'setting',
         meta: { title: '个人设置', icon: 'user' }
       }
+
     ]
   },
 
@@ -230,4 +235,5 @@ export const constantRouterMap = [
     component: () =>
       import(/* webpackChunkName: "fail" */ '@/views/exception/404')
   }
+
 ]
