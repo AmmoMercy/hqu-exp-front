@@ -26,12 +26,6 @@
         <span slot="status" slot-scope="text">
           <a-badge :status="text | statusTypeFilter" :text="text | statusFilter" />
         </span>
-        <span slot="introduction" slot-scope="text">
-          {{ text|ellipsis }}
-        </span>
-        <span slot="exps" slot-scope="text">
-          {{ text|ellipsis }}
-        </span>
         <span slot="action">
           <template>
             <a slot="action" @click="goToExpDetail(record)" >查看</a>
@@ -77,34 +71,12 @@ const columns = [
     dataIndex: 'name'
   },
   {
-    title: '性别',
-    dataIndex: 'gender',
-    scopedSlots: { customRender: 'gender' }
-  },
-  {
     title: '入学年份',
     dataIndex: 'enterence_year'
   },
   {
     title: '专业',
     dataIndex: 'major'
-  },
-  {
-    title: '联系方式',
-    dataIndex: 'tel'
-  },
-  {
-    title: '简介',
-    dataIndex: 'introduction',
-    scopedSlots: { customRender: 'introduction' }
-  },
-  {
-    title: '邮箱',
-    dataIndex: 'email'
-  },
-  {
-    title: '实训经历',
-    dataIndex: 'exps'
   },
   {
     title: '审核状态',
@@ -159,13 +131,6 @@ export default {
     statusTypeFilter (type) {
       return statusMap[type].status
     },
-    ellipsis (value) {
-      if (!value) return ''
-      if (value.length > 4) {
-        return value.slice(0, 4) + '...'
-      }
-      return value
-    }
   },
   methods: {
     handleEdit (e) {

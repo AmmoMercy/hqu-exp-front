@@ -38,12 +38,12 @@ export function getEntDetail (parameter) {
     method: 'get'
   })
 }
-export function getEntApp (parameter) {
+/* export function getEntApp (parameter) {
   return axios({
     url: '/enterprise/applicationlist?' + 'internshipId=' + parameter & 'page=' + parameter,
     method: 'get'
   })
-}
+} */
 export function getInternshipList () {
   return axios({
     url: '/enterprise/internshiplist',

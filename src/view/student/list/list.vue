@@ -17,8 +17,6 @@
       </div>
       <a-table :columns="columnsSelector()" :dataSource="managestu" rowKey="_id">
         <span slot="serial" slot-scope="text, record, index">{{ index + 1 }}</span>
-        <span slot="introduction" slot-scope="text">{{ text|ellipsis }}</span>
-        <span slot="exps" slot-scope="text">{{ text|ellipsis }}</span>
         <span slot="works">
           <a href="#">filestitle</a>
         </span>
@@ -73,35 +71,12 @@ const columns = [
     dataIndex: "name"
   },
   {
-    title: "性别",
-    dataIndex: "gender",
-    scopedSlots: { customRender: "gender" }
-  },
-  {
     title: "入学年份",
     dataIndex: "enterence_year"
   },
   {
     title: "专业",
     dataIndex: "major"
-  },
-  {
-    title: "联系方式",
-    dataIndex: "tel"
-  },
-  {
-    title: "简介",
-    dataIndex: "introduction",
-    scopedSlots: { customRender: "introduction" }
-  },
-  {
-    title: "邮箱",
-    dataIndex: "email"
-  },
-  {
-    title: "实训经历",
-    dataIndex: "exps",
-    scopedSlots: { customRender: "exps" }
   },
   {
     title: "实训成绩",
@@ -166,15 +141,6 @@ export default {
       getApplyList(this.intershipId).then(res => {
         this.managestu = res.data;
       });
-    }
-  },
-  filters: {
-    ellipsis(value) {
-      if (!value) return "";
-      if (value.length > 4) {
-        return value.slice(0, 4) + "...";
-      }
-      return value;
     }
   },
   methods: {
