@@ -32,9 +32,9 @@
         <span slot="qualificate_file">
           <a href="#">filestitle</a>
         </span>
-        <!-- <span slot="description" slot-scope="text">
-
-        </span> -->
+        <span slot="description" slot-scope="text">
+          {{text|ellipsis}}
+        </span>
 
         <span slot="status" slot-scope="text">
           <a-badge :status="text | statusTypeFilter" :text="text | statusFilter" />
@@ -197,6 +197,13 @@ export default {
     },
     statusTypeFilter (type) {
       return statusMap[type].status
+    },
+    ellipsis (value) {
+      if (!value) return ''
+      if (value.length > 4) {
+        return value.slice(0,4) + '...'
+      }
+      return value
     }
   },
   methods: { 

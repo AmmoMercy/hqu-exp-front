@@ -18,10 +18,10 @@
       <a-table :columns="columnsSelector()" :dataSource="managestu" rowKey="_id">
         <span slot="serial" slot-scope="text, record, index">{{ index + 1 }}</span>
         <span slot="introduction" slot-scope="text">
-          <!-- <ellipsis :length="4" tooltip>{{ text }}</ellipsis> -->
+          {{ text|ellipsis }}
         </span>
         <span slot="exps" slot-scope="text">
-          <!-- <ellipsis :length="4" tooltip>{{ text }}</ellipsis> -->
+          {{ text|ellipsis }}
         </span>
         <span slot="works">
           <a href="#">filestitle</a>
@@ -159,6 +159,15 @@ export default {
     getApplyList(this.intershipId).then((res) => {
       this.managestu = res.data
     })
+  },
+  filters: {
+    ellipsis (value) {
+      if (!value) return ''
+      if (value.length > 4) {
+        return value.slice(0,4) + '...'
+      }
+      return value
+    }
   },
   methods: {
     goToStuDetail (e) {

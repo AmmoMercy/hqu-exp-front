@@ -26,6 +26,12 @@
         <span slot="status" slot-scope="text">
           <a-badge :status="text | statusTypeFilter" :text="text | statusFilter" />
         </span>
+        <span slot="introduction" slot-scope="text">
+          {{ text|ellipsis }}
+        </span>
+        <span slot="exps" slot-scope="text">
+          {{ text|ellipsis }}
+        </span>
         <span slot="action">
           <template>
             <a slot="action" @click="goToExpDetail(record)" >查看</a>
@@ -144,6 +150,13 @@ export default {
     },
     statusTypeFilter(type) {
       return statusMap[type].status;
+    },
+    ellipsis (value) {
+      if (!value) return ''
+      if (value.length > 4) {
+        return value.slice(0,4) + '...'
+      }
+      return value
     }
   },
   methods: {
