@@ -34,13 +34,13 @@ export function submitprove (parameter) {
 }
 export function getEntDetail (parameter) {
   return axios({
-    url: '/api/enterprise/detail',
+    url: '/enterprise/detail',
     method: 'get'
   })
 }
 export function getEntApp (parameter) {
   return axios({
-    url: '/api/enterprise/applicationlist?' + 'internshipId=' + parameter & 'page=' + parameter,
+    url: '/enterprise/applicationlist?' + 'internshipId=' + parameter & 'page=' + parameter,
     method: 'get'
   })
 }
@@ -67,10 +67,5 @@ export function putmark (param) {
     url: '/enterprise/result/mark',
     method: 'put',
     data: param
-  })
-}
-export function getMark (parameter) {
-  return axios({
-    url: '/enterprise/applicationlist?' + 'internshipId=' + parameter & 'page=' + parameter & 'status=' + parameter
   })
 }

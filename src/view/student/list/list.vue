@@ -63,7 +63,7 @@
 </template>
 <script>
 import store from '@/store'
-import {getMark, getInternshipList, putmark ,getApplyList} from '@/api/enterprise'
+import { getMark, putmark, getApplyList } from '@/api/enterprise'
 
 const columns = [
   {
@@ -125,13 +125,12 @@ const columns = [
   }
 ]
 
-
 export default {
   // name: "StudentList",
   data () {
     return {
-      applyId:'',
-      intershipId:store.getters.expid,
+      applyId: '',
+      intershipId: store.getters.expid,
       columns,
       mdl: {},
       queryParam: {},
@@ -160,14 +159,11 @@ export default {
     getApplyList(this.intershipId).then((res) => {
       this.managestu = res.data
     })
-    getMark().then((res) => {
-      this.apply_id = res.data
-    })
   },
   methods: {
     handleEdit (e) {
       console.log(e)
-      this.applyId=e._id
+      this.applyId = e._id
       // this.mdl = Object.assign({}, record);
       this.visible = true
     },
@@ -193,7 +189,7 @@ export default {
       return searchData
     },
     handleSubmit (e) {
-      let _this= this
+      const _this = this
       e.preventDefault()
       const {
         form: { validateFields }
@@ -202,7 +198,7 @@ export default {
       validateFields(validateFieldsKey, { force: true }, (err, values) => {
         if (!err) {
           const publishParams = { ...values }
-          
+
           publishParams.apply_id = _this.applyId
           console.log(publishParams)
           putmark(publishParams)
