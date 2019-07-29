@@ -43,7 +43,7 @@
 </template>
 <script>
 import store from '@/store'
-import { getApplyList,getExpInfo,getEntApp } from '@/api/enterprise'
+import { getApplyList, getExpInfo, getEntApp } from '@/api/enterprise'
 const statusMap = {
   0: {
     status: 'default',
@@ -61,50 +61,50 @@ const statusMap = {
     status: 'error',
     text: '审核未通过'
   }
-};
+}
 
 const columns = [
   {
-    title: "#",
-    scopedSlots: { customRender: "serial" }
+    title: '#',
+    scopedSlots: { customRender: 'serial' }
   },
   {
-    title: "学号",
-    dataIndex: "stu_id"
+    title: '学号',
+    dataIndex: 'stu_id'
   },
   {
-    title: "姓名",
-    dataIndex: "name"
+    title: '姓名',
+    dataIndex: 'name'
   },
   {
-    title: "性别",
-    dataIndex: "gender",
-    scopedSlots: { customRender: "gender" }
+    title: '性别',
+    dataIndex: 'gender',
+    scopedSlots: { customRender: 'gender' }
   },
   {
-    title: "入学年份",
-    dataIndex: "enterence_year"
+    title: '入学年份',
+    dataIndex: 'enterence_year'
   },
   {
-    title: "专业",
-    dataIndex: "major"
+    title: '专业',
+    dataIndex: 'major'
   },
   {
-    title: "联系方式",
-    dataIndex: "tel"
+    title: '联系方式',
+    dataIndex: 'tel'
   },
   {
-    title: "简介",
-    dataIndex: "introduction",
-    scopedSlots: { customRender: "introduction" }
+    title: '简介',
+    dataIndex: 'introduction',
+    scopedSlots: { customRender: 'introduction' }
   },
   {
-    title: "邮箱",
-    dataIndex: "email"
+    title: '邮箱',
+    dataIndex: 'email'
   },
   {
-    title: "实训经历",
-    dataIndex: "exps"
+    title: '实训经历',
+    dataIndex: 'exps'
   },
   {
     title: '审核状态',
@@ -112,28 +112,36 @@ const columns = [
     scopedSlots: { customRender: 'status' }
   },
   {
-    title: "操作",
-    dataIndex: "action",
-    scopedSlots: { customRender: "action" }
+    title: '操作',
+    dataIndex: 'action',
+    scopedSlots: { customRender: 'action' }
   }
-];
+]
 export default {
-  name: "Applicationlist",
-  data() {
+  name: 'Applicationlist',
+  data () {
     return {
-      applyId:'',
-      intershipId:store.getters.expid,
+      applyId: '',
+      intershipId: store.getters.expid,
       columns,
       mdl: {},
       queryParam: {},
-      applications:[],
-      role:'',
+      applications: [],
+      role: '',
       loading: false
-    };
+    }
   },
   computed: {
     getId () {
       return store.getters.expid
+    }
+  },
+  watch: {
+    getId (val, oldVal) {
+      this.intershipId = val
+      getApplyList(this.intershipId).then((res) => {
+        this.applications = res.data
+      })
     }
   },
   mounted () {
@@ -145,16 +153,16 @@ export default {
     })
   },
   filters: {
-    statusFilter(type) {
-      return statusMap[type].text;
+    statusFilter (type) {
+      return statusMap[type].text
     },
-    statusTypeFilter(type) {
-      return statusMap[type].status;
+    statusTypeFilter (type) {
+      return statusMap[type].status
     },
     ellipsis (value) {
       if (!value) return ''
       if (value.length > 4) {
-        return value.slice(0,4) + '...'
+        return value.slice(0, 4) + '...'
       }
       return value
     }
@@ -162,24 +170,24 @@ export default {
   methods: {
     handleEdit (e) {
       console.log(e)
-      this.applyId=e._id
+      this.applyId = e._id
       // this.mdl = Object.assign({}, record);
       this.visible = true
     },
     columnsSelector () {
-    this.role = store.getters.role
-    if (this.role === 'enterprise') {
-      return this.columns
-    } else if (this.role === 'student') {
-      return this.studentColumns
-    } else { return this.adminColums }
-  },
-    Searchlist(){
-      this.loading = true;
-      setTimeout(() => {
-        this.loading = false;
-      }, 300);
+      this.role = store.getters.role
+      if (this.role === 'enterprise') {
+        return this.columns
+      } else if (this.role === 'student') {
+        return this.studentColumns
+      } else { return this.adminColums }
     },
+    Searchlist () {
+      this.loading = true
+      setTimeout(() => {
+        this.loading = false
+      }, 300)
+    }
   }
-};
+}
 </script>
