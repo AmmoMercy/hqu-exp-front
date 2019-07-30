@@ -5,12 +5,12 @@
         <a-form layout="inline">
           <a-row :gutter="48">
             <a-col :md="6" :sm="24">
-              <a-form-item label="姓名">
-                <a-input v-model="search" placeholder="请输入姓名" />
+              <a-form-item label="学号">
+                <a-input v-model="searchid" placeholder="请输入学号" />
               </a-form-item>
             </a-col>
             <span>
-              <a-button type="primary" @click="getStu">查询</a-button>
+              <a-button type="primary" @click="SearchList">查询</a-button>
             </span>
           </a-row>
         </a-form>
@@ -56,7 +56,7 @@
 <script>
 import store from '@/store'
 import {getStu} from '@/api/student'
-import { putmark, getApplyList } from '@/api/enterprise'
+import { putmark, getStuManageList } from '@/api/enterprise'
 
 const columns = [
   {
@@ -81,7 +81,7 @@ const columns = [
   },
   {
     title: "实训成绩",
-    dataIndex: "grade"
+    dataIndex: "mark"
   },
   {
     title: "作品",
@@ -108,7 +108,8 @@ export default {
       loading: false,
       managestu: [],
       role: "",
-      search: "",
+      searchid: "",
+      searchdata:[],
       visible: false,
       student: {},
       formItemLayout: {
@@ -127,19 +128,22 @@ export default {
     this.form = this.$form.createForm(this);
   },
   mounted() {
-    getApplyList(this.intershipId).then(res => {
+    getStuManageList(this.intershipId).then(res => {
       this.managestu = res.data;
     });
   },
   computed: {
     getExpId: function() {
       return store.getters.expid;
-    }
+    },
+    getStuId: function() {
+      return store.getters.stuid;
+    },
   },
   watch: {
     getExpId: function(val, oldVal) {
       this.intershipId = val;
-      getApplyList(this.intershipId).then(res => {
+      getStuManageList(this.intershipId).then(res => {
         this.managestu = res.data;
       });
     }
@@ -167,18 +171,21 @@ export default {
         return this.adminColums;
       }
     },
-    getStu: function(data) {
+    SearchList: function(data) {
       this.loading = true;
+      console.log(searchid);
       setTimeout(() => {
-        this.data = data;
-        this.loading = false;
+        getStu(searchid=this.stuid).then(res => {
+        this.searchdata = res.data;
+        this.loading = false
+        })
       }, 300);
-      for (var i = 0; i < this.data; i++) {
+      /* for (var i = 0; i < this.data; i++) {
         if (this.data[i].stu_id.search(this.searchVal) != -1) {
           searchData.push(this.data[i]);
         }
       }
-      return searchData;
+      return searchData; */
     },
     handleSubmit(e) {
       const _this = this;
