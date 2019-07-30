@@ -209,6 +209,7 @@ export default {
       const _this = this;
       console.log(e);
       store.commit("SET_EXP_ID", e._id);
+      store.commit("SET_ENT_ID", e.enterprise_id);
       _this.$router.push({ name: "internshipdetail" });
     },
     goToAppList(e) {
