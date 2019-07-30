@@ -229,12 +229,49 @@ export default {
     }
   },
   methods: {
+    openNotification1 () {
+        this.$notification.open({
+          type:'success',
+          message: '报名成功',
+          description: '请耐心等待审核',
+          style: {
+            width: '600px',
+            marginLeft: `${335 - 600}px`,
+          },
+        });
+      },
+    openNotification () {
+        this.$notification.open({
+          type:'error',
+          message: '报名失败',
+          description: '无法重复报名，请确定先前没有报名过此项目',
+          style: {
+            width: '600px',
+            marginLeft: `${335 - 600}px`,
+          },
+        });
+      },
     showConfirm() {
+      var _this=this
       this.$confirm({
         title: "确认报名吗",
         content: "一旦报名，不可取消，不可重复报名",
         onOk() {
-          this.handleOk();
+          return new Promise((resolve, reject) => {
+            var params={}
+            params.exp_id=_this.expid
+            studentapply(params).then((res)=>{
+              if(res.code==='200'){
+                resolve
+                _this.openNotification1()
+              }
+              if(res.code==='100'){
+                _this.openNotification()
+              }
+            })
+            setTimeout(Math.random() > 0.5 ? resolve : reject, 1000);
+          })
+          .catch(() => console.log('Oops errors!'));
         },
         onCancel() {
           console.log("Cancel");
@@ -314,17 +351,12 @@ export default {
         console.log("Received values of form: ", values);
       });
     },
-    handleOk(e) {
-      e.preventDefault();
-      this.form.validateFieldsAndScroll((err, values) => {
-        if (!err) {
-          studentapply(this.expid).then(res => {
-            if (res.code === "200") this.countDown();
-            store.dispatch("GetInfo");
-          });
-        }
-      });
-    },
+    // handleOk() {       
+    //     const formData = new FormData()
+    //     formData.append("exp_id",this.expid)
+    //     studentapply(formData)
+    //     this.countDown()
+    // },
     countDown() {
       let secondsToGo = 3;
       const modal = this.$success({
