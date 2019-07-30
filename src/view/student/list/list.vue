@@ -54,9 +54,9 @@
   </a-spin>
 </template>
 <script>
-import store from '@/store'
-import {getStu} from '@/api/student'
-import { putmark, getStuManageList } from '@/api/enterprise'
+import store from "@/store";
+import { getStu } from "@/api/student";
+import { putmark, getStuManageList } from "@/api/enterprise";
 
 const columns = [
   {
@@ -109,7 +109,6 @@ export default {
       managestu: [],
       role: "",
       searchid: "",
-      searchdata:[],
       visible: false,
       student: {},
       formItemLayout: {
@@ -138,7 +137,7 @@ export default {
     },
     getStuId: function() {
       return store.getters.stuid;
-    },
+    }
   },
   watch: {
     getExpId: function(val, oldVal) {
@@ -171,21 +170,26 @@ export default {
         return this.adminColums;
       }
     },
+    //搜索查询功能
     SearchList: function(data) {
+      var _this = this;
+      var searchid = this.searchid;
       this.loading = true;
       console.log(searchid);
       setTimeout(() => {
-        getStu(searchid=this.stuid).then(res => {
-        this.searchdata = res.data;
-        this.loading = false
-        })
+        getStu(this.searchid).then(res => {
+          if (res.code === "100") {
+            getStuManageList(this.intershipId).then(res => {
+              this.managestu = res.data;
+            });
+            _this.loading = false;
+          } else {
+            _this.managestu = [];
+            _this.managestu.push(res.data);
+            _this.loading = false;
+          }
+        });
       }, 300);
-      /* for (var i = 0; i < this.data; i++) {
-        if (this.data[i].stu_id.search(this.searchVal) != -1) {
-          searchData.push(this.data[i]);
-        }
-      }
-      return searchData; */
     },
     handleSubmit(e) {
       const _this = this;
