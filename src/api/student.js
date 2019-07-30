@@ -53,6 +53,25 @@ export function studentUpload (parameter) {
     data: parameter
   })
 }
+export function studentapply (parameter) {
+  return axios({
+    url: '/student/application',
+    method: 'post',
+    data: parameter
+  })
+}
+export function stuGetInternship (id) {
+  return axios({
+    url: '/student/internship?internship=' + id,
+    methodd: 'get'
+  })
+}
+export function stuGetEnterprise (id) {
+  return axios({
+    url: 'enterprise/detail?enterprise=' + id,
+    methodd: 'get'
+  })
+}
 // export function getExpList (parameter) {
 //   return axios({
 //     url: '/student/completion/table',

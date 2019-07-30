@@ -69,3 +69,9 @@ export function putmark (param) {
     data: param
   })
 }
+export function getStuManageList (internshipId) {
+  return axios({
+    url: '/enterprise/stumanagelist?exp_id=' + internshipId + '&page=1',
+    method: 'get'
+  })
+}

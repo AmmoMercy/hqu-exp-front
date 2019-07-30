@@ -53,11 +53,11 @@
         </a-button>
       </a-form-item>
       <detail-list title="一般信息">
-        <detail-list-item term="类型">{{ internship.type }}</detail-list-item>
+        <detail-list-item term="类型">{{ enterprise.type }}</detail-list-item>
         <detail-list-item term="企业/导师名称">
-          <a>{{ internship.enterprise }}</a>
+          <a>{{ enterprise.name }}</a>
         </detail-list-item>
-        <detail-list-item term="实训地址">{{ internship.address }}</detail-list-item>
+        <detail-list-item term="实训地址">{{ enterprise.address }}</detail-list-item>
         <detail-list-item term="实训起止日">{{ internship.exp_begin_time }}-{{ internship.exp_end_time }}</detail-list-item>
         <detail-list-item term="报名截止日期">{{ internship.apply_end_time }}</detail-list-item>
         <detail-list-item term="意向人数">{{ internship.need_num }}</detail-list-item>
@@ -75,7 +75,7 @@
       </a-form-item>
       <a-divider style="margin-bottom: 32px" />
       <a-form-item :wrapperCol="{ span: 24 }" style="text-align: center" v-if="role==='student'">
-        <a-button htmlType="submit" type="primary" @click="handleEnter(record)">我要报名</a-button>
+        <a-button htmlType="submit" type="primary" @click="showConfirm">我要报名</a-button>
       </a-form-item>
 
       <a-modal
@@ -139,42 +139,21 @@
           </a-form-item>
         </a-form>
       </a-modal>
-
-      <a-modal title="确认报名" :width="800" v-model="enterVisible" @ok="handleOk">
-        <a-row :gutter="16">
-          <a-col class="gutter-row" :span="20">
-            <a-form-item extra="我们将发送一串验证码至您的邮箱，以确认是您本人的操作">
-              <a-input
-                size="large"
-                type="text"
-                placeholder="验证码"
-                v-decorator="['captcha', {rules: [{ required: true, message: '请输入验证码' }], validateTrigger: 'blur'}]"
-              >
-                <a-icon slot="prefix" type="mail" :style="{ color: 'rgba(0,0,0,.25)' }" />
-              </a-input>
-            </a-form-item>
-          </a-col>
-          <a-col class="gutter-row" :span="4">
-            <a-button
-              class="getCaptcha"
-              size="large"
-              :disabled="state.smsSendBtn"
-              @click.stop.prevent="getCaptcha"
-              v-text="!state.smsSendBtn && '获取验证码'||(state.time+' s')"
-            ></a-button>
-          </a-col>
-        </a-row>
-      </a-modal>
     </a-card>
   </page-view>
 </template>
 
 <script>
-import { mixinDevice } from '@/utils/mixin';
-import { PageView } from '@/layouts';
-import DetailList from '@/components/tools/DetailList';
-import store from '@/store';
-import { getInternship } from '../../api/enterprise';
+import { mixinDevice } from '@/utils/mixin'
+import { PageView } from '@/layouts'
+import DetailList from '@/components/tools/DetailList'
+import store from '@/store'
+import { getInternship } from '../../api/enterprise'
+import {
+  studentapply,
+  stuGetInternship,
+  stuGetEnterprise
+} from '../../api/student'
 
 const DetailListItem = DetailList.Item
 
@@ -195,13 +174,14 @@ export default {
         percent: 10,
         progressColor: '#FF0000'
       },
+      entid: store.getters.entid,
       form: this.$form.createForm(this),
       config: {
         rules: [
           { type: 'object', required: true, message: 'Please select time!' }
         ]
       },
-      confirmDirty: false,
+      // confirmDirty: false,
       autoCompleteResult: [],
       formItemLayout: {
         labelCol: {
@@ -227,6 +207,7 @@ export default {
       },
       role: store.getters.role,
       internship: {},
+      enterprise: {},
       visible: false,
       enterVisible: false,
       mdl: {},
@@ -243,6 +224,7 @@ export default {
   },
   mounted () {
     this.getExpInfo(this.expid)
+    this.getEnterpriseInfo(this.entid)
   },
   watch: {
     getId: function (val, oldVal) {
@@ -253,20 +235,81 @@ export default {
     }
   },
   methods: {
+    openNotification1 () {
+      this.$notification.open({
+        type: 'success',
+        message: '报名成功',
+        description: '请耐心等待审核',
+        style: {
+          width: '600px',
+          marginLeft: `${335 - 600}px`
+        }
+      })
+    },
+    openNotification () {
+      this.$notification.open({
+        type: 'error',
+        message: '报名失败',
+        description: '无法重复报名，请确定先前没有报名过此项目',
+        style: {
+          width: '600px',
+          marginLeft: `${335 - 600}px`
+        }
+      })
+    },
+    showConfirm () {
+      var _this = this
+      this.$confirm({
+        title: '确认报名吗',
+        content: '一旦报名，不可取消，不可重复报名',
+        onOk () {
+          return new Promise((resolve, reject) => {
+            var params = {}
+            params.exp_id = _this.expid
+            studentapply(params).then((res) => {
+              if (res.code === '200') {
+                resolve
+                _this.openNotification1()
+              }
+              if (res.code === '100') {
+                _this.openNotification()
+              }
+            })
+            setTimeout(Math.random() > 0.5 ? resolve : reject, 1000)
+          })
+            .catch(() => console.log('Oops errors!'))
+        },
+        onCancel () {
+          console.log('Cancel')
+        },
+        class: 'test'
+      })
+    },
     getExpInfo (id) {
-      var self = this
       if (store.getters.role === 'enterprise') {
-        this.internship = store.getters.userInfo
-      } else if (store.getters.role === 'enterprise') {
-        this.expid = id
-        getInternship(this.expid).then(response => {
+        getInternship(id).then(response => {
           if (response.code === '200') {
-            self.internship = response.data
-            
+            this.internship = response.data
           }
         })
-            
-            }
+      } else {
+        stuGetInternship(id).then(response => {
+          if (response.code === '200') {
+            this.internship = response.data
+          }
+        })
+      }
+    },
+    getEnterpriseInfo (id) {
+      if (store.getters.role === 'enterprise') {
+        this.enterprise = store.getters.userInfo
+      } else {
+        stuGetEnterprise(id).then(response => {
+          if (response.code === '200') {
+            this.enterprise = response.data
+          }
+        })
+      }
     },
     handleEdit (record) {
       this.mdl = Object.assign({}, record)
@@ -288,15 +331,6 @@ export default {
       this.internship.status = 0
       // 此处加上保存进数据库的方法
     },
-    handleOk () {
-      // if (必填项填写完毕) {
-      //   this.mdl = Object.assign({}, record);
-      //   this.visible = true;
-      //   this.internship.status = 0;
-      // }else{
-      //   alert("必须填写完所有内容")
-      // }
-    },
     handleSubmit (e) {
       e.preventDefault()
       const {
@@ -311,12 +345,6 @@ export default {
         'need_num',
         'apply_end_time'
       ]
-      // const values = {
-      //   ...fieldsValue,
-      //   'date-time-picker': fieldsValue['date-time-picker'].format(
-      //     'YYYY-MM-DD HH:mm:ss'
-      //   )
-      // }
       validateFields(validateFieldsKey, { force: true }, (err, values) => {
         if (!err) {
           const publishParams = { ...values }
@@ -329,6 +357,12 @@ export default {
         console.log('Received values of form: ', values)
       })
     },
+    // handleOk() {
+    //     const formData = new FormData()
+    //     formData.append("exp_id",this.expid)
+    //     studentapply(formData)
+    //     this.countDown()
+    // },
     countDown () {
       let secondsToGo = 3
       const modal = this.$success({
@@ -346,6 +380,7 @@ export default {
         clearInterval(interval)
         modal.destroy()
         this.visible = false
+        this.enterVisible = false
         this.confirmLoading = false
       }, secondsToGo * 1000)
     }
