@@ -1,127 +1,129 @@
 <template>
   <div class="main">
-    <a-form
-      id="formLogin"
-      class="user-layout-login"
-      ref="formLogin"
-      :form="form"
-      @submit="handleSubmit"
-    >
-      <a-tabs
-        :activeKey="customActiveKey"
-        :tabBarStyle="{ textAlign: 'center', borderBottom: 'unset' }"
-        @change="handleTabClick"
+    <a-spin :spinning="state.loginBtn">
+      <a-form
+        id="formLogin"
+        class="user-layout-login"
+        ref="formLogin"
+        :form="form"
+        @submit="handleSubmit"
       >
-        <a-tab-pane key="student" tab="学生登录">
-          <a-form-item>
-            <a-input
-              size="large"
-              type="text"
-              placeholder="请输入邮箱"
-              v-decorator="[
-                'studentEmail',
-                {rules: [{ required: true, message: '请输入帐户名或邮箱地址' }, { validator: validateEmail }], validateTrigger: 'change'}
-              ]"
-            >
-              <a-icon slot="prefix" type="user" :style="{ color: 'rgba(0,0,0,.25)' }"/>
-            </a-input>
-          </a-form-item>
-          <a-form-item>
-            <a-input
-              size="large"
-              type="password"
-              autocomplete="false"
-              placeholder="密码: admin or ant.design"
-              v-decorator="[
-                'studentPassword',
-                {rules: [{ required: true, message: '请输入密码' }], validateTrigger: 'blur'}
-              ]"
-            >
-              <a-icon slot="prefix" type="lock" :style="{ color: 'rgba(0,0,0,.25)' }"/>
-            </a-input>
-          </a-form-item>
-        </a-tab-pane>
+        <a-tabs
+          :activeKey="customActiveKey"
+          :tabBarStyle="{ textAlign: 'center', borderBottom: 'unset' }"
+          @change="handleTabClick"
+        >
+          <a-tab-pane key="student" tab="学生登录">
+            <a-form-item>
+              <a-input
+                size="large"
+                type="text"
+                placeholder="请输入邮箱"
+                v-decorator="[
+                  'studentEmail',
+                  {rules: [{ required: true, message: '请输入帐户名或邮箱地址' }, { validator: validateEmail }], validateTrigger: 'change'}
+                ]"
+              >
+                <a-icon slot="prefix" type="user" :style="{ color: 'rgba(0,0,0,.25)' }"/>
+              </a-input>
+            </a-form-item>
+            <a-form-item>
+              <a-input
+                size="large"
+                type="password"
+                autocomplete="false"
+                placeholder="密码: admin or ant.design"
+                v-decorator="[
+                  'studentPassword',
+                  {rules: [{ required: true, message: '请输入密码' }], validateTrigger: 'blur'}
+                ]"
+              >
+                <a-icon slot="prefix" type="lock" :style="{ color: 'rgba(0,0,0,.25)' }"/>
+              </a-input>
+            </a-form-item>
+          </a-tab-pane>
 
-        <a-tab-pane key="admin" tab="管理员登录">
-          <a-form-item>
-            <a-input
-              size="large"
-              type="text"
-              placeholder="请输入邮箱"
-              v-decorator="[
-                'adminEmail',
-                {rules: [{ required: true, message: '请输入帐户名或邮箱地址' }, { validator: validateEmail }], validateTrigger: 'change'}
-              ]"
-            >
-              <a-icon slot="prefix" type="user" :style="{ color: 'rgba(0,0,0,.25)' }"/>
-            </a-input>
-          </a-form-item>
+          <a-tab-pane key="admin" tab="管理员登录">
+            <a-form-item>
+              <a-input
+                size="large"
+                type="text"
+                placeholder="请输入邮箱"
+                v-decorator="[
+                  'adminEmail',
+                  {rules: [{ required: true, message: '请输入帐户名或邮箱地址' }, { validator: validateEmail }], validateTrigger: 'change'}
+                ]"
+              >
+                <a-icon slot="prefix" type="user" :style="{ color: 'rgba(0,0,0,.25)' }"/>
+              </a-input>
+            </a-form-item>
 
-          <a-form-item>
-            <a-input
-              size="large"
-              type="password"
-              autocomplete="false"
-              placeholder="密码: admin or ant.design"
-              v-decorator="[
-                'adminPassword',
-                {rules: [{ required: true, message: '请输入密码' }], validateTrigger: 'blur'}
-              ]"
-            >
-              <a-icon slot="prefix" type="lock" :style="{ color: 'rgba(0,0,0,.25)' }"/>
-            </a-input>
-          </a-form-item>
-        </a-tab-pane>
+            <a-form-item>
+              <a-input
+                size="large"
+                type="password"
+                autocomplete="false"
+                placeholder="密码: admin or ant.design"
+                v-decorator="[
+                  'adminPassword',
+                  {rules: [{ required: true, message: '请输入密码' }], validateTrigger: 'blur'}
+                ]"
+              >
+                <a-icon slot="prefix" type="lock" :style="{ color: 'rgba(0,0,0,.25)' }"/>
+              </a-input>
+            </a-form-item>
+          </a-tab-pane>
 
-        <a-tab-pane key="enterprise" tab="公司登录">
-          <a-form-item>
-            <a-input
-              size="large"
-              type="text"
-              placeholder="请输入邮箱"
-              v-decorator="[
-                'enterpriseEmail',
-                {rules: [{ required: true, message: '请输入帐户名或邮箱地址' }, { validator: validateEmail ,message:'请输入正确的邮箱'}], validateTrigger: 'change'}
-              ]"
-            >
-              <a-icon slot="prefix" type="user" :style="{ color: 'rgba(0,0,0,.25)' }"/>
-            </a-input>
-          </a-form-item>
+          <a-tab-pane key="enterprise" tab="公司登录">
+            <a-form-item>
+              <a-input
+                size="large"
+                type="text"
+                placeholder="请输入邮箱"
+                v-decorator="[
+                  'enterpriseEmail',
+                  {rules: [{ required: true, message: '请输入帐户名或邮箱地址' }, { validator: validateEmail ,message:'请输入正确的邮箱'}], validateTrigger: 'change'}
+                ]"
+              >
+                <a-icon slot="prefix" type="user" :style="{ color: 'rgba(0,0,0,.25)' }"/>
+              </a-input>
+            </a-form-item>
 
-          <a-form-item>
-            <a-input
-              size="large"
-              type="password"
-              autocomplete="false"
-              placeholder="密码: admin or ant.design"
-              v-decorator="[
-                'enterprisePassword',
-                {rules: [{ required: true, message: '请输入密码' }], validateTrigger: 'blur'}
-              ]"
-            >
-              <a-icon slot="prefix" type="lock" :style="{ color: 'rgba(0,0,0,.25)' }"/>
-            </a-input>
-          </a-form-item>
-        </a-tab-pane>
-      </a-tabs>
-      <a-form-item v-if="customActiveKey=='enterprise'">
-        <router-link
+            <a-form-item>
+              <a-input
+                size="large"
+                type="password"
+                autocomplete="false"
+                placeholder="密码: admin or ant.design"
+                v-decorator="[
+                  'enterprisePassword',
+                  {rules: [{ required: true, message: '请输入密码' }], validateTrigger: 'blur'}
+                ]"
+              >
+                <a-icon slot="prefix" type="lock" :style="{ color: 'rgba(0,0,0,.25)' }"/>
+              </a-input>
+            </a-form-item>
+          </a-tab-pane>
+        </a-tabs>
+        <a-form-item v-if="customActiveKey=='enterprise'">
+          <router-link
 
-          :to="{ name: 'register' }"
-          class="forge-password"
-          style="float: right;"
-        >企业注册</router-link>
-      </a-form-item>
-      <a-form-item style="margin-top:24px">
-        <a-button
-          size="large"
-          type="primary"
-          htmlType="submit"
-          class="login-button"
-          :loading="state.loginBtn"
-        >确定</a-button>
-      </a-form-item>
-    </a-form>
+            :to="{ name: 'register' }"
+            class="forge-password"
+            style="float: right;"
+          >企业注册</router-link>
+        </a-form-item>
+        <a-form-item style="margin-top:24px">
+          <a-button
+            size="large"
+            type="primary"
+            htmlType="submit"
+            class="login-button"
+            :loading="state.loginBtn"
+          >确定</a-button>
+        </a-form-item>
+      </a-form>
+    </a-spin>
   </div>
 </template>
 
