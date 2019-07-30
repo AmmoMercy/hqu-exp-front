@@ -46,6 +46,12 @@ export const studentRouterMap = [
             name: 'internshipCompletion',
             component: () => import('@/view/internship/completion'),
             meta: { title: '结业上传', keepAlive: true }
+          },
+          { path: '/enterprise',
+            name: 'enterprise',
+            component: () => import('@/view/enterprise/detail'),
+            meta: { title: '企业信息', icon: 'deployment-unit' },
+            hidden: true
           }
         ]
       },

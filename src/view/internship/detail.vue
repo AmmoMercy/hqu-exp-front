@@ -55,7 +55,7 @@
       <detail-list title="一般信息">
         <detail-list-item term="类型">{{ enterprise.type }}</detail-list-item>
         <detail-list-item term="企业/导师名称">
-          <a>{{ enterprise.name }}</a>
+          <a @click="goToEntDetail">{{ enterprise.name }}</a>
         </detail-list-item>
         <detail-list-item term="实训地址">{{ enterprise.address }}</detail-list-item>
         <detail-list-item term="实训起止日">{{ internship.exp_begin_time }}-{{ internship.exp_end_time }}</detail-list-item>
@@ -235,6 +235,11 @@ export default {
     }
   },
   methods: {
+    goToEntDetail () {
+      const _this = this
+      store.commit('SET_ENT_ID', _this.entid)
+      _this.$router.push({ name: 'enterprise' })
+    },
     openNotification1 () {
       this.$notification.open({
         type: 'success',

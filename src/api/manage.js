@@ -66,3 +66,10 @@ export function getEnt () {
     method: 'get'
   })
 }
+export function Audit (parameter) {
+  return axios({
+    url: '/enterprise/detail',
+    method: 'put',
+    data: parameter
+  })
+}
