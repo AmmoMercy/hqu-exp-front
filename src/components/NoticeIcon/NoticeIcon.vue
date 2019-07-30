@@ -11,37 +11,23 @@
   >
     <template slot="content">
       <a-spin :spinning="loadding">
-        <a-tabs>
-          <a-tab-pane tab="通知" key="1">
-            <a-list>
-              <a-list-item>
-                <a-list-item-meta title="你收到了 14 份新周报" description="一年前">
-                  <a-avatar style="background-color: white" slot="avatar" src="https://gw.alipayobjects.com/zos/rmsportal/ThXAXghbEsBCCSDihZxY.png"/>
-                </a-list-item-meta>
-              </a-list-item>
-              <a-list-item>
-                <a-list-item-meta title="你推荐的 曲妮妮 已通过第三轮面试" description="一年前">
-                  <a-avatar style="background-color: white" slot="avatar" src="https://gw.alipayobjects.com/zos/rmsportal/OKJXDXrmkNshAMvwtvhu.png"/>
-                </a-list-item-meta>
-              </a-list-item>
-              <a-list-item>
-                <a-list-item-meta title="这种模板可以区分多种通知类型" description="一年前">
-                  <a-avatar style="background-color: white" slot="avatar" src="https://gw.alipayobjects.com/zos/rmsportal/kISTdvpyTAhtGxpovNWd.png"/>
-                </a-list-item-meta>
-              </a-list-item>
-            </a-list>
-          </a-tab-pane>
-          <a-tab-pane tab="消息" key="2">
-            123
-          </a-tab-pane>
-          <a-tab-pane tab="待办" key="3">
-            123
-          </a-tab-pane>
-        </a-tabs>
+        <a-list
+          itemLayout="horizontal"
+          :dataSource="dataList"
+        >
+          <a-list-item slot="renderItem" slot-scope="item, index">
+            <a-list-item-meta
+              :description="'待处理申请数：'+item.applying_num"
+            >
+              <a slot="title" @click="goToApplyList(item)">{{ item.expId }}</a>
+
+            </a-list-item-meta>
+          </a-list-item>
+        </a-list>
       </a-spin>
     </template>
     <span @click="fetchNotice" class="header-notice" ref="noticeRef">
-      <a-badge count="12">
+      <a-badge :count="applying_num">
         <a-icon style="font-size: 16px; padding: 4px" type="bell" />
       </a-badge>
     </span>
@@ -49,15 +35,35 @@
 </template>
 
 <script>
+import { getApplyCount } from '@/api/enterprise'
+import store from '@/store'
 export default {
   name: 'HeaderNotice',
   data () {
     return {
+      dataList: [ ],
       loadding: false,
-      visible: false
+      visible: false,
+      applying_num: 0
     }
   },
+  mounted () {
+    var _this = this
+    getApplyCount().then(
+      (res) => {
+        for (var item of res.data) {
+          if (item.applying_num !== 0) {
+            _this.applying_num = _this.applying_num + item.applying_num
+            _this.dataList.push(item)
+          }
+        }
+      })
+  },
   methods: {
+    goToApplyList (e) {
+      store.commit('SET_EXP_ID', e.expId)
+      this.$router.push({ name: 'applicatinlist' })
+    },
     fetchNotice () {
       if (!this.visible) {
         this.loadding = true

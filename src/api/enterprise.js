@@ -75,3 +75,10 @@ export function getStuManageList (internshipId) {
     method: 'get'
   })
 }
+export function getApplyCount () {
+  return axios({
+    url: '/enterprise/application/count',
+    method: 'get'
+
+  })
+}
