@@ -25,9 +25,9 @@
       <a-button v-if="enterprise.status ===0" style="margin-left: 8px" @click="fail">
         <a-icon type="close" />不通过
       </a-button>
-      <a-button v-if="enterprise.status >= 1" style="margin-left: 8px" @click="reCheck">
+      <!-- <a-button v-if="enterprise.status >= 1" style="margin-left: 8px" @click="reCheck">
         <a-icon type="close" />撤销
-      </a-button>
+      </a-button> -->
     </template>
 
     <a-card :bordered="false" title="流程进度" v-if="role==='enterprise'||role==='admin'">
@@ -156,6 +156,7 @@ import { PageView } from '@/layouts';
 import DetailList from '@/components/tools/DetailList';
 import store from '@/store';
 import { getEnt } from '../../api/enterprise';
+import { Audit } from '../../api/manage';
 
 const DetailListItem = DetailList.Item
 
@@ -169,6 +170,7 @@ export default {
   mixins: [mixinDevice],
   data () {
     return {
+      entid:store.getters.entid,
       form: this.$form.createForm(this),
       config: {
         rules: [
@@ -225,21 +227,51 @@ export default {
       ]
     }
   },
+  computed: {
+    getInfo () {
+      return store.getters.userInfo
+    }
+  },
   mounted () {
     if (store.getters.role === 'enterprise') {
       this.enterprise = store.getters.userInfo
-      console.log(this.enterprise)
     } else {
-      const entid = store.getters.entid
-      getEnt(entid).then(response => {
-        if (response.code === 200) {
+      getEnt(this.entid).then(response => {
+        if (response.code === "200") {
           this.enterprise = response.data
         }
       })
     }
     this.imageList = this.enterprise.images.split(',')
   },
+  watch: {
+    getInfo: function (val, oldVa) {
+      this.internship = val
+    }
+  },
   methods: {
+    openNotification1 () {
+      this.$notification.open({
+        type: 'success',
+        message: '审核已通过',
+        description: '此企业已通过审核',
+        style: {
+          width: '600px',
+          marginLeft: `${335 - 600}px`
+        }
+      })
+    },
+    openNotification () {
+      this.$notification.open({
+        type: 'error',
+        message: '审核未通过',
+        description: '此企业未通过审核',
+        style: {
+          width: '600px',
+          marginLeft: `${335 - 600}px`
+        }
+      })
+    },
     handleCancel () {
       this.previewVisible = false
       // 补充从数据库添加新照片的方法
@@ -258,17 +290,48 @@ export default {
     },
     handleOk () {},
     pass () {
+      var _this = this
       this.enterprise.status = 1
       // 此处加上保存进数据库的方法
+       var params = {}
+            params.enterpriseId = _this.entid
+            params.status = "1"
+            Audit(params).then((res) => {
+              if (res.code === '200') {
+               store.dispatch('GetInfo')
+               _this.openNotification1()
+              }
+    })
     },
     fail () {
+      var _this = this
       this.enterprise.status = 2
       // 此处加上保存进数据库的方法
-    },
-    reCheck () {
-      this.enterprise.status = 0
+       var params = {}
+            params.enterpriseId = _this.entid
+            params.status = "2"
+            Audit(params).then((res) => {
+              if (res.code === '200') {
+               store.dispatch('GetInfo')
+               _this.openNotification()
+              }
+    })
       // 此处加上保存进数据库的方法
     },
+    // reCheck () {
+    //   var _this = this
+    //   this.enterprise.status = 0
+    //   // 此处加上保存进数据库的方法
+    //    var params = {}
+    //         params.enterpriseId = _this.entid
+    //         params.status = "0"
+    //         Audit(params).then((res) => {
+    //           if (res.code === '200') {
+    //            store.dispatch('GetInfo')
+    //           }
+    // })
+    //   // 此处加上保存进数据库的方法
+    // },
     getImgUrl (i) {
       return this.imageList[i]
     },
