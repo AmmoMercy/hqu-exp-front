@@ -154,13 +154,8 @@ export const enterpriseRouterMap = [
     name: 'enterpriseRegister',
     component: () => import('@/view/enterpriseRegister'),
     meta: { title: '企业注册', keepAlive: true }
-  },
-  {
-    path: '/studentRegister',
-    name: 'studentRegister',
-    component: () => import('@/view/studentRegister'),
-    meta: { title: '学生注册', keepAlive: true }
   }
+
 ]
 
 export const adminRouterMap = [
@@ -237,7 +232,12 @@ export const constantRouterMap = [
         path: '/register',
         name: 'register',
         component: () => import('@/view/enterpriseRegister')
+      },
+      { path: '/studentRegister',
+        name: 'studentRegister',
+        component: () => import('@/view/student/studentRegister.vue')
       }
+
     ]
   },
 

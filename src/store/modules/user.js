@@ -126,17 +126,11 @@ const user = {
       return new Promise(resolve => {
         commit('SET_ROLE', '')
         if (process.env.NODE_ENV === 'development') {
-          window.document.cookie = '_kb_session_id=; expires=Thu, 01 Jan 1999 00:00:01 GMT;'
+          window.document.cookie = '_kb_session_id=; expires= ' + new Date(0).toUTCString()
         }
         Vue.ls.remove(USER_ROLE)
 
-        logout(state.token)
-          .then(() => {
-            resolve()
-          })
-          .catch(() => {
-            resolve()
-          })
+        resolve()
       })
     }
   }

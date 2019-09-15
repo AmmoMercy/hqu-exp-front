@@ -72,11 +72,10 @@ export function stuGetEnterprise (id) {
     methodd: 'get'
   })
 }
-// export function getExpList (parameter) {
-//   return axios({
-//     url: '/student/completion/table',
-//     method: 'get',
-//     parameter: parameter
-
-//   })
-// }
+export function register (val) {
+  return axios({
+    url: '/student/register',
+    method: 'post',
+    data: val
+  })
+}

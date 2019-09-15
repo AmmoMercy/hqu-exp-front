@@ -113,6 +113,14 @@
             style="float: right;"
           >企业注册</router-link>
         </a-form-item>
+        <a-form-item v-if="customActiveKey=='student'">
+          <router-link
+
+            :to="{ name: 'studentRegister' }"
+            class="forge-password"
+            style="float: right;"
+          >学生注册</router-link>
+        </a-form-item>
         <a-form-item style="margin-top:24px">
           <a-button
             size="large"
