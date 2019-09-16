@@ -1,5 +1,4 @@
 import { axios } from '@/utils/request'
-// import api from './manage'
 export function getStu (parameter) {
   return axios({
     url: '/student/detail?' + 'student=' + parameter,

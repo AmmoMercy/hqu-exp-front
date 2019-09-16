@@ -151,12 +151,12 @@
 </template>
 
 <script>
-import { mixinDevice } from '@/utils/mixin';
-import { PageView } from '@/layouts';
-import DetailList from '@/components/tools/DetailList';
-import store from '@/store';
-import { getEnt } from '../../api/enterprise';
-import { Audit } from '../../api/manage';
+import { mixinDevice } from '@/utils/mixin'
+import { PageView } from '@/layouts'
+import DetailList from '@/components/tools/DetailList'
+import store from '@/store'
+import { getEnt } from '../../api/enterprise'
+import { Audit } from '../../api/admin'
 
 const DetailListItem = DetailList.Item
 
@@ -170,7 +170,7 @@ export default {
   mixins: [mixinDevice],
   data () {
     return {
-      entid:store.getters.entid,
+      entid: store.getters.entid,
       form: this.$form.createForm(this),
       config: {
         rules: [
@@ -237,7 +237,7 @@ export default {
       this.enterprise = store.getters.userInfo
     } else {
       getEnt(this.entid).then(response => {
-        if (response.code === "200") {
+        if (response.code === '200') {
           this.enterprise = response.data
         }
       })
@@ -293,29 +293,29 @@ export default {
       var _this = this
       this.enterprise.status = 1
       // 此处加上保存进数据库的方法
-       var params = {}
-            params.enterpriseId = _this.entid
-            params.status = "1"
-            Audit(params).then((res) => {
-              if (res.code === '200') {
-               store.dispatch('GetInfo')
-               _this.openNotification1()
-              }
-    })
+      var params = {}
+      params.enterpriseId = _this.entid
+      params.status = '1'
+      Audit(params).then((res) => {
+        if (res.code === '200') {
+          store.dispatch('GetInfo')
+          _this.openNotification1()
+        }
+      })
     },
     fail () {
       var _this = this
       this.enterprise.status = 2
       // 此处加上保存进数据库的方法
-       var params = {}
-            params.enterpriseId = _this.entid
-            params.status = "2"
-            Audit(params).then((res) => {
-              if (res.code === '200') {
-               store.dispatch('GetInfo')
-               _this.openNotification()
-              }
-    })
+      var params = {}
+      params.enterpriseId = _this.entid
+      params.status = '2'
+      Audit(params).then((res) => {
+        if (res.code === '200') {
+          store.dispatch('GetInfo')
+          _this.openNotification()
+        }
+      })
       // 此处加上保存进数据库的方法
     },
     // reCheck () {

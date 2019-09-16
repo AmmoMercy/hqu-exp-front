@@ -154,6 +154,7 @@ import {
   stuGetInternship,
   stuGetEnterprise
 } from '../../api/student'
+import { adminGetEnt } from '@/api/admin'
 
 const DetailListItem = DetailList.Item
 
@@ -206,7 +207,7 @@ export default {
         }
       },
       role: store.getters.role,
-      internship: {},
+      internship: { },
       enterprise: {},
       visible: false,
       enterVisible: false,
@@ -273,8 +274,8 @@ export default {
             params.exp_id = _this.expid
             studentapply(params).then((res) => {
               if (res.code === '200') {
-                resolve
                 _this.openNotification1()
+                resolve()
               }
               if (res.code === '100') {
                 _this.openNotification()
@@ -297,10 +298,17 @@ export default {
             this.internship = response.data
           }
         })
-      } else {
+      } else if (store.getters.role === 'student') {
         stuGetInternship(id).then(response => {
           if (response.code === '200') {
             this.internship = response.data
+          }
+        })
+      } else {
+        adminGetEnt(id).then(response => {
+          if (response.code === '200') {
+            this.internship = response
+            debugger
           }
         })
       }

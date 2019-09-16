@@ -52,7 +52,7 @@
 /* import moment from 'moment'
 import { getRoleList, getServiceList } from '@/api/manage' */
 import store from '@/store'
-import { getEnt } from '@/api/manage'
+import { getEnt } from '@/api/admin'
 // import { getInternshipList } from '@/api/enterprise'
 const statusMap = {
   0: {

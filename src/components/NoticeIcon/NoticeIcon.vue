@@ -49,6 +49,7 @@ export default {
   },
   mounted () {
     var _this = this
+    if (store.getters.role !== 'enterprise') { return }
     getApplyCount().then(
       (res) => {
         for (var item of res.data) {

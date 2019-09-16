@@ -195,6 +195,12 @@ export const adminRouterMap = [
         component: () => import('@/view/enterprise/detail'),
         meta: { title: '企业信息', icon: 'deployment-unit' },
         hidden: true
+      },
+      { path: '/internshipdetail',
+        name: 'internshipdetail',
+        component: () => import('@/view/internship/detail'),
+        meta: { title: '实训信息', keepAlive: false },
+        hidden: true
       }
 
     ]
