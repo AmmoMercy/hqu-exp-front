@@ -25,3 +25,11 @@ export function adminGetEnt (param) {
 
   })
 }
+export function PostStatus (data) {
+  return axios({
+    url: '/admin/internship',
+    method: 'PUT',
+    data: data
+
+  })
+}

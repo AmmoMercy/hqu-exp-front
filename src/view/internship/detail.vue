@@ -154,7 +154,7 @@ import {
   stuGetInternship,
   stuGetEnterprise
 } from '../../api/student'
-import { adminGetEnt } from '@/api/admin'
+import { adminGetEnt, PostStatus } from '@/api/admin'
 
 const DetailListItem = DetailList.Item
 
@@ -308,7 +308,6 @@ export default {
         adminGetEnt(id).then(response => {
           if (response.code === '200') {
             this.internship = response
-            debugger
           }
         })
       }
@@ -333,8 +332,14 @@ export default {
       this.enterVisible = true
     },
     pass () {
-      this.internship.status = 1
-      // 此处加上保存进数据库的方法
+      var data = { }
+      data.status = 1
+      data.expid = this.internship._id
+      PostStatus(data).then(res => {
+        if (res.code === '200') {
+          this.internship.status = 1
+        }
+      })
     },
     fail () {
       this.internship.status = 2

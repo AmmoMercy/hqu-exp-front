@@ -6,14 +6,14 @@
         class="user-layout-login"
         ref="formLogin"
         :form="form"
-        @submit="handleSubmit"
-      >
+        @submit="handleSubmit">
         <a-tabs
           :activeKey="customActiveKey"
           :tabBarStyle="{ textAlign: 'center', borderBottom: 'unset' }"
-          @change="handleTabClick"
-        >
-          <a-tab-pane key="student" tab="学生登录">
+          @change="handleTabClick">
+          <a-tab-pane
+            key="student"
+            tab="学生登录">
             <a-form-item>
               <a-input
                 size="large"
@@ -22,9 +22,11 @@
                 v-decorator="[
                   'studentEmail',
                   {rules: [{ required: true, message: '请输入帐户名或邮箱地址' }, { validator: validateEmail }], validateTrigger: 'change'}
-                ]"
-              >
-                <a-icon slot="prefix" type="user" :style="{ color: 'rgba(0,0,0,.25)' }"/>
+                ]">
+                <a-icon
+                  slot="prefix"
+                  type="user"
+                  :style="{ color: 'rgba(0,0,0,.25)' }" />
               </a-input>
             </a-form-item>
             <a-form-item>
@@ -36,14 +38,18 @@
                 v-decorator="[
                   'studentPassword',
                   {rules: [{ required: true, message: '请输入密码' }], validateTrigger: 'blur'}
-                ]"
-              >
-                <a-icon slot="prefix" type="lock" :style="{ color: 'rgba(0,0,0,.25)' }"/>
+                ]">
+                <a-icon
+                  slot="prefix"
+                  type="lock"
+                  :style="{ color: 'rgba(0,0,0,.25)' }" />
               </a-input>
             </a-form-item>
           </a-tab-pane>
 
-          <a-tab-pane key="admin" tab="管理员登录">
+          <a-tab-pane
+            key="admin"
+            tab="管理员登录">
             <a-form-item>
               <a-input
                 size="large"
@@ -52,9 +58,11 @@
                 v-decorator="[
                   'adminEmail',
                   {rules: [{ required: true, message: '请输入帐户名或邮箱地址' }, { validator: validateEmail }], validateTrigger: 'change'}
-                ]"
-              >
-                <a-icon slot="prefix" type="user" :style="{ color: 'rgba(0,0,0,.25)' }"/>
+                ]">
+                <a-icon
+                  slot="prefix"
+                  type="user"
+                  :style="{ color: 'rgba(0,0,0,.25)' }" />
               </a-input>
             </a-form-item>
 
@@ -67,14 +75,18 @@
                 v-decorator="[
                   'adminPassword',
                   {rules: [{ required: true, message: '请输入密码' }], validateTrigger: 'blur'}
-                ]"
-              >
-                <a-icon slot="prefix" type="lock" :style="{ color: 'rgba(0,0,0,.25)' }"/>
+                ]">
+                <a-icon
+                  slot="prefix"
+                  type="lock"
+                  :style="{ color: 'rgba(0,0,0,.25)' }" />
               </a-input>
             </a-form-item>
           </a-tab-pane>
 
-          <a-tab-pane key="enterprise" tab="公司登录">
+          <a-tab-pane
+            key="enterprise"
+            tab="公司登录">
             <a-form-item>
               <a-input
                 size="large"
@@ -83,9 +95,11 @@
                 v-decorator="[
                   'enterpriseEmail',
                   {rules: [{ required: true, message: '请输入帐户名或邮箱地址' }, { validator: validateEmail ,message:'请输入正确的邮箱'}], validateTrigger: 'change'}
-                ]"
-              >
-                <a-icon slot="prefix" type="user" :style="{ color: 'rgba(0,0,0,.25)' }"/>
+                ]">
+                <a-icon
+                  slot="prefix"
+                  type="user"
+                  :style="{ color: 'rgba(0,0,0,.25)' }" />
               </a-input>
             </a-form-item>
 
@@ -98,28 +112,26 @@
                 v-decorator="[
                   'enterprisePassword',
                   {rules: [{ required: true, message: '请输入密码' }], validateTrigger: 'blur'}
-                ]"
-              >
-                <a-icon slot="prefix" type="lock" :style="{ color: 'rgba(0,0,0,.25)' }"/>
+                ]">
+                <a-icon
+                  slot="prefix"
+                  type="lock"
+                  :style="{ color: 'rgba(0,0,0,.25)' }" />
               </a-input>
             </a-form-item>
           </a-tab-pane>
         </a-tabs>
         <a-form-item v-if="customActiveKey=='enterprise'">
           <router-link
-
             :to="{ name: 'register' }"
             class="forge-password"
-            style="float: right;"
-          >企业注册</router-link>
+            style="float: right;">企业注册</router-link>
         </a-form-item>
         <a-form-item v-if="customActiveKey=='student'">
           <router-link
-
             :to="{ name: 'studentRegister' }"
             class="forge-password"
-            style="float: right;"
-          >学生注册</router-link>
+            style="float: right;">学生注册</router-link>
         </a-form-item>
         <a-form-item style="margin-top:24px">
           <a-button
@@ -127,8 +139,7 @@
             type="primary"
             htmlType="submit"
             class="login-button"
-            :loading="state.loginBtn"
-          >确定</a-button>
+            :loading="state.loginBtn">确定</a-button>
         </a-form-item>
       </a-form>
     </a-spin>
@@ -180,7 +191,7 @@ export default {
     },
     toCaptcha () {
       var self = this
-      var captcha = new TencentCaptcha('2085027395', (res) => {
+      var captcha = new TencentCaptcha('2085027395', res => {
         // res（未通过验证）= {ret: 1, ticket: null}
         // res（验证成功） = {ret: 0, ticket: "String", randstr: "String"}
         if (res.ret === 0) {
@@ -197,7 +208,10 @@ export default {
       const {
         form: { validateFields }
       } = this
-      const validateFieldsKey = [this.customActiveKey + 'Email', this.customActiveKey + 'Password']
+      const validateFieldsKey = [
+        this.customActiveKey + 'Email',
+        this.customActiveKey + 'Password'
+      ]
       console.log(validateFieldsKey)
       validateFields(validateFieldsKey, { force: true }, (err, values) => {
         if (!err) {
@@ -212,18 +226,11 @@ export default {
       })
     },
     goLogin () {
-      const {
-        state,
-        Login,
-        values,
-        ticket,
-        randstr
-
-      } = this
+      const { state, Login, values, ticket, randstr } = this
       const loginType = this.state.loginType
       state.loginBtn = true
       const loginParams = { ...values }
-
+      var _this = this
       if (loginType === 'enterprise') {
         loginParams.email = loginParams.enterpriseEmail
         loginParams.password = md5(loginParams.enterprisePassword)
@@ -244,8 +251,11 @@ export default {
       loginParams.loginType = state.loginType
       loginParams.Ticket = ticket
       loginParams.Randstr = randstr
+
       Login(loginParams)
-        .then((res) => this.loginSuccess(res))
+        .then(res => {
+          _this.loginSuccess()
+        })
         .catch(err => this.requestFailed(err))
         .finally(() => {
           state.loginBtn = false
@@ -257,7 +267,7 @@ export default {
 
     loginSuccess (res) {
       console.log(res)
-      this.$router.push({ name: 'internship' })
+      this.$router.push({ name: 'index' })
       // 延迟 1 秒显示欢迎信息
       setTimeout(() => {
         this.$notification.success({
@@ -267,9 +277,15 @@ export default {
       }, 1000)
     },
     requestFailed (err) {
+      var message = ''
+      if (err != null) {
+        message = err
+      } else {
+        message = '请求错误'
+      }
       this.$notification['error']({
         message: '错误',
-        description: ((err.response || {}).data || {}).message || '请求出现错误，请稍后再试',
+        description: message,
         duration: 4
       })
     }

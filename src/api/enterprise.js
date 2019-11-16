@@ -82,3 +82,10 @@ export function getApplyCount () {
 
   })
 }
+export function changeApplyStatus (param) {
+  return axios({
+    url: '/enterprise/application',
+    method: 'PUT',
+    data: param
+  })
+}

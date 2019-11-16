@@ -3,6 +3,12 @@
     title="学生信息"
     logo="https://gw.alipayobjects.com/zos/rmsportal/nxkuOJlFJuAUhzlMTCEe.png"
   >
+    <a-button v-if="this.role==='enterprise'" type="primary" @click="pass">
+      <a-icon type="check" />通过
+    </a-button>
+    <a-button v-if="this.role==='enterprise'" style="margin-left: 8px" @click="fail">
+      <a-icon type="close" />不通过
+    </a-button>
     <detail-list slot="headerContent" size="small" :col="3" class="detail-layout">
       <detail-list-item v-if="role=='student'" term="学号">{{ student.stu_id }}</detail-list-item>
       <detail-list-item term="姓名">{{ student.name }}</detail-list-item>
@@ -126,29 +132,30 @@
 </template>
 
 <script>
-import { mixinDevice } from "@/utils/mixin";
-import { PageView } from "@/layouts";
-import DetailList from "@/components/tools/DetailList";
-import store from "@/store";
-import { genderChanger } from "@/utils/util";
-import { getStu, editStudent, studentUpload } from "../../api/student";
-import student from "../../store/modules/jumper";
-const DetailListItem = DetailList.Item;
+import { mixinDevice } from '@/utils/mixin'
+import { PageView } from '@/layouts'
+import DetailList from '@/components/tools/DetailList'
+import store from '@/store'
+import { genderChanger } from '@/utils/util'
+import { getStu, editStudent, studentUpload } from '../../api/student'
+import student from '../../store/modules/jumper'
+import { changeApplyStatus } from '@/api/enterprise'
+const DetailListItem = DetailList.Item
 
 export default {
-  name: "Advanced",
+  name: 'Advanced',
   components: {
     PageView,
     DetailList,
     DetailListItem
   },
   mixins: [mixinDevice],
-  data() {
+  data () {
     return {
       form: this.$form.createForm(this),
       config: {
         rules: [
-          { type: "object", required: true, message: "Please select time!" }
+          { type: 'object', required: true, message: 'Please select time!' }
         ]
       },
       confirmDirty: false,
@@ -193,77 +200,77 @@ export default {
       student: {},
       stuid: store.getters.stuid,
       confirmLoading: false
-    };
-  },
-  computed: {
-    getId() {
-      return store.getters.stuid;
-    },
-    getInfo() {
-      return store.getters.userInfo;
     }
   },
-  mounted() {
-    this.getStuInfo(this.stuid);
-    this.student.gender = genderChanger(this.student.gender);
+  computed: {
+    getId () {
+      return store.getters.stuid
+    },
+    getInfo () {
+      return store.getters.userInfo
+    }
+  },
+  mounted () {
+    this.getStuInfo(this.stuid)
+    this.student.gender = genderChanger(this.student.gender)
   },
   watch: {
-    getId: function(val, oldVal) {
-      this.getStuInfo(val);
+    getId: function (val, oldVal) {
+      this.getStuInfo(val)
     },
-    getInfo: function(val, oldVa) {
-      this.student = val;
+    getInfo: function (val, oldVa) {
+      this.student = val
     }
   },
   methods: {
-    validatePhone(rule, value, callback) {
-      const reg = /^[1][3,4,5,7,8][0-9]{9}$/;
-      if (value === "" || value === undefined || value == null) {
-        callback();
+    validatePhone (rule, value, callback) {
+      const reg = /^[1][3,4,5,7,8][0-9]{9}$/
+      if (value === '' || value === undefined || value == null) {
+        callback()
       } else {
-        if (!reg.test(value) && value !== "") {
-          callback(new Error("请输入正确的电话号码"));
+        if (!reg.test(value) && value !== '') {
+          callback(new Error('请输入正确的电话号码'))
         } else {
-          callback();
+          callback()
         }
       }
     },
-    fileBeforeUpload(file, fileList) {
-      this.file = file;
-      return false;
+    fileBeforeUpload (file, fileList) {
+      this.file = file
+      return false
     },
-    getStuInfo(id) {
-      var self = this;
-      if (store.getters.role === "student") {
-        this.student = store.getters.userInfo;
+    getStuInfo (id) {
+      var self = this
+      if (store.getters.role === 'student') {
+        this.student = store.getters.userInfo
       } else {
-        this.stuid = id;
+        this.stuid = id
         getStu(this.stuid).then(response => {
-          if (response.code === "200") {
-            self.student = response.data;
+          if (response.code === '200') {
+            self.student = response.data
           }
-        });
+        })
       }
     },
-    handleChange({ file, fileList }) {
-      if (file.status !== "uploading") {
-        console.log(file, fileList);
+    handleChange ({ file, fileList }) {
+      if (file.status !== 'uploading') {
+        console.log(file, fileList)
       }
     },
-    handleEdit(record) {
-      this.mdl = Object.assign({}, record);
-      this.visible = true;
+    handleEdit (record) {
+      this.mdl = Object.assign({}, record)
+      this.visible = true
     },
-    handleUpdateEdit(record) {
-      this.mdl = Object.assign({}, record);
-      this.updateVisible = true;
+    handleUpdateEdit (record) {
+      this.mdl = Object.assign({}, record)
+      this.updateVisible = true
     },
-    handleSubmit(e) {
-      e.preventDefault();
+    handleSubmit (e) {
+      e.preventDefault()
       const {
         form: { validateFields }
-      } = this;
-      const validateFieldsKey = ["major", "tel", "introduction", "exps"];
+      } = this
+      const validateFieldsKey = ['major', 'tel', 'introduction', 'exps']
       // const values = {
       //   ...fieldsValue,
       //   'date-time-picker': fieldsValue['date-time-picker'].format(
@@ -272,60 +279,60 @@ export default {
       // }
       validateFields(validateFieldsKey, { force: true }, (err, values) => {
         if (!err) {
-          const publishParams = { ...values };
-          console.log(publishParams);
+          const publishParams = { ...values }
+          console.log(publishParams)
           editStudent(publishParams).then(res => {
-            if (res.code === "200") this.countDown();
-            store.dispatch("GetInfo");
-          });
+            if (res.code === '200') this.countDown()
+            store.dispatch('GetInfo')
+          })
         }
-        console.log("Received values of form: ", values);
-      });
+        console.log('Received values of form: ', values)
+      })
     },
-    normFile(event1) {
-      console.log("Upload event:", event1);
+    normFile (event1) {
+      console.log('Upload event:', event1)
       if (Array.isArray(event1)) {
-        return event1;
+        return event1
       }
-      return event1 && event1.fileList;
+      return event1 && event1.fileList
     },
-    handleOk(e) {
-      e.preventDefault();
+    handleOk (e) {
+      e.preventDefault()
       this.form.validateFieldsAndScroll((err, values) => {
         if (!err) {
-          const formData = new FormData();
-          delete values.dragger;
-          formData.append("file", this.file);
+          const formData = new FormData()
+          delete values.dragger
+          formData.append('file', this.file)
           studentUpload(formData).then(res => {
-            if (res.code === "200") this.countDown();
-            store.dispatch("GetInfo");
-          });
+            if (res.code === '200') this.countDown()
+            store.dispatch('GetInfo')
+          })
         }
-      });
+      })
     },
-    countDown() {
-      let secondsToGo = 3;
+    countDown () {
+      let secondsToGo = 3
       const modal = this.$success({
-        title: "提交成功",
+        title: '提交成功',
         content: `这个窗口将于 ${secondsToGo} s后关闭。`
-      });
+      })
       const interval = setInterval(() => {
-        secondsToGo -= 1;
+        secondsToGo -= 1
         modal.update({
           content: `这个窗口将于 ${secondsToGo} s后关闭。`
-        });
-      }, 1000);
-      this.confirmLoading = true;
+        })
+      }, 1000)
+      this.confirmLoading = true
       setTimeout(() => {
-        clearInterval(interval);
-        modal.destroy();
-        this.visible = false;
-        this.updateVisible = false;
-        this.confirmLoading = false;
-      }, secondsToGo * 1000);
+        clearInterval(interval)
+        modal.destroy()
+        this.visible = false
+        this.updateVisible = false
+        this.confirmLoading = false
+      }, secondsToGo * 1000)
     }
   }
-};
+}
 </script>
 
 <style scoped>

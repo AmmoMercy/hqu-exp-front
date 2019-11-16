@@ -4,14 +4,21 @@
       <div class="table-page-search-wrapper">
         <a-form layout="inline">
           <a-row :gutter="48">
-            <a-col :md="8" :sm="24">
+            <a-col
+              :md="8"
+              :sm="24">
               <a-form-item label="实训题目">
                 <a-input placeholder="请输入实训题目" />
               </a-form-item>
             </a-col>
-            <a-col :md="8" :sm="24">
+            <a-col
+              :md="8"
+              :sm="24">
               <a-form-item label="审核状态">
-                <a-select v-model="queryParam.status" placeholder="请选择" default-value="0">
+                <a-select
+                  v-model="queryParam.status"
+                  placeholder="请选择"
+                  default-value="0">
                   <a-select-option value="0">待审核</a-select-option>
                   <a-select-option value="1">审核中</a-select-option>
                   <a-select-option value="2">审核通过</a-select-option>
@@ -21,29 +28,54 @@
               </a-form-item>
             </a-col>
             <span>
-              <a-button type="primary" @click="Searchlist">查询</a-button>
+              <a-button
+                type="primary"
+                @click="Searchlist">查询</a-button>
             </span>
           </a-row>
         </a-form>
       </div>
-      <a-table :columns="columnsSelector()" :dataSource="internships" rowKey="_id">
+      <a-table
+        :columns="columnsSelector()"
+        :dataSource="internships"
+        rowKey="_id">
         <!-- <a slot="name" slot-scope="text" href="javascript:;">{{text}}</a> -->
-        <span slot="serial" slot-scope="text, record, index">{{ index + 1 }}</span>
+        <span
+          slot="serial"
+          slot-scope="text, record, index">{{ index + 1 }}</span>
         <span slot="qualificate_file">
           <a href="#">filestitle</a>
         </span>
-        <span slot="description" slot-scope="text">{{ text|ellipsis }}</span>
+        <span
+          slot="description"
+          slot-scope="text">{{ text|ellipsis }}</span>
 
-        <span slot="status" slot-scope="text">
-          <a-badge :status="text | statusTypeFilter" :text="text | statusFilter" />
+        <span
+          slot="status"
+          slot-scope="text">
+          <a-badge
+            :status="text | statusTypeFilter"
+            :text="text | statusFilter" />
         </span>
-        <span slot="action" slot-scope="text,record">
+        <span
+          slot="action"
+          slot-scope="text,record">
           <template>
-            <a slot="action" @click="goToExpDetail(record)">查看</a>
-            <a-divider type="vertical" v-if="role!='student'" />
-            <a @click="goToAppList(record)" v-if="role!='student'">查看申请</a>
-            <a-divider type="vertical" v-if="role!='student'" />
-            <a @click="goToStudentList(record)" v-if="role!='student'">学生管理</a>
+            <a
+              slot="action"
+              @click="goToExpDetail(record)">查看</a>
+            <a-divider
+              type="vertical"
+              v-if="role!='student'" />
+            <a
+              @click="goToAppList(record)"
+              v-if="role!='student'">查看申请</a>
+            <a-divider
+              type="vertical"
+              v-if="role!='student'" />
+            <a
+              @click="goToStudentList(record)"
+              v-if="role!='student'">学生管理</a>
           </template>
         </span>
       </a-table>
@@ -62,19 +94,15 @@ import { dateTransformer } from '@/utils/util'
 const statusMap = {
   0: {
     status: 'default',
-    text: '待审核'
+    text: '审核中'
   },
   1: {
-    status: 'processing',
-    text: '审核中'
+    status: 'error',
+    text: '未通过'
   },
   2: {
     status: 'success',
     text: '审核通过'
-  },
-  3: {
-    status: 'error',
-    text: '审核未通过'
   }
 }
 const enterpriseColumns = [

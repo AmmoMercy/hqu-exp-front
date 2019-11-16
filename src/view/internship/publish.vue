@@ -14,12 +14,16 @@
       </a-form-item>
       <a-form-item v-bind="formItemLayout" label="开始时间">
         <a-date-picker
+          :disabledDate="disabledStartDate"
+          v-model="beginDate"
           v-decorator="['exp_begin_time', config]"
           format="YYYY-MM-DD"
         />
       </a-form-item>
       <a-form-item v-bind="formItemLayout" label="结束时间">
         <a-date-picker
+          :disabledDate="disabledEndDate"
+          v-model="endDate"
           v-decorator="['exp_end_time', config]"
           format="YYYY-MM-DD " />
       </a-form-item>
@@ -41,6 +45,7 @@
       </a-form-item>
       <a-form-item v-bind="formItemLayout" label="申请截至时间">
         <a-date-picker
+          :disabledDate="disableBeforeToday"
           v-decorator="['apply_end_time',config]"
           show-time
           format="YYYY-MM-DD HH:mm:ss"
@@ -58,16 +63,18 @@
 </template>
 <script>
 import { publish } from '@/api/enterprise'
+import moment from 'moment'
 export default {
   data () {
     return {
       form: this.$form.createForm(this),
       config: {
         rules: [
-          { type: 'object', required: true, message: 'Please select time!' }
+          { type: 'object', required: true, message: '请选择日期' }
         ]
       },
-
+      beginDate: null,
+      endDate: null,
       confirmDirty: false,
       autoCompleteResult: [],
       formItemLayout: {
@@ -95,8 +102,27 @@ export default {
 
     }
   },
-
   methods: {
+    moment,
+    disableBeforeToday (current) {
+      // Can not select days before today and today
+      return current && current < moment().endOf('day')
+    },
+    disabledStartDate (beginDate) {
+      const endDate = this.endDate
+      if (!beginDate || !endDate) {
+        return beginDate < moment().endOf('day')
+      }
+      return beginDate.valueOf() > endDate.valueOf() || beginDate < moment().endOf('day')
+    },
+    disabledEndDate (endDate) {
+      const beginDate = this.beginDate
+      if (!endDate || !beginDate) {
+        return endDate < moment().endOf('day')
+      }
+      return beginDate.valueOf() >= endDate.valueOf() || endDate < moment().endOf('day')
+    },
+
     countDown () {
       let secondsToGo = 5
       const modal = this.$success({
@@ -112,6 +138,7 @@ export default {
       setTimeout(() => {
         clearInterval(interval)
         modal.destroy()
+        this.$router.push({ name: 'list' })
       }, secondsToGo * 1000)
     },
     handleSubmit (e) {
@@ -135,7 +162,8 @@ export default {
           console.log(publishParams)
           publish(publishParams)
             .then((res) => {
-              if (res.code === 200) { this.countDown() }
+              console.log(res)
+              if (res.code === '200') { this.countDown() }
             })
         }
         console.log('Received values of form: ', values)

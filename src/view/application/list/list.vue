@@ -8,8 +8,8 @@
               <a-form-item label="审核状态">
                 <a-select v-model="queryParam.status" placeholder="请选择" default-value="0">
                   <a-select-option value="0">待审核</a-select-option>
-                  <a-select-option value="1">审核中</a-select-option>
-                  <a-select-option value="2">审核通过</a-select-option>
+                  <a-select-option value="1">审核通过</a-select-option>
+                  <a-select-option value="2">审核未通过</a-select-option>
                   <a-select-option value="3">审核未通过</a-select-option>
                   <a-select-option value="4">全部</a-select-option>
                 </a-select>
@@ -26,9 +26,12 @@
         <span slot="status" slot-scope="text">
           <a-badge :status="text | statusTypeFilter" :text="text | statusFilter" />
         </span>
-        <span slot="action">
+        <span slot="action" slot-scope="text, record">
           <template>
-            <a slot="action" @click="goToExpDetail(record)" >查看</a>
+            <a slot="action" @click="goToStuDetail(record.stu_id)" >查看&nbsp </a>
+          </template>
+          <template>
+            <a slot="action" @click="passApply(record._id)" >通过</a>
           </template>
         </span>
       </a-table>
@@ -37,7 +40,8 @@
 </template>
 <script>
 import store from '@/store'
-import { getApplyList } from '@/api/enterprise'
+import { getApplyList, changeApplyStatus } from '@/api/enterprise'
+
 const statusMap = {
   0: {
     status: 'default',
@@ -55,21 +59,21 @@ const statusMap = {
     status: 'error',
     text: '已拒绝'
   },
-  4:{
-    status:'success',
-    text:'学生已同意'
+  4: {
+    status: 'success',
+    text: '学生已同意'
   },
-  5:{
-    status:'error',
-    text:'学生已拒绝'
+  5: {
+    status: 'error',
+    text: '学生已拒绝'
   },
-  6:{
-    status:'success',
-    text:'正常结业'
+  6: {
+    status: 'success',
+    text: '正常结业'
   },
-  7:{
-    status:'default',
-    text:'非正常结业'
+  7: {
+    status: 'default',
+    text: '非正常结业'
   }
 }
 
@@ -146,7 +150,7 @@ export default {
     },
     statusTypeFilter (type) {
       return statusMap[type].status
-    },
+    }
   },
   methods: {
     /* handleEdit (e) {
@@ -155,6 +159,12 @@ export default {
       // this.mdl = Object.assign({}, record);
       this.visible = true
     }, */
+    passApply (id) {
+      var data = {}
+      data.applyStatus = 2
+      data.applyId = id
+      changeApplyStatus(data).then()
+    },
     columnsSelector () {
       this.role = store.getters.role
       if (this.role === 'enterprise') {
@@ -168,6 +178,10 @@ export default {
       setTimeout(() => {
         this.loading = false
       }, 300)
+    },
+    goToStuDetail (stuid) {
+      store.commit('SET_STU_ID', stuid)
+      this.$router.push({ name: 'studentdetail' })
     }
   }
 }

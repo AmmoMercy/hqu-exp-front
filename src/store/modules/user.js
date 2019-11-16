@@ -55,7 +55,7 @@ const user = {
               Vue.ls.set(USER_ROLE, loginType)
               resolve()
             } else {
-              reject(result.msg)
+              reject(result)
             }
           })
           .catch(error => {
