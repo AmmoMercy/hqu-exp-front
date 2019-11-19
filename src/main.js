@@ -14,7 +14,8 @@ import bootstrap from './core/bootstrap'
 import './core/use'
 import './permission' // permission control
 import './utils/filter' // global filter
-
+import JsonExcel from 'vue-json-excel'
+Vue.component('downloadExcel', JsonExcel)
 Vue.config.productionTip = false
 
 // mount axios Vue.$http and this.$http

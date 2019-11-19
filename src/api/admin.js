@@ -33,3 +33,10 @@ export function PostStatus (data) {
 
   })
 }
+export function getGrade (level) {
+  return axios({
+    url: '/admin/stumanagelist' + level,
+    method: 'GET'
+
+  })
+}

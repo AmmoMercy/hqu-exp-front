@@ -2,31 +2,6 @@
   <a-spin :spinning="loading">
     <a-card :bordered="false">
       <div class="table-page-search-wrapper">
-        <a-form layout="inline">
-          <a-row :gutter="48">
-            <a-col :md="8" :sm="24">
-              <a-form-item label="企业名称">
-                <a-input v-model="queryParam.enterprisename" placeholder="请输入企业名称" />
-              </a-form-item>
-            </a-col>
-            <a-col :md="8" :sm="24">
-              <a-form-item label="审核状态">
-                <a-select placeholder="请选择" default-value="0">
-                  <a-select-option value="0">待审核</a-select-option>
-                  <a-select-option value="1">审核中</a-select-option>
-                  <a-select-option value="2">审核通过</a-select-option>
-                  <a-select-option value="3">审核未通过</a-select-option>
-                  <a-select-option value="4">全部</a-select-option>
-                </a-select>
-              </a-form-item>
-            </a-col>
-            <a-col>
-              <span>
-                <a-button type="primary" @click="Searchlist">查询</a-button>
-              </span>
-            </a-col>
-          </a-row>
-        </a-form>
       </div>
       <a-table :columns="columns" :dataSource="enterprises" rowKey="_id">
         <!-- <a slot="name" slot-scope="text" href="javascript:;">{{text}}</a> -->
@@ -110,7 +85,17 @@ const columns = [
   {
     title: '审核状态',
     dataIndex: 'status',
+    filters: [
+      { text: '未审核',
+        value: '0' },
+      { text: '通过',
+        value: '1' },
+      { text: '未通过',
+        value: '2' }
+    ],
+    onFilter: (value, record) => record.name.indexOf(value) === 0,
     scopedSlots: { customRender: 'status' }
+
   },
   {
     title: '注册时间',

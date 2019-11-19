@@ -207,24 +207,8 @@ export default {
       previewImage: '',
       enterprise: {},
       role: store.getters.role,
-      imageList: [],
-      fileList: [
-        {
-          uid: '-1',
-          url:
-            'https://zos.alipayobjects.com/rmsportal/jkjgkEfvpUPVyRjUImniVslZfWPnJuuZ.png'
-        },
-        {
-          uid: '-1',
-          url:
-            'https://zos.alipayobjects.com/rmsportal/jkjgkEfvpUPVyRjUImniVslZfWPnJuuZ.png'
-        },
-        {
-          uid: '-1',
-          url:
-            'https://zos.alipayobjects.com/rmsportal/jkjgkEfvpUPVyRjUImniVslZfWPnJuuZ.png'
-        }
-      ]
+      imageList: []
+
     }
   },
   computed: {
@@ -239,6 +223,7 @@ export default {
       getEnt(this.entid).then(response => {
         if (response.code === '200') {
           this.enterprise = response.data
+          this.imageList = response.data.images.split(',')
         }
       })
     }

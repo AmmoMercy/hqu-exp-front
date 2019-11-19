@@ -2,38 +2,7 @@
   <a-spin :spinning="loading">
     <a-card :bordered="false">
       <div class="table-page-search-wrapper">
-        <a-form layout="inline">
-          <a-row :gutter="48">
-            <a-col
-              :md="8"
-              :sm="24">
-              <a-form-item label="实训题目">
-                <a-input placeholder="请输入实训题目" />
-              </a-form-item>
-            </a-col>
-            <a-col
-              :md="8"
-              :sm="24">
-              <a-form-item label="审核状态">
-                <a-select
-                  v-model="queryParam.status"
-                  placeholder="请选择"
-                  default-value="0">
-                  <a-select-option value="0">待审核</a-select-option>
-                  <a-select-option value="1">审核中</a-select-option>
-                  <a-select-option value="2">审核通过</a-select-option>
-                  <a-select-option value="3">审核未通过</a-select-option>
-                  <a-select-option value="4">全部</a-select-option>
-                </a-select>
-              </a-form-item>
-            </a-col>
-            <span>
-              <a-button
-                type="primary"
-                @click="Searchlist">查询</a-button>
-            </span>
-          </a-row>
-        </a-form>
+
       </div>
       <a-table
         :columns="columnsSelector()"
@@ -49,13 +18,10 @@
         <span
           slot="description"
           slot-scope="text">{{ text|ellipsis }}</span>
-
         <span
           slot="status"
           slot-scope="text">
-          <a-badge
-            :status="text | statusTypeFilter"
-            :text="text | statusFilter" />
+          <a-badge :status="text | statusTypeFilter" :text="text | statusFilter" />
         </span>
         <span
           slot="action"
@@ -94,15 +60,19 @@ import { dateTransformer } from '@/utils/util'
 const statusMap = {
   0: {
     status: 'default',
-    text: '审核中'
+    text: '待审核'
   },
   1: {
-    status: 'error',
-    text: '未通过'
+    status: 'processing',
+    text: '审核通过'
   },
   2: {
     status: 'success',
-    text: '审核通过'
+    text: '审核未通过'
+  },
+  3: {
+    status: 'error',
+    text: '审核未通过'
   }
 }
 const enterpriseColumns = [
@@ -142,7 +112,17 @@ const enterpriseColumns = [
   {
     title: '审核状态',
     dataIndex: 'status',
-    scopedSlots: { customRender: 'status' }
+    scopedSlots: { customRender: 'status' },
+    filters: [
+      { text: '未审核',
+        value: '0' },
+      { text: '通过',
+        value: '1' },
+      { text: '未通过',
+        value: '2' }
+    ],
+    onFilter: (value, record) => record.name.indexOf(value) === 0
+
   },
   {
     title: '操作',
@@ -218,6 +198,20 @@ const adminColums = [
     title: '实训描述',
     dataIndex: 'description',
     scopedSlots: { customRender: 'description' }
+  },
+  {
+    title: '审核状态',
+    dataIndex: 'status',
+    scopedSlots: { customRender: 'status' },
+    filters: [
+      { text: '未审核',
+        value: '0' },
+      { text: '通过',
+        value: '1' },
+      { text: '未通过',
+        value: '2' }
+    ],
+    onFilter: (value, record) => record.name.indexOf(value) === 0
   },
   {
     title: '意向人数',
