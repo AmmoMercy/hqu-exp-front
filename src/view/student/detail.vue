@@ -1,25 +1,31 @@
 <template>
   <page-view
     title="学生信息"
-    logo="https://gw.alipayobjects.com/zos/rmsportal/nxkuOJlFJuAUhzlMTCEe.png"
-  >
-    <a-button v-if="this.role==='enterprise'" type="primary" @click="pass">
-      <a-icon type="check" />通过
-    </a-button>
-    <a-button v-if="this.role==='enterprise'" style="margin-left: 8px" @click="fail">
-      <a-icon type="close" />不通过
-    </a-button>
-    <detail-list slot="headerContent" size="small" :col="3" class="detail-layout">
-      <detail-list-item v-if="role=='student'" term="学号">{{ student.stu_id }}</detail-list-item>
+    logo="https://gw.alipayobjects.com/zos/rmsportal/nxkuOJlFJuAUhzlMTCEe.png">
+    <detail-list
+      slot="headerContent"
+      size="small"
+      :col="3"
+      class="detail-layout">
+      <detail-list-item
+        v-if="role=='student'"
+        term="学号">{{ student.stu_id }}</detail-list-item>
       <detail-list-item term="姓名">{{ student.name }}</detail-list-item>
       <detail-list-item term="性别">{{ student.gender }}</detail-list-item>
       <detail-list-item term="入学年份">{{ student.enterence_year }}</detail-list-item>
       <detail-list-item term="专业">{{ student.major }}</detail-list-item>
     </detail-list>
-
-    <a-card style="margin-top: 24px" :bordered="false" title="详细信息">
-      <a-form-item :wrapperCol="{ span: 24 }" style="text-align: right" v-if="role==='student'">
-        <a-button htmlType="submit" @click="handleEdit(record)">
+    <a-card
+      style="margin-top: 24px"
+      :bordered="false"
+      title="详细信息">
+      <a-form-item
+        :wrapperCol="{ span: 24 }"
+        style="text-align: right"
+        v-if="role==='student'">
+        <a-button
+          htmlType="submit"
+          @click="handleEdit(record)">
           <a-icon type="edit" />
         </a-button>
       </a-form-item>
@@ -34,8 +40,7 @@
           rows="10"
           readonly
           v-model="student.introduction"
-          style="border:none"
-        />
+          style="border:none" />
       </a-form-item>
       <a-divider style="margin-bottom: 32px" />
       <a-form-item label="实训经历">
@@ -44,56 +49,73 @@
           rows="10"
           readonly
           v-model="student.exps"
-          style="border:none"
-        />
+          style="border:none" />
       </a-form-item>
 
-      <a-modal title="编辑个人简历" :width="800" v-model="visible" @ok="handleSubmit">
+      <a-modal
+        title="编辑个人简历"
+        :width="800"
+        v-model="visible"
+        @ok="handleSubmit">
         <a-form :form="form">
-          <a-form-item v-bind="formItemLayout" label="专业">
+          <a-form-item
+            v-bind="formItemLayout"
+            label="专业">
             <a-input
               v-decorator="[
                 'major',{initialValue:student.major,rules: [{ required: true, message: 'Please input your topic!' }],}]"
-              placeholder="major"
-            />
+              placeholder="major" />
           </a-form-item>
-          <a-form-item v-bind="formItemLayout" label="手机号码">
+          <a-form-item
+            v-bind="formItemLayout"
+            label="手机号码">
             <a-input
               v-decorator="[
                 'tel',{initialValue:student.tel,rules: [{ required: true, message: 'Please input your topic!' },{validator:validatePhone}]}]"
-              placeholder="tel"
-            />
+              placeholder="tel" />
           </a-form-item>
-          <a-form-item v-bind="formItemLayout" label="个人简介">
+          <a-form-item
+            v-bind="formItemLayout"
+            label="个人简介">
             <a-textarea
               rows="8"
               v-decorator="[
                 'introduction',
                 {initialValue:student.introduction,rules: [{ required: true, message: '请输入目标描述' }]}
-              ]"
-            />
+              ]" />
           </a-form-item>
-          <a-form-item v-bind="formItemLayout" label="实训经历">
+          <a-form-item
+            v-bind="formItemLayout"
+            label="实训经历">
             <a-textarea
               rows="8"
               v-decorator="[
                 'exps',
                 {initialValue:student.exps,rules: [{ required: true, message: '请输入目标描述' }]}
-              ]"
-            />
+              ]" />
           </a-form-item>
         </a-form>
       </a-modal>
     </a-card>
-    <a-card style="margin-top: 24px" :bordered="false" title="学生作品">
-      <a-form-item :wrapperCol="{ span: 24 }" style="text-align: right">
-        <a-button htmlType="submit" @click="handleUpdateEdit(record)" v-if="role==='student'">
+    <a-card
+      style="margin-top: 24px"
+      :bordered="false"
+      title="学生作品">
+      <a-form-item
+        :wrapperCol="{ span: 24 }"
+        style="text-align: right">
+        <a-button
+          htmlType="submit"
+          @click="handleUpdateEdit(record)"
+          v-if="role==='student'">
           <a-icon type="upload" />上传作品
         </a-button>
       </a-form-item>
       <detail-list>
         <detail-list-item term="全部作品">
-          <a :href="student.works" target="_blank">点击下载</a>
+          <a
+            :href="student.works"
+            target="_blank">点击下载</a>
         </detail-list-item>
       </detail-list>
 
@@ -102,8 +124,7 @@
         :width="800"
         v-model="updateVisible"
         @ok="handleOk"
-        :confirmLoading="confirmLoading"
-      >
+        :confirmLoading="confirmLoading">
         <a-form :form="form">
           <a-form-item v-bind="formItemLayout1">
             <div class="dropbox">
@@ -115,8 +136,7 @@
                 }]"
                 name="files"
                 :beforeUpload="fileBeforeUpload"
-                accept=".zip"
-              >
+                accept=".zip">
                 <p class="ant-upload-drag-icon">
                   <a-icon type="inbox" />
                 </p>

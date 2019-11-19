@@ -93,7 +93,7 @@ const columns = [
       { text: '未通过',
         value: '2' }
     ],
-    onFilter: (value, record) => record.name.indexOf(value) === 0,
+    onFilter: (value, record) => record.status.toString().indexOf(value) === 0,
     scopedSlots: { customRender: 'status' }
 
   },

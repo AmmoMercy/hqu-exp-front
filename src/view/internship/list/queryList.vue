@@ -63,17 +63,14 @@ const statusMap = {
     text: '待审核'
   },
   1: {
-    status: 'processing',
+    status: 'success',
     text: '审核通过'
   },
   2: {
-    status: 'success',
-    text: '审核未通过'
-  },
-  3: {
     status: 'error',
     text: '审核未通过'
   }
+
 }
 const enterpriseColumns = [
   {
@@ -121,7 +118,7 @@ const enterpriseColumns = [
       { text: '未通过',
         value: '2' }
     ],
-    onFilter: (value, record) => record.name.indexOf(value) === 0
+    onFilter: (value, record) => record.status.toString().indexOf(value) === 0
 
   },
   {
@@ -202,7 +199,6 @@ const adminColums = [
   {
     title: '审核状态',
     dataIndex: 'status',
-    scopedSlots: { customRender: 'status' },
     filters: [
       { text: '未审核',
         value: '0' },
@@ -211,7 +207,9 @@ const adminColums = [
       { text: '未通过',
         value: '2' }
     ],
-    onFilter: (value, record) => record.name.indexOf(value) === 0
+    onFilter: (value, record) => record.status.toString().indexOf(value) === 0,
+    scopedSlots: { customRender: 'status' }
+
   },
   {
     title: '意向人数',
