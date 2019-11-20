@@ -58,10 +58,10 @@
           <a @click="goToEntDetail">{{ enterprise.name }}</a>
         </detail-list-item>
         <detail-list-item term="实训地址">{{ enterprise.address }}</detail-list-item>
-        <detail-list-item term="实训起止日">{{ internship.exp_begin_time }}-{{ internship.exp_end_time }}</detail-list-item>
-        <detail-list-item term="报名截止日期">{{ internship.apply_end_time }}</detail-list-item>
-        <detail-list-item term="意向人数">{{ internship.need_num }}</detail-list-item>
-        <detail-list-item term="已报名人数">{{ internship.submit_num }}人</detail-list-item>
+        <detail-list-item term="实训起止日">{{ internship.expBeginTime }}-{{ internship.exp_end_time }}</detail-list-item>
+        <detail-list-item term="报名截止日期">{{ internship.applyEndTime }}</detail-list-item>
+        <detail-list-item term="意向人数">{{ internship.needNum }}</detail-list-item>
+        <detail-list-item term="已报名人数">{{ internship.submitTime }}人</detail-list-item>
       </detail-list>
       <a-divider style="margin-bottom: 32px" />
       <a-form-item label="实训描述">
@@ -89,7 +89,7 @@
           <a-form-item v-bind="formItemLayout" label="id" v-if="0">
             <a-input
               v-decorator="[
-                'id',{initialValue:internship._id,rules: [{ required: true, message: 'Please input your topic!' }],}]"
+                'id',{initialValue:internship.expId,rules: [{ required: true, message: 'Please input your topic!' }],}]"
               placeholder="id"
             />
           </a-form-item>
@@ -154,7 +154,7 @@ import {
   stuGetInternship,
   stuGetEnterprise
 } from '../../api/student'
-import { adminGetEnt, PostStatus } from '@/api/admin'
+import { adminGetExp, PostStatus } from '@/api/admin'
 
 const DetailListItem = DetailList.Item
 
@@ -207,7 +207,7 @@ export default {
         }
       },
       role: store.getters.role,
-      internship: { },
+      internship: {},
       enterprise: {},
       visible: false,
       enterVisible: false,
@@ -225,7 +225,6 @@ export default {
   },
   mounted () {
     this.getExpInfo(this.expid)
-    this.getEnterpriseInfo(this.entid)
   },
   watch: {
     getId: function (val, oldVal) {
@@ -305,9 +304,9 @@ export default {
           }
         })
       } else {
-        adminGetEnt(id).then(response => {
+        adminGetExp(id).then(response => {
           if (response.code === 200) {
-            this.internship = response
+            this.internship = response.data
           }
         })
       }
@@ -334,7 +333,7 @@ export default {
     pass () {
       var data = { }
       data.status = 1
-      data.expid = this.internship._id
+      data.expid = this.internship.expId
       PostStatus(data).then(res => {
         if (res.code === 200) {
           this.internship.status = 1

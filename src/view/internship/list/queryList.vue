@@ -7,7 +7,7 @@
       <a-table
         :columns="columnsSelector()"
         :dataSource="internships"
-        rowKey="_id">
+        rowKey="expId">
         <!-- <a slot="name" slot-scope="text" href="javascript:;">{{text}}</a> -->
         <span
           slot="serial"
@@ -276,21 +276,19 @@ export default {
   methods: {
     goToExpDetail (e) {
       const _this = this
-      console.log(e)
-      store.commit('SET_EXP_ID', e._id)
+
+      store.commit('SET_EXP_ID', e.expId)
       store.commit('SET_ENT_ID', e.enterprise_id)
       _this.$router.push({ name: 'internshipdetail' })
     },
     goToAppList (e) {
       const _this = this
-      console.log(e)
-      store.commit('SET_EXP_ID', e._id)
+      store.commit('SET_EXP_ID', e.expId)
       _this.$router.push({ name: 'applicatinlist' })
     },
     goToStudentList (e) {
       const _this = this
-      console.log(e)
-      store.commit('SET_EXP_ID', e._id)
+      store.commit('SET_EXP_ID', e.expId)
       _this.$router.push({ name: 'studentmanage' })
     },
     columnsSelector () {

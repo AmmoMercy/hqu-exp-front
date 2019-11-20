@@ -12,8 +12,8 @@ const whiteList = ['login', 'register', 'registerResult', 'studentRegister'] // 
 router.beforeEach((to, from, next) => {
   NProgress.start() // start progress bar
   to.meta && (typeof to.meta.title !== 'undefined' && setDocumentTitle(`${to.meta.title} - ${domTitle}`))
+  console.log('cookie', window.document.cookie)
   if (window.document.cookie) {
-    /* has token */
     if (to.path === '/user/login') {
       next({ name: 'index' })
       NProgress.done()
@@ -28,7 +28,6 @@ router.beforeEach((to, from, next) => {
               // 根据roles权限生成可访问的路由表
               // 动态添加可访问路由表
               router.addRoutes(store.getters.addRouters)
-
               next({ name: 'index' })
             })
           })

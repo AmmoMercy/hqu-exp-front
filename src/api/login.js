@@ -1,6 +1,5 @@
 import api from './index'
 import { axios } from '@/utils/request'
-import Qs from 'qs'
 /**
  * login func
  * parameter: {

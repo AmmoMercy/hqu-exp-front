@@ -13,10 +13,13 @@ const service = axios.create({
     //   : '/api', // api base_url
     '/api',
   timeout: 100000,
+  // 请求超时时间
   transformRequest: [function (data) { // 在请求之前对data传参进行格式转换
-    data = Qs.stringify(data)
+    if (!(data instanceof FormData)) {
+      data = Qs.stringify(data)
+    }
     return data
-  }] // 请求超时时间
+  }]
 })
 
 const err = error => {

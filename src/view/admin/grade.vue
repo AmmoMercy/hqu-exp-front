@@ -6,20 +6,16 @@
           <a-row :gutter="48">
             <a-col :md="6" :sm="24">
               <a-form-item label="实训年级">
-                <a-select v-model="level" :defauValue="level">
+                <a-select @change="getGradeByLevel" v-model="level" :defauValue="level">
                   <a-select-option value="2018">2018</a-select-option>
                   <a-select-option value="2017">2017</a-select-option>
                 </a-select>
               </a-form-item>
             </a-col>
 
-            <span>
-              <a-button type="primary" @click="Searchlist">查询</a-button>
-            </span>
-          </a-row>
-        </a-form>
+          </a-row></a-form>
       </div>
-      <a-table ref="table" size="default" :columns="columns" :dataSource="data" showPagination="auto">
+      <a-table ref="table" size="default" :columns="columns" :dataSource="grades" showPagination="auto">
         <span slot="serial" slot-scope="text, record, index">{{ index + 1 }}</span>
         <span slot="introduction" slot-scope="text">
           <ellipsis :length="4" tooltip>{{ text }}</ellipsis>
@@ -36,7 +32,7 @@
       </a-table>
       <a-button type="link"><download-excel
         class="button"
-        :data="json_data"
+        :data="data"
         :fields="json_fields"
         worksheet="My Worksheet"
         name="实训成绩.xls">
@@ -47,8 +43,7 @@
   </a-spin>
 </template>
 <script>
-import moment from 'moment'
-import getGrade from '@/api/admin'
+import { getGrade } from '@/api/admin'
 const columns = [
   {
     title: '#',
@@ -95,46 +90,19 @@ const columns = [
     scopedSlots: { customRender: 'action' }
   }
 ]
-const data = [
-  {
-    key: '1',
-    stu_id: '21313131',
-    name: 'KooBoo',
-    gender: '男',
-    enterence_year: '2019',
-    major: 'IT',
-    tel: '123456',
-    introduction: 'this is intro',
-    email: 'Kooboo@qq.com',
-    exps: 'this is exps',
-    grade: 80
-  },
-  {
-    key: '2',
-    stu_id: '123123',
-    name: 'tencent',
-    gender: '女',
-    enterence_year: '2019',
-    major: 'IT',
-    tel: '123456',
-    introduction: 'this is intro',
-    email: 'tencent@qq.com',
-    exps: 'this is exps',
-    grade: 80
-  }
-]
+
 export default {
   name: 'GradeList',
   data () {
     return {
       level: null,
-      data,
+      grades: [],
       columns,
       mdl: {},
       queryParam: {},
       loading: false,
       json_fields: {
-        'Complete name': 'name',
+        'name': 'name',
         'City': 'city',
         'Telephone': 'phone.mobile',
         'Telephone 2': {
@@ -177,14 +145,14 @@ export default {
     }
   },
   mounted () {
-    this.level = moment().get('year') - 3
-    if (this.level !== null) {
-      getGrade()
-    }
+
   },
   methods: {
-    getGradeByLevel () {
-      getGrade().then()
+    getGradeByLevel (level) {
+      this.loading = true
+      getGrade(level).then(res => {
+        this.grades = res.data
+      }).finally(() => { this.loading = false })
     },
     Searchlist: function (data) {
       this.loading = true

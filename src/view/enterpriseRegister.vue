@@ -394,7 +394,7 @@ export default {
         formData.append(key, values[key])
       }
       this.imageList.forEach(file => {
-        formData.append('images[]', file)
+        formData.append('images', file)
       })
       formData.append('qualificate_file', this.file)
       self.registerBtn = true

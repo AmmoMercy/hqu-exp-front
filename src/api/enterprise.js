@@ -1,4 +1,4 @@
-import { axios } from '@/utils/request'
+import { axios, installer } from '@/utils/request'
 export function getEnt (parameter) {
   return axios({
     url: '/enterprise/detail?' + 'enterprise=' + parameter,

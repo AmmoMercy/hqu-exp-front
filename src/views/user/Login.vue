@@ -254,7 +254,7 @@ export default {
 
       Login(loginParams)
         .then(res => {
-          _this.loginSuccess()
+          _this.loginSuccess(res)
         })
         .catch(err => this.requestFailed(err))
         .finally(() => {
@@ -266,7 +266,7 @@ export default {
     },
 
     loginSuccess (res) {
-      console.log(res)
+      console.log('login', res)
       this.$router.push({ name: 'index' })
       // 延迟 1 秒显示欢迎信息
       setTimeout(() => {

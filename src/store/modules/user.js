@@ -47,13 +47,11 @@ const user = {
 
         login(userInfo, loginType)
           .then(response => {
+            console.log('logintype', loginType)
             const result = response
             if (result.code === 200) {
-              // const accessedRouters = routerMapSelector(loginType)
-              // commit('SET_ROUTERS', accessedRouters)
-              // router.addRoutes(accessedRouters)
               Vue.ls.set(USER_ROLE, loginType)
-              resolve()
+              resolve(result)
             } else {
               reject(result)
             }

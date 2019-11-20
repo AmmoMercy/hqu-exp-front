@@ -18,9 +18,9 @@ export function AdminGetExpList () {
     method: 'get'
   })
 }
-export function adminGetEnt (param) {
+export function adminGetExp (param) {
   return axios({
-    url: '/admin/internship?internship=' + param,
+    url: '/admin/internship?expId=' + param,
     method: 'get'
 
   })
@@ -35,7 +35,7 @@ export function PostStatus (data) {
 }
 export function getGrade (level) {
   return axios({
-    url: '/admin/stumanagelist' + level,
+    url: '/admin/stumanagelist?level=' + level,
     method: 'GET'
 
   })
