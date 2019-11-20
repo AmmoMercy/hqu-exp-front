@@ -266,7 +266,7 @@ export default {
       } else {
         this.stuid = id
         getStu(this.stuid).then(response => {
-          if (response.code === '200') {
+          if (response.code === 200) {
             self.student = response.data
           }
         })
@@ -302,7 +302,7 @@ export default {
           const publishParams = { ...values }
           console.log(publishParams)
           editStudent(publishParams).then(res => {
-            if (res.code === '200') this.countDown()
+            if (res.code === 200) this.countDown()
             store.dispatch('GetInfo')
           })
         }
@@ -324,7 +324,7 @@ export default {
           delete values.dragger
           formData.append('file', this.file)
           studentUpload(formData).then(res => {
-            if (res.code === '200') this.countDown()
+            if (res.code === 200) this.countDown()
             store.dispatch('GetInfo')
           })
         }

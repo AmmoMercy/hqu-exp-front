@@ -163,7 +163,7 @@ export default {
           publish(publishParams)
             .then((res) => {
               console.log(res)
-              if (res.code === '200') { this.countDown() }
+              if (res.code === 200) { this.countDown() }
             })
         }
         console.log('Received values of form: ', values)

@@ -54,61 +54,61 @@
   </a-spin>
 </template>
 <script>
-import store from "@/store";
-import { getStu } from "@/api/student";
-import { putmark, getStuManageList } from "@/api/enterprise";
+import store from '@/store'
+import { getStu } from '@/api/student'
+import { putmark, getStuManageList } from '@/api/enterprise'
 
 const columns = [
   {
-    title: "#",
-    scopedSlots: { customRender: "serial" }
+    title: '#',
+    scopedSlots: { customRender: 'serial' }
   },
   {
-    title: "学号",
-    dataIndex: "stu_id"
+    title: '学号',
+    dataIndex: 'stu_id'
   },
   {
-    title: "姓名",
-    dataIndex: "stuName"
+    title: '姓名',
+    dataIndex: 'stuName'
   },
   {
-    title: "入学年份",
-    dataIndex: "enterence_year"
+    title: '入学年份',
+    dataIndex: 'enterence_year'
   },
   {
-    title: "专业",
-    dataIndex: "major"
+    title: '专业',
+    dataIndex: 'major'
   },
   {
-    title: "实训成绩",
-    dataIndex: "mark"
+    title: '实训成绩',
+    dataIndex: 'mark'
   },
   {
-    title: "作品",
-    dataIndex: "works",
-    scopedSlots: { customRender: "works" }
+    title: '作品',
+    dataIndex: 'works',
+    scopedSlots: { customRender: 'works' }
   },
   {
-    title: "操作",
-    dataIndex: "action",
-    scopedSlots: { customRender: "action" }
+    title: '操作',
+    dataIndex: 'action',
+    scopedSlots: { customRender: 'action' }
   }
-];
+]
 
 export default {
   // name: "StudentList",
-  data() {
+  data () {
     return {
       confirmLoading: false,
-      applyId: "",
+      applyId: '',
       intershipId: store.getters.expid,
       columns,
       mdl: {},
       queryParam: {},
       loading: false,
       managestu: [],
-      role: "",
-      searchid: "",
+      role: '',
+      searchid: '',
       visible: false,
       student: {},
       formItemLayout: {
@@ -121,118 +121,118 @@ export default {
           sm: { span: 15 }
         }
       }
-    };
+    }
   },
-  beforeCreate() {
-    this.form = this.$form.createForm(this);
+  beforeCreate () {
+    this.form = this.$form.createForm(this)
   },
-  mounted() {
+  mounted () {
     getStuManageList(this.intershipId).then(res => {
-      this.managestu = res.data;
-    });
+      this.managestu = res.data
+    })
   },
   computed: {
-    getExpId: function() {
-      return store.getters.expid;
+    getExpId: function () {
+      return store.getters.expid
     },
-    getStuId: function() {
-      return store.getters.stuid;
+    getStuId: function () {
+      return store.getters.stuid
     }
   },
   watch: {
-    getExpId: function(val, oldVal) {
-      this.intershipId = val;
+    getExpId: function (val, oldVal) {
+      this.intershipId = val
       getStuManageList(this.intershipId).then(res => {
-        this.managestu = res.data;
-      });
+        this.managestu = res.data
+      })
     }
   },
   methods: {
-    goToStuDetail(e) {
-      const _this = this;
-      console.log(e);
-      store.commit("SET_STU_ID", e.stu_id);
-      _this.$router.push({ name: "studentdetail" });
+    goToStuDetail (e) {
+      const _this = this
+      console.log(e)
+      store.commit('SET_STU_ID', e.stu_id)
+      _this.$router.push({ name: 'studentdetail' })
     },
-    handleEdit(e) {
-      console.log(e);
-      this.applyId = e._id;
+    handleEdit (e) {
+      console.log(e)
+      this.applyId = e._id
       // this.mdl = Object.assign({}, record);
-      this.visible = true;
+      this.visible = true
     },
-    columnsSelector() {
-      this.role = store.getters.role;
-      if (this.role === "enterprise") {
-        return this.columns;
-      } else if (this.role === "student") {
-        return this.studentColumns;
+    columnsSelector () {
+      this.role = store.getters.role
+      if (this.role === 'enterprise') {
+        return this.columns
+      } else if (this.role === 'student') {
+        return this.studentColumns
       } else {
-        return this.adminColums;
+        return this.adminColums
       }
     },
-    //搜索查询功能
-    SearchList: function(data) {
-      var _this = this;
-      var searchid = this.searchid;
-      this.loading = true;
-      console.log(searchid);
+    // 搜索查询功能
+    SearchList: function (data) {
+      var _this = this
+      var searchid = this.searchid
+      this.loading = true
+      console.log(searchid)
       setTimeout(() => {
         getStu(this.searchid).then(res => {
-          if (res.code === "100") {
+          if (res.code === '100') {
             getStuManageList(this.intershipId).then(res => {
-              this.managestu = res.data;
-            });
-            _this.loading = false;
+              this.managestu = res.data
+            })
+            _this.loading = false
           } else {
-            _this.managestu = [];
-            _this.managestu.push(res.data);
-            _this.loading = false;
+            _this.managestu = []
+            _this.managestu.push(res.data)
+            _this.loading = false
           }
-        });
-      }, 300);
+        })
+      }, 300)
     },
-    handleSubmit(e) {
-      const _this = this;
-      e.preventDefault();
+    handleSubmit (e) {
+      const _this = this
+      e.preventDefault()
       const {
         form: { validateFields }
-      } = this;
-      const validateFieldsKey = ["mark"];
+      } = this
+      const validateFieldsKey = ['mark']
       validateFields(validateFieldsKey, { force: true }, (err, values) => {
         if (!err) {
-          const publishParams = { ...values };
+          const publishParams = { ...values }
 
-          publishParams.apply_id = _this.applyId;
-          console.log(publishParams);
+          publishParams.apply_id = _this.applyId
+          console.log(publishParams)
           putmark(publishParams).then(res => {
-            if (res.code === "200") {
-              this.countDown();
+            if (res.code === 200) {
+              this.countDown()
             }
-          });
+          })
         }
-        console.log("Received values of form: ", values);
-      });
+        console.log('Received values of form: ', values)
+      })
     },
-    countDown() {
-      let secondsToGo = 3;
+    countDown () {
+      let secondsToGo = 3
       const modal = this.$success({
-        title: "提交成功",
+        title: '提交成功',
         content: `这个窗口将于 ${secondsToGo} s后关闭。`
-      });
+      })
       const interval = setInterval(() => {
-        secondsToGo -= 1;
+        secondsToGo -= 1
         modal.update({
           content: `这个窗口将于 ${secondsToGo} s后关闭。`
-        });
-      }, 1000);
-      this.confirmLoading = true;
+        })
+      }, 1000)
+      this.confirmLoading = true
       setTimeout(() => {
-        clearInterval(interval);
-        modal.destroy();
-        this.visible = false;
-        this.confirmLoading = false;
-      }, secondsToGo * 1000);
+        clearInterval(interval)
+        modal.destroy()
+        this.visible = false
+        this.confirmLoading = false
+      }, secondsToGo * 1000)
     }
   }
-};
+}
 </script>

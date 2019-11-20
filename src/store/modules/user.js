@@ -48,7 +48,7 @@ const user = {
         login(userInfo, loginType)
           .then(response => {
             const result = response
-            if (result.code === '200') {
+            if (result.code === 200) {
               // const accessedRouters = routerMapSelector(loginType)
               // commit('SET_ROUTERS', accessedRouters)
               // router.addRoutes(accessedRouters)

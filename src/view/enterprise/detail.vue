@@ -221,7 +221,7 @@ export default {
       this.enterprise = store.getters.userInfo
     } else {
       getEnt(this.entid).then(response => {
-        if (response.code === '200') {
+        if (response.code === 200) {
           this.enterprise = response.data
           this.imageList = response.data.images.split(',')
         }
@@ -282,7 +282,7 @@ export default {
       params.enterpriseId = _this.entid
       params.status = '1'
       Audit(params).then((res) => {
-        if (res.code === '200') {
+        if (res.code === 200) {
           store.dispatch('GetInfo')
           _this.openNotification1()
         }
@@ -296,7 +296,7 @@ export default {
       params.enterpriseId = _this.entid
       params.status = '2'
       Audit(params).then((res) => {
-        if (res.code === '200') {
+        if (res.code === 200) {
           store.dispatch('GetInfo')
           _this.openNotification()
         }
@@ -311,7 +311,7 @@ export default {
     //         params.enterpriseId = _this.entid
     //         params.status = "0"
     //         Audit(params).then((res) => {
-    //           if (res.code === '200') {
+    //           if (res.code === 200) {
     //            store.dispatch('GetInfo')
     //           }
     // })

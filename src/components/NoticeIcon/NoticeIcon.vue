@@ -9,23 +9,7 @@
     :arrowPointAtCenter="true"
     :overlayStyle="{ width: '300px', top: '50px' }"
   >
-    <template slot="content">
-      <a-spin :spinning="loadding">
-        <a-list
-          itemLayout="horizontal"
-          :dataSource="dataList"
-        >
-          <a-list-item slot="renderItem" slot-scope="item, index">
-            <a-list-item-meta
-              :description="'待处理申请数：'+item.applying_num"
-            >
-              <a slot="title" @click="goToApplyList(item)">{{ item.expId }}</a>
 
-            </a-list-item-meta>
-          </a-list-item>
-        </a-list>
-      </a-spin>
-    </template>
     <span @click="fetchNotice" class="header-notice" ref="noticeRef">
       <a-badge :count="applying_num">
         <a-icon style="font-size: 16px; padding: 4px" type="bell" />

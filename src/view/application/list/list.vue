@@ -25,23 +25,14 @@
           </a-row>
         </a-form>
       </div>
-      <a-table
-        :columns="columnsSelector()"
-        :dataSource="applications"
-        rowKey="_id">
-        <span
-          slot="serial"
-          slot-scope="text, record, index">{{ index + 1 }}</span>
-        <span
-          slot="status"
-          slot-scope="text">
-          <a-badge
-            :status="text | statusTypeFilter"
-            :text="text | statusFilter" />
+      <a-table :columns="columnsSelector()" :dataSource="applications" rowKey="_id">
+        <span slot="serial" slot-scope="text, record, index">
+          {{ index + 1 }}
         </span>
-        <span
-          slot="action"
-          slot-scope="text, record">
+        <span slot="status" slot-scope="text">
+          <a-badge :status="text | statusTypeFilter" :text="text | statusFilter" />
+        </span>
+        <span slot="action" slot-scope="text, record">
           <template>
             <a
               slot="action"
@@ -185,7 +176,7 @@ export default {
       data.applyStatus = 2
       data.applyId = id
       changeApplyStatus(data).then((res) => {
-        if (res.code === '200') {
+        if (res.code === 200) {
           this.$notification.open({
             type: 'success',
             message: '成功',

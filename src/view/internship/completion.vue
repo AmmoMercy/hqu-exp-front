@@ -126,7 +126,7 @@ export default {
     if (store.getters.role === 'student') {
       getProcessingExp().then(
         (response) => {
-          if (response.code === '200') {
+          if (response.code === 200) {
             this.exp.push(response.data)
             this.exp[0].name = store.getters.userInfo.name
           }
@@ -159,14 +159,14 @@ export default {
           for (var key in values) {
             formData1.append(key, values[key])
           }
-          formData1.append('apply_id',this.exp[0].apply_id)
-          formData1.append('exp_id',this.exp[0].exp_id)
+          formData1.append('apply_id', this.exp[0].apply_id)
+          formData1.append('exp_id', this.exp[0].exp_id)
           formData1.append('completion_file', this.file)
           completion(formData1)
           const formData2 = new FormData()
           delete values.dragger
-          formData2.append('apply_id',this.exp[0].apply_id)
-          formData2.append('exp_id',this.exp[0].exp_id)
+          formData2.append('apply_id', this.exp[0].apply_id)
+          formData2.append('exp_id', this.exp[0].exp_id)
           formData2.append('perception_file', this.file)
           perception(formData2)
           this.countDown()

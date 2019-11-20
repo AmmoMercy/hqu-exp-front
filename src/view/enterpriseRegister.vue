@@ -400,7 +400,7 @@ export default {
       self.registerBtn = true
       register(formData)
         .then(res => {
-          if (res.code === '200') {
+          if (res.code === 200) {
             self.countDown()
           } else {
             this.registerFailed(res)

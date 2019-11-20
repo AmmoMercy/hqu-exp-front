@@ -95,7 +95,7 @@ module.exports = {
     port: 8000,
     proxy: {
       '/api': {
-        target: 'http://hqu-internship.hqu-internship.kooboo.site',
+        target: 'http://39.108.172.6:8000/',
         ws: false,
         changeOrigin: true,
         cookieDomainRewrite: {

@@ -273,7 +273,7 @@ export default {
             var params = {}
             params.exp_id = _this.expid
             studentapply(params).then((res) => {
-              if (res.code === '200') {
+              if (res.code === 200) {
                 _this.openNotification1()
                 resolve()
               }
@@ -294,19 +294,19 @@ export default {
     getExpInfo (id) {
       if (store.getters.role === 'enterprise') {
         getInternship(id).then(response => {
-          if (response.code === '200') {
+          if (response.code === 200) {
             this.internship = response.data
           }
         })
       } else if (store.getters.role === 'student') {
         stuGetInternship(id).then(response => {
-          if (response.code === '200') {
+          if (response.code === 200) {
             this.internship = response.data
           }
         })
       } else {
         adminGetEnt(id).then(response => {
-          if (response.code === '200') {
+          if (response.code === 200) {
             this.internship = response
           }
         })
@@ -317,7 +317,7 @@ export default {
         this.enterprise = store.getters.userInfo
       } else {
         stuGetEnterprise(id).then(response => {
-          if (response.code === '200') {
+          if (response.code === 200) {
             this.enterprise = response.data
           }
         })
@@ -336,7 +336,7 @@ export default {
       data.status = 1
       data.expid = this.internship._id
       PostStatus(data).then(res => {
-        if (res.code === '200') {
+        if (res.code === 200) {
           this.internship.status = 1
         }
       })

@@ -4,7 +4,7 @@ import store from '@/store'
 import { VueAxios } from './axios'
 import notification from 'ant-design-vue/es/notification'
 import { ACCESS_TOKEN } from '@/store/mutation-types'
-
+import Qs from 'qs'
 // 创建 axios 实例
 const service = axios.create({
   baseURL:
@@ -12,7 +12,11 @@ const service = axios.create({
     //   ? 'http://hqu-internship.hqu-internship.kooboo.site/api'
     //   : '/api', // api base_url
     '/api',
-  timeout: 100000 // 请求超时时间
+  timeout: 100000,
+  transformRequest: [function (data) { // 在请求之前对data传参进行格式转换
+    data = Qs.stringify(data)
+    return data
+  }] // 请求超时时间
 })
 
 const err = error => {
