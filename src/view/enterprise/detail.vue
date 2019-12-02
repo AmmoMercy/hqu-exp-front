@@ -2,50 +2,90 @@
 <template>
   <page-view
     :title="enterprise.name"
-    logo="https://gw.alipayobjects.com/zos/rmsportal/nxkuOJlFJuAUhzlMTCEe.png"
-  >
+    logo="https://gw.alipayobjects.com/zos/rmsportal/nxkuOJlFJuAUhzlMTCEe.png">
     <detail-list
       slot="headerContent"
       size="small"
       :col="2"
       class="detail-layout"
-      v-if="role==='admin'"
-    >
+      v-if="role==='admin'">
       <detail-list-item term="注册时间">{{ enterprise.register_time }}</detail-list-item>
-      <detail-list-item term="资质文件">
-        <a>url</a>
+      <!-- 缺少该参数 -->
+      <detail-list-item term="承诺书">
+        <a href="#">url</a>
       </detail-list-item>
-      <detail-list-item term="类型">{{ enterprise.type }}</detail-list-item>
+      <detail-list-item term="类型">{{ enterprise.type |typeFilter }}</detail-list-item>
     </detail-list>
     <!-- actions -->
     <template slot="action" class="steps-action" v-if="role==='admin'">
-      <a-button v-if="enterprise.status===0" type="primary" @click="pass">
+      <a-button v-if="enterprise.status===0" type="primary" @click="changeStatus(1)">
         <a-icon type="check" />通过
       </a-button>
-      <a-button v-if="enterprise.status ===0" style="margin-left: 8px" @click="fail">
+      <a-button v-if="enterprise.status ===0" style="margin-left: 8px" @click="changeStatus(2)">
         <a-icon type="close" />不通过
       </a-button>
-      <!-- <a-button v-if="enterprise.status >= 1" style="margin-left: 8px" @click="reCheck">
-        <a-icon type="close" />撤销
-      </a-button> -->
+      <a-button v-if="enterprise.status >= 1" style="margin-left: 8px" @click="changeStatus(0)">
+        <a-icon type="close" />撤销操作
+      </a-button>
     </template>
 
-    <a-card :bordered="false" title="流程进度" v-if="role==='enterprise'||role==='admin'">
+    <a-card
+      :bordered="false"
+      title="流程进度"
+      v-if="role==='enterprise'">
       <a-steps :current="enterprise.status+1">
-        <a-step title="提交成功" description="请耐心等待审核。" />
-        <a-step v-if="enterprise.status===0" title="审核中" description="审核结果将会在7个工作日内进行通知。" />
-        <a-step v-if="enterprise.status===1" title="审核通过!" description="贵企业已经可以进行实训信息发布。" />
+        <a-step
+          title="提交成功"
+          description="请耐心等待审核。" />
+        <a-step
+          v-if="enterprise.status===0"
+          title="审核中"
+          description="审核结果将会在7个工作日内进行通知。" />
+        <a-step
+          v-if="enterprise.status===1"
+          title="审核通过!"
+          description="企业已经可以进行实训信息发布。" />
         <a-step
           v-else-if="enterprise.status===2"
           title="审核未通过!"
           status="error"
-          description="请修改企业信息，重新提交。"
-        />
-        <a-step v-else title="等待审核完毕" />
+          description="请修改企业信息，重新提交。" />
+        <a-step
+          v-else
+          title="等待审核完毕" />
+      </a-steps>
+    </a-card>
+    <a-card
+      :bordered="false"
+      title="流程进度"
+      v-if="role==='admin'">
+      <a-steps :current="enterprise.status+1">
+        <a-step
+          title="提交成功"
+          description="等待管理员审核" />
+        <a-step
+          v-if="enterprise.status===0"
+          title="审核中"
+          description="正在进行审核" />
+        <a-step
+          v-if="enterprise.status===1"
+          title="审核通过!"
+          description="该企业已经可以进行实训信息发布。" />
+        <a-step
+          v-else-if="enterprise.status===2"
+          title="审核未通过!"
+          status="error"
+          description="请通知企业修改信息，重新提交。" />
+        <a-step
+          v-else
+          title="等待审核完毕" />
       </a-steps>
     </a-card>
 
-    <a-card style="margin-top: 24px" :bordered="false" title="企业信息">
+    <a-card
+      style="margin-top: 24px"
+      :bordered="false"
+      title="企业信息">
       <!-- <a-form-item :wrapperCol="{ span: 24 }" style="text-align: right">
         <a-button htmlType="submit" @click="handleEdit(record)" v-if="role==='enterprise'">
           <a-icon type="edit" />
@@ -65,13 +105,17 @@
           rows="10"
           readonly
           v-model="enterprise.intro"
-          style="border:none"
-        />
+          style="border:none" />
       </a-form-item>
       <a-divider>企业照片</a-divider>
 
-      <a-carousel arrows dotsClass="slick-dots slick-thumb" style="margin-bottom: 75px">
-        <a slot="customPaging" slot-scope="props">
+      <a-carousel
+        arrows
+        dotsClass="slick-dots slick-thumb"
+        style="margin-bottom: 75px">
+        <a
+          slot="customPaging"
+          slot-scope="props">
           <img :src="getImgUrl(props.i)" />
         </a>
         <div v-for="item in imageList">
@@ -208,49 +252,59 @@ export default {
       enterprise: {},
       role: store.getters.role,
       imageList: []
-
     }
   },
   computed: {
-    getInfo () {
-      return store.getters.userInfo
+    getEntId () {
+      return store.getters.entid
     }
   },
   mounted () {
     if (store.getters.role === 'enterprise') {
       this.enterprise = store.getters.userInfo
     } else {
-      getEnt(this.entid).then(response => {
+      this.getEntInfo(this.entid)
+    }
+    this.imageList = this.enterprise.images.split(',')
+  },
+  watch: {
+    getEntId: function (val, oldVa) {
+      this.getEntInfo(val)
+    }
+  },
+  filters: {
+    typeFilter (data) {
+      if (data === 'tutor') {
+        return '导师'
+      }
+      return '企业'
+    }
+  },
+  methods: {
+    getEntInfo (id) {
+      getEnt(id).then(response => {
         if (response.code === 200) {
           this.enterprise = response.data
           this.imageList = response.data.images.split(',')
         }
       })
-    }
-    this.imageList = this.enterprise.images.split(',')
-  },
-  watch: {
-    getInfo: function (val, oldVa) {
-      this.internship = val
-    }
-  },
-  methods: {
-    openNotification1 () {
+    },
+    notificationSuccess (msg) {
       this.$notification.open({
         type: 'success',
-        message: '审核已通过',
-        description: '此企业已通过审核',
+        message: '成功',
+        description: msg,
         style: {
           width: '600px',
           marginLeft: `${335 - 600}px`
         }
       })
     },
-    openNotification () {
+    notificationFail (msg) {
       this.$notification.open({
         type: 'error',
-        message: '审核未通过',
-        description: '此企业未通过审核',
+        message: '失败',
+        description: msg,
         style: {
           width: '600px',
           marginLeft: `${335 - 600}px`
@@ -259,7 +313,6 @@ export default {
     },
     handleCancel () {
       this.previewVisible = false
-      // 补充从数据库添加新照片的方法
     },
     handlePreview (file) {
       this.previewImage = file.url || file.thumbUrl
@@ -267,24 +320,23 @@ export default {
     },
     handleChange ({ fileList }) {
       this.fileList = fileList
-      // 补充从数据库删除该照片的方法
     },
     handleEdit (record) {
       this.mdl = Object.assign({}, record)
       this.visible = true
     },
     handleOk () {},
-    pass () {
+    changeStatus (status) {
       var _this = this
-      this.enterprise.status = 1
+      this.enterprise.status = status
       // 此处加上保存进数据库的方法
       var params = {}
       params.enterpriseId = _this.entid
       params.status = '1'
-      Audit(params).then((res) => {
+      Audit(params).then(res => {
         if (res.code === 200) {
           store.dispatch('GetInfo')
-          _this.openNotification1()
+          _this.notificationSuccess(res.msg)
         }
       })
     },
@@ -295,7 +347,7 @@ export default {
       var params = {}
       params.enterpriseId = _this.entid
       params.status = '2'
-      Audit(params).then((res) => {
+      Audit(params).then(res => {
         if (res.code === 200) {
           store.dispatch('GetInfo')
           _this.openNotification()
@@ -319,37 +371,37 @@ export default {
     // },
     getImgUrl (i) {
       return this.imageList[i]
-    },
-    handleSubmit (e) {
-      e.preventDefault()
-      const {
-        form: { validateFields }
-      } = this
-      const validateFieldsKey = [
-        'name',
-        'address',
-        'email',
-        'contact_name',
-        'contact_tel',
-        'intro'
-      ]
-      // const values = {
-      //   ...fieldsValue,
-      //   'date-time-picker': fieldsValue['date-time-picker'].format(
-      //     'YYYY-MM-DD HH:mm:ss'
-      //   )
-      // }
-      validateFields(validateFieldsKey, { force: true }, (err, values) => {
-        if (!err) {
-          const publishParams = { ...values }
-          console.log(publishParams)
-          publish(publishParams).then(res => {
-            if (res.code === 200) this.countDown()
-          })
-        }
-        console.log('Received values of form: ', values)
-      })
     }
+    // handleSubmit (e) {
+    //   e.preventDefault()
+    //   const {
+    //     form: { validateFields }
+    //   } = this
+    //   const validateFieldsKey = [
+    //     'name',
+    //     'address',
+    //     'email',
+    //     'contact_name',
+    //     'contact_tel',
+    //     'intro'
+    //   ]
+    //   const values = {
+    //     ...fieldsValue,
+    //     'date-time-picker': fieldsValue['date-time-picker'].format(
+    //       'YYYY-MM-DD HH:mm:ss'
+    //     )
+    //   }
+    //   validateFields(validateFieldsKey, { force: true }, (err, values) => {
+    //     if (!err) {
+    //       const publishParams = { ...values }
+    //       console.log(publishParams)
+    //       publish(publishParams).then(res => {
+    //         if (res.code === 200) this.countDown()
+    //       })
+    //     }
+    //     console.log('Received values of form: ', values)
+    //   })
+    // }
   }
 }
 </script>
@@ -373,24 +425,8 @@ export default {
   line-height: 64px;
   font-size: 16px;
 
-  i {
-    font-size: 24px;
-    margin-right: 16px;
-    position: relative;
-    top: 3px;
-  }
 }
 
-.mobile {
-  .detail-layout {
-    margin-left: unset;
-  }
-  .text {
-  }
-  .status-list {
-    text-align: left;
-  }
-}
 .ant-carousel >>> .slick-dots {
   height: auto;
 }

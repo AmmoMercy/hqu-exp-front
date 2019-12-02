@@ -304,7 +304,6 @@ export default {
       var captcha = new TencentCaptcha('2085027395', res => {
         // res（未通过验证）= {ret: 1, ticket: null}
         // res（验证成功） = {ret: 0, ticket: "String", randstr: "String"}
-        console.log(self, this)
         if (res.ret === 0) {
           this.goRegister()
         }
@@ -314,7 +313,6 @@ export default {
     },
     handleCheckBox () {
       this.isChecked = this.form.getFieldValue('agreement')
-      console.log(this.isChecked)
     },
     imageBeforeUpload (file, fileList) {
       this.imageList.push(file)
@@ -366,7 +364,6 @@ export default {
       this.previewVisible = false
     },
     normFile (event1) {
-      console.log('Upload event:', event1)
       if (Array.isArray(event1)) {
         return event1
       }

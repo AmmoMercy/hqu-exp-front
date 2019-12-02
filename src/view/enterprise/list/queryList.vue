@@ -35,16 +35,12 @@ const statusMap = {
     text: '待审核'
   },
   1: {
-    status: 'processing',
-    text: '审核中'
-  },
-  2: {
     status: 'success',
     text: '审核通过'
   },
-  3: {
+  2: {
     status: 'error',
-    text: '审核未通过'
+    text: '审核不通过'
   }
 }
 const columns = [
@@ -66,11 +62,11 @@ const columns = [
   },
   {
     title: '联系人姓名',
-    dataIndex: 'contact_name'
+    dataIndex: 'contactName'
   },
   {
     title: '联系人电话',
-    dataIndex: 'contact_tel'
+    dataIndex: 'contactTel'
   },
   {
     title: '资质文件',
@@ -136,17 +132,10 @@ export default {
   methods: {
     goToEnterprise (r) {
       const _this = this
-      store.commit('SET_ENT_ID', r._id)
+      store.commit('SET_ENT_ID', r.enterpriseId)
       _this.$router.push({ name: 'enterprise' })
-    },
-
-    Searchlist () {
-      this.loading = true
-      setTimeout(() => {
-        this.data = data
-        this.loading = false
-      }, 300)
     }
+
   }
 }
 </script>

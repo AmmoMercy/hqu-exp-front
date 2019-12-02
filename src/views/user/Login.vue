@@ -212,10 +212,8 @@ export default {
         this.customActiveKey + 'Email',
         this.customActiveKey + 'Password'
       ]
-      console.log(validateFieldsKey)
       validateFields(validateFieldsKey, { force: true }, (err, values) => {
         if (!err) {
-          console.log(values)
           this.toCaptcha()
           this.values = values
         } else {
@@ -279,12 +277,12 @@ export default {
     requestFailed (err) {
       var message = ''
       if (err != null) {
-        message = err
+        message = err.msg
       } else {
         message = '请求错误'
       }
       this.$notification['error']({
-        message: '错误',
+        message: '错误 ',
         description: message,
         duration: 4
       })

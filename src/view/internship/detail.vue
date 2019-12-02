@@ -16,13 +16,13 @@
     </detail-list>
     <!-- actions -->
     <template slot="action" class="steps-action" v-if="role==='admin'">
-      <a-button v-if="internship.status===0" type="primary" @click="pass">
+      <a-button v-if="internship.status===0" type="primary" @click="changeStatus(1)">
         <a-icon type="check" />通过
       </a-button>
-      <a-button v-if="internship.status ===0" style="margin-left: 8px" @click="fail">
+      <a-button v-if="internship.status ===0" style="margin-left: 8px" @click="changeStatus(2)">
         <a-icon type="close" />不通过
       </a-button>
-      <a-button v-if="internship.status >= 1" style="margin-left: 8px" @click="reCheck">
+      <a-button v-if="internship.status >= 1" style="margin-left: 8px" @click="changeStatus(0)">
         <a-icon type="close" />撤销操作
       </a-button>
     </template>
@@ -225,6 +225,7 @@ export default {
   },
   mounted () {
     this.getExpInfo(this.expid)
+    this.getEnterpriseInfo()
   },
   watch: {
     getId: function (val, oldVal) {
@@ -240,22 +241,22 @@ export default {
       store.commit('SET_ENT_ID', _this.entid)
       _this.$router.push({ name: 'enterprise' })
     },
-    openNotification1 () {
+    notificationSuccess (msg) {
       this.$notification.open({
         type: 'success',
-        message: '报名成功',
-        description: '请耐心等待审核',
+        message: '成功',
+        description: msg,
         style: {
           width: '600px',
           marginLeft: `${335 - 600}px`
         }
       })
     },
-    openNotification () {
+    notificationFalse (msg) {
       this.$notification.open({
         type: 'error',
-        message: '报名失败',
-        description: '无法重复报名，请确定先前没有报名过此项目',
+        message: '错误',
+        description: 'msg',
         style: {
           width: '600px',
           marginLeft: `${335 - 600}px`
@@ -273,11 +274,11 @@ export default {
             params.exp_id = _this.expid
             studentapply(params).then((res) => {
               if (res.code === 200) {
-                _this.openNotification1()
+                _this.notificationSuccess(res.message)
                 resolve()
               }
-              if (res.code === '100') {
-                _this.openNotification()
+              if (res.code === 100) {
+                _this.notificationFalse()
               }
             })
             setTimeout(Math.random() > 0.5 ? resolve : reject, 1000)
@@ -330,23 +331,16 @@ export default {
       this.mdl = Object.assign({}, record)
       this.enterVisible = true
     },
-    pass () {
+    changeStatus (status) {
       var data = { }
-      data.status = 1
+      data.status = status
       data.expid = this.internship.expId
       PostStatus(data).then(res => {
         if (res.code === 200) {
-          this.internship.status = 1
+          this.internship.status = status
+          this.notificationSuccess(res.msg)
         }
       })
-    },
-    fail () {
-      this.internship.status = 2
-      // 此处加上保存进数据库的方法
-    },
-    reCheck () {
-      this.internship.status = 0
-      // 此处加上保存进数据库的方法
     },
     handleSubmit (e) {
       e.preventDefault()
@@ -365,7 +359,6 @@ export default {
       validateFields(validateFieldsKey, { force: true }, (err, values) => {
         if (!err) {
           const publishParams = { ...values }
-          console.log(publishParams)
           publish(publishParams).then(res => {
             if (res.code === 200) this.countDown()
             store.dispatch('GetInfo')
@@ -436,8 +429,7 @@ export default {
   .detail-layout {
     margin-left: unset;
   }
-  .text {
-  }
+
   .status-list {
     text-align: left;
   }

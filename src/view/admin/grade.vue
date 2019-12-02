@@ -32,9 +32,9 @@
       </a-table>
       <a-button type="link"><download-excel
         class="button"
-        :data="data"
+        :data="grades"
         :fields="json_fields"
-        worksheet="My Worksheet"
+        type="xls"
         name="实训成绩.xls">
         点击导出实训成绩文件
       </download-excel></a-button>
@@ -102,38 +102,11 @@ export default {
       queryParam: {},
       loading: false,
       json_fields: {
-        'name': 'name',
-        'City': 'city',
-        'Telephone': 'phone.mobile',
-        'Telephone 2': {
-          field: 'phone.landline',
-          callback: (value) => {
-            return `Landline Phone - ${value}`
-          }
-        }
+        '学号': 'stu_id',
+        '年级': 'enterence_year'
+
       },
-      json_data: [
-        {
-          'name': 'Tony Peña',
-          'city': 'New York',
-          'country': 'United States',
-          'birthdate': '1978-03-15',
-          'phone': {
-            'mobile': '1-541-754-3010',
-            'landline': '(541) 754-3010'
-          }
-        },
-        {
-          'name': 'Thessaloniki',
-          'city': 'Athens',
-          'country': 'Greece',
-          'birthdate': '1987-11-23',
-          'phone': {
-            'mobile': '+1 855 275 5071',
-            'landline': '(2741) 2621-244'
-          }
-        }
-      ],
+      json_data: [{ 'stu_id': '121', 'enterence_year': '2017软件工程1班' }, { 'stu_id': 'asdfasdf', 'enterence_year': '2017软件工程1班', 'stuName': 'asdfasdf' }],
       json_meta: [
         [
           {

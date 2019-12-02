@@ -65,7 +65,6 @@ const permission = {
     GenerateRoutes ({ commit }, role) {
       return new Promise(resolve => {
         const accessedRouters = routerMapSelector(role)
-        console.log(accessedRouters)
         commit('SET_ROUTERS', accessedRouters)
         resolve(accessedRouters)
       })

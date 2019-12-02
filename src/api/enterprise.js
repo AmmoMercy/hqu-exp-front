@@ -1,4 +1,4 @@
-import { axios, installer } from '@/utils/request'
+import { axios } from '@/utils/request'
 export function getEnt (parameter) {
   return axios({
     url: '/enterprise/detail?' + 'enterprise=' + parameter,
@@ -7,7 +7,7 @@ export function getEnt (parameter) {
 }
 export function getEntInfo (parameter) {
   return axios({
-    url: '/enterprise/info',
+    url: '/enterprise/detail',
     method: 'get'
   })
 }
@@ -58,7 +58,7 @@ export function getApplyList (internshipId) {
 }
 export function getInternship (id) {
   return axios({
-    url: '/enterprise/internship?internship=' + id,
+    url: '/enterprise/internship?expId=' + id,
     method: 'get'
   })
 }

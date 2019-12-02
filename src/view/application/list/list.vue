@@ -36,12 +36,12 @@
           <template>
             <a
               slot="action"
-              @click="goToStuDetail(record.stu_id)">查看&nbsp </a>
+              @click="goToStuDetail(record.stu_id)">查看&nbsp; </a>
           </template>
           <template v-if="record.apply_status===0">
             <a
               slot="action"
-              @click="modifyApplication(record._id,2)">接受&nbsp</a>
+              @click="modifyApplication(record._id,2)">接受&nbsp;</a>
             <a
               slot="action"
               @click="modifyApplication(record._id,3)">拒绝</a>

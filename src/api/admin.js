@@ -7,7 +7,7 @@ export function getEnt () {
 }
 export function Audit (parameter) {
   return axios({
-    url: '/enterprise/detail',
+    url: '/admin/enterprise',
     method: 'put',
     data: parameter
   })

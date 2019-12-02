@@ -124,7 +124,7 @@ const user = {
       return new Promise(resolve => {
         commit('SET_ROLE', '')
         if (process.env.NODE_ENV === 'development') {
-          window.document.cookie = '_kb_session_id=; expires= ' + new Date(0).toUTCString()
+          window.document.cookie = 'JSESSIONID=; expires= ' + new Date(0).toUTCString()
         }
         Vue.ls.remove(USER_ROLE)
 

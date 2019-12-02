@@ -12,7 +12,6 @@ const whiteList = ['login', 'register', 'registerResult', 'studentRegister'] // 
 router.beforeEach((to, from, next) => {
   NProgress.start() // start progress bar
   to.meta && (typeof to.meta.title !== 'undefined' && setDocumentTitle(`${to.meta.title} - ${domTitle}`))
-  console.log('cookie', window.document.cookie)
   if (window.document.cookie) {
     if (to.path === '/user/login') {
       next({ name: 'index' })

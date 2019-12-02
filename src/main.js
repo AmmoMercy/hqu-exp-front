@@ -17,7 +17,6 @@ import './utils/filter' // global filter
 import JsonExcel from 'vue-json-excel'
 Vue.component('downloadExcel', JsonExcel)
 Vue.config.productionTip = false
-
 // mount axios Vue.$http and this.$http
 Vue.use(VueAxios)
 
